@@ -120,6 +120,26 @@ function LandingPage() {
           </div>
         </section>
 
+        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-600 fill-mode-both">
+          <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
+            Para quem é isso?
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              "Pessoas que amam mistério e investigação",
+              "Amigos em busca de desafios",
+              "Casais que querem algo diferente",
+              "Dates fora da caixinha"
+            ].map((item, i) => (
+              <div key={i} className="flex gap-3 items-start text-sm text-muted">
+                <span className="text-primary/80 mt-0.5 text-lg font-serif">›</span>
+                <span className="leading-snug">{item}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <div className="h-px ultraviolet-gradient my-12 opacity-50 animate-in fade-in duration-1000 delay-700 fill-mode-both" />
 
         <section className="bg-white/5 border border-primary/15 rounded-lg p-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-700 fill-mode-both relative overflow-hidden">
