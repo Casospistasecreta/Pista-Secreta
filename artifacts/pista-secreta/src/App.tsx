@@ -143,9 +143,7 @@ function LandingPage() {
               target="_blank" 
               rel="noopener noreferrer"
               className="block w-full bg-primary/90 hover:bg-primary text-background border-none rounded p-4 font-serif text-lg font-bold text-center mb-8 transition-colors shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)]"
-            >
-              Acessar o caso agora
-            </a>
+            >Começar Investigação</a>
 
             <div className="border-t border-primary/10 pt-6">
               <p className="text-xs text-muted text-center italic mb-4">
