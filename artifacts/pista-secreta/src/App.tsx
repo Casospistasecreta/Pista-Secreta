@@ -27,7 +27,6 @@ function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans relative selection:bg-secondary selection:text-foreground">
       <div className="noise-overlay" />
-      
       {/* Background Hero */}
       <div className="absolute inset-0 z-0 h-[60vh] md:h-[80vh] overflow-hidden">
         <div className="absolute inset-0 bg-background/80 z-10" />
@@ -38,7 +37,6 @@ function LandingPage() {
           className="w-full h-full object-cover opacity-30 mix-blend-luminosity"
         />
       </div>
-
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-12 md:py-24">
         <header className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 fill-mode-both">
           <div className="flex items-center gap-4 mb-8">
@@ -70,7 +68,7 @@ function LandingPage() {
               <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity rotate-12 scale-150 w-32 h-32 blur-xl bg-secondary rounded-full mix-blend-screen pointer-events-none" />
               
               <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                <span>Caso 001</span>
+                <span>Caso 001 - ARQUIVO CONFIDENCIAL</span>
                 <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/40 -rotate-2">
                   Em aberto
                 </span>
