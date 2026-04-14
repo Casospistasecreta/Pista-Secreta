@@ -1,0 +1,26 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "SG7WaM2lNJ49mez7TBkbZ"
+uri = "file://artifacts/pista-secreta/public/hero-bg.png"
+type = "image"
+title = "Ultraviolet mystery classified files hero"
+
+[[generated]]
+id = "m5GMIAp0oY-A2OuiAg_7n"
+uri = "file://artifacts/pista-secreta/public/case-1.png"
+type = "image"
+title = "Case 001 Wendel Jr"
+
+[[generated]]
+id = "em7LIRDJBwyylJaNHo153"
+uri = "file://artifacts/pista-secreta/public/case-2.png"
+type = "image"
+title = "Case 002 University"
+
+[[generated]]
+id = "KPQOIrsWnIM6yBmlbYEtX"
+uri = "file://artifacts/pista-secreta/public/evidence.png"
+type = "image"
+title = "Evidence items preview"
