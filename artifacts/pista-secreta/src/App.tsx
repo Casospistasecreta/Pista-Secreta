@@ -85,7 +85,7 @@ function LandingPage() {
               <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity rotate-12 scale-150 w-32 h-32 blur-xl bg-secondary rounded-full mix-blend-screen pointer-events-none" />
               
               <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                <span>Caso 002</span>
+                <span>Caso 002 - ARQUIVO CONFIDENCIAL</span>
                 <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/40 -rotate-2">
                   Em aberto
                 </span>
