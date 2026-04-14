@@ -131,9 +131,8 @@ function LandingPage() {
               <span className="text-sm text-muted">por caso · acesso completo e imediato</span>
             </div>
             
-            <p className="font-mono text-xs text-muted tracking-wide mb-8">
-              Ideal para 2–6 pessoas &middot; date, amigos ou família
-            </p>
+            <p className="font-mono text-xs text-muted tracking-wide mb-8">Ideal para 2–6 pessoas · date, amigos ou família.
+            Tempo médio: 1h - 2h</p>
 
             <a 
               href="https://kiwify.com.br" 
