@@ -47,8 +47,7 @@ function LandingPage() {
           </div>
 
           <h1 className="font-serif text-4xl md:text-5xl font-bold leading-tight mb-4 tracking-tight">
-            O arquivo está <br />
-            <em className="italic font-normal text-primary/90">esperando por você.</em>
+            Casos nunca resolvidos
           </h1>
           <p className="text-lg text-muted leading-relaxed max-w-lg">
             Uma experiência investigativa imersiva para grupos de 2 a 6 pessoas. Provas reais, interrogatórios gravados, envelopes lacrados — e um assassinato que precisa ser resolvido.
