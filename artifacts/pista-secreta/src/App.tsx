@@ -105,12 +105,11 @@ function LandingPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {[
-              "3 envelopes com pistas impressas",
-              "Documentos e fotos do caso",
-              "Áudios de interrogatório",
-              "Vídeos ambientados na trama",
-              "Playlist temática exclusiva",
-              "PDF completo para imprimir"
+              "Documentos reais do caso",
+              "Interrogatórios gravados",
+              "Vídeos com pistas escondidas",
+              "Evidências que se contradizem",
+              "Playlist para imersão total"
             ].map((item, i) => (
               <div key={i} className="flex gap-3 items-start text-sm text-muted">
                 <span className="text-primary/80 mt-0.5 text-lg font-serif">›</span>
