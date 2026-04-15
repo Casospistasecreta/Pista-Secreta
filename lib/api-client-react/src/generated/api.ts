@@ -5,18 +5,26 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  HealthStatus,
+  PurchaseClickStats,
+  TrackPurchaseClickRequest,
+  TrackPurchaseClickResponse,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -92,6 +100,170 @@ export function useHealthCheck<
   request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getHealthCheckQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Records a click on the purchase call-to-action.
+ * @summary Track purchase button click
+ */
+export const getTrackPurchaseClickUrl = () => {
+  return `/api/analytics/purchase-click`;
+};
+
+export const trackPurchaseClick = async (
+  trackPurchaseClickRequest?: TrackPurchaseClickRequest,
+  options?: RequestInit,
+): Promise<TrackPurchaseClickResponse> => {
+  return customFetch<TrackPurchaseClickResponse>(getTrackPurchaseClickUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(trackPurchaseClickRequest),
+  });
+};
+
+export const getTrackPurchaseClickMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof trackPurchaseClick>>,
+    TError,
+    { data: BodyType<TrackPurchaseClickRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof trackPurchaseClick>>,
+  TError,
+  { data: BodyType<TrackPurchaseClickRequest> },
+  TContext
+> => {
+  const mutationKey = ["trackPurchaseClick"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof trackPurchaseClick>>,
+    { data: BodyType<TrackPurchaseClickRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return trackPurchaseClick(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type TrackPurchaseClickMutationResult = NonNullable<
+  Awaited<ReturnType<typeof trackPurchaseClick>>
+>;
+export type TrackPurchaseClickMutationBody =
+  BodyType<TrackPurchaseClickRequest>;
+export type TrackPurchaseClickMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Track purchase button click
+ */
+export const useTrackPurchaseClick = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof trackPurchaseClick>>,
+    TError,
+    { data: BodyType<TrackPurchaseClickRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof trackPurchaseClick>>,
+  TError,
+  { data: BodyType<TrackPurchaseClickRequest> },
+  TContext
+> => {
+  return useMutation(getTrackPurchaseClickMutationOptions(options));
+};
+
+/**
+ * Returns the total number of tracked purchase clicks.
+ * @summary Get purchase click stats
+ */
+export const getGetPurchaseClickStatsUrl = () => {
+  return `/api/analytics/purchase-clicks`;
+};
+
+export const getPurchaseClickStats = async (
+  options?: RequestInit,
+): Promise<PurchaseClickStats> => {
+  return customFetch<PurchaseClickStats>(getGetPurchaseClickStatsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetPurchaseClickStatsQueryKey = () => {
+  return [`/api/analytics/purchase-clicks`] as const;
+};
+
+export const getGetPurchaseClickStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPurchaseClickStats>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getPurchaseClickStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetPurchaseClickStatsQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getPurchaseClickStats>>
+  > = ({ signal }) => getPurchaseClickStats({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPurchaseClickStats>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetPurchaseClickStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPurchaseClickStats>>
+>;
+export type GetPurchaseClickStatsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get purchase click stats
+ */
+
+export function useGetPurchaseClickStats<
+  TData = Awaited<ReturnType<typeof getPurchaseClickStats>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getPurchaseClickStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetPurchaseClickStatsQueryOptions(options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;

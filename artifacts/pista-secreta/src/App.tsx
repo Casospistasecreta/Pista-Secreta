@@ -3,18 +3,40 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import case1Image from "@assets/1.png";
 import case2Image from "@assets/2.png";
 
 const queryClient = new QueryClient();
+const purchaseUrl = "https://kiwify.app/CzueX7E";
+
+function getApiPath(path: string) {
+  return `${import.meta.env.BASE_URL}${path}`.replace(/\/{2,}/g, "/");
+}
 
 function LandingPage() {
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [purchaseClicks, setPurchaseClicks] = useState<number | null>(null);
+  const showStats = new URLSearchParams(window.location.search).get("stats") === "1";
+
+  useEffect(() => {
+    if (!showStats) {
+      return;
+    }
+
+    fetch(getApiPath("api/analytics/purchase-clicks"))
+      .then((response) => response.json())
+      .then((data: { totalClicks?: number }) => {
+        setPurchaseClicks(data.totalClicks ?? 0);
+      })
+      .catch(() => {
+        setPurchaseClicks(0);
+      });
+  }, [showStats]);
 
   const handleSignup = () => {
     if (!email || !email.includes("@")) {
@@ -24,6 +46,15 @@ function LandingPage() {
     setError(false);
     setSuccess(true);
     setEmail("");
+  };
+
+  const handlePurchaseClick = () => {
+    fetch(getApiPath("api/analytics/purchase-click"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ destination: purchaseUrl }),
+      keepalive: true,
+    }).catch(() => {});
   };
 
   return (
@@ -161,9 +192,10 @@ function LandingPage() {
             </p>
 
             <a 
-              href="https://kiwify.app/CzueX7E" 
+              href={purchaseUrl}
               target="_blank" 
               rel="noopener noreferrer"
+              onClick={handlePurchaseClick}
               className="block w-full bg-primary/90 hover:bg-primary text-background border-none rounded p-4 font-serif text-lg font-bold text-center mb-8 transition-colors shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)]"
             >Começar Investigação</a>
 
@@ -202,6 +234,11 @@ function LandingPage() {
           <p className="text-[10px] md:text-xs text-primary/25 text-center font-mono tracking-widest uppercase">
             Entrega digital imediata &nbsp;&middot;&nbsp; Sem assinatura &nbsp;&middot;&nbsp; Compatível com qualquer dispositivo
           </p>
+          {showStats && (
+            <p className="mt-4 text-[10px] md:text-xs text-primary/40 text-center font-mono tracking-widest uppercase">
+              Cliques no botão: {purchaseClicks ?? "carregando"}
+            </p>
+          )}
         </footer>
       </div>
     </div>

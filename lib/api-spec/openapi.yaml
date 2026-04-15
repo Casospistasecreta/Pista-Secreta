@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: analytics
+    description: Landing page analytics operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /analytics/purchase-click:
+    post:
+      operationId: trackPurchaseClick
+      tags: [analytics]
+      summary: Track purchase button click
+      description: Records a click on the purchase call-to-action.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrackPurchaseClickRequest"
+      responses:
+        "200":
+          description: Click tracked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrackPurchaseClickResponse"
+  /analytics/purchase-clicks:
+    get:
+      operationId: getPurchaseClickStats
+      tags: [analytics]
+      summary: Get purchase click stats
+      description: Returns the total number of tracked purchase clicks.
+      responses:
+        "200":
+          description: Purchase click stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PurchaseClickStats"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +67,26 @@ components:
           type: string
       required:
         - status
+    TrackPurchaseClickRequest:
+      type: object
+      properties:
+        destination:
+          type: string
+    TrackPurchaseClickResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        totalClicks:
+          type: integer
+      required:
+        - success
+        - totalClicks
+    PurchaseClickStats:
+      type: object
+      properties:
+        totalClicks:
+          type: integer
+      required:
+        - totalClicks
 

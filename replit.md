@@ -6,7 +6,7 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 
 ## Artifacts
 
-- **Pista Secreta** (`artifacts/pista-secreta`) — React/Vite landing page for an immersive Portuguese investigative mystery experience. Uses the provided ultraviolet landing page reference, local email signup success state, and a Kiwify purchase CTA.
+- **Pista Secreta** (`artifacts/pista-secreta`) — React/Vite landing page for an immersive Portuguese investigative mystery experience. Uses the provided ultraviolet landing page reference, local email signup success state, a Kiwify purchase CTA, and server-side purchase click tracking. Opening the page with `?stats=1` shows the current click total.
 
 ## Stack
 

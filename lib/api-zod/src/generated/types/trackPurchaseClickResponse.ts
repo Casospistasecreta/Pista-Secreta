@@ -5,19 +5,8 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
-
-export interface TrackPurchaseClickRequest {
-  destination?: string;
-}
 
 export interface TrackPurchaseClickResponse {
   success: boolean;
-  totalClicks: number;
-}
-
-export interface PurchaseClickStats {
   totalClicks: number;
 }

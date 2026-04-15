@@ -14,3 +14,24 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Records a click on the purchase call-to-action.
+ * @summary Track purchase button click
+ */
+export const TrackPurchaseClickBody = zod.object({
+  destination: zod.string().optional(),
+});
+
+export const TrackPurchaseClickResponse = zod.object({
+  success: zod.boolean(),
+  totalClicks: zod.number(),
+});
+
+/**
+ * Returns the total number of tracked purchase clicks.
+ * @summary Get purchase click stats
+ */
+export const GetPurchaseClickStatsResponse = zod.object({
+  totalClicks: zod.number(),
+});
