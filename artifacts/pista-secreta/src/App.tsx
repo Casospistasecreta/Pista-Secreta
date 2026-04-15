@@ -241,7 +241,7 @@ function LandingPage() {
                 Tempo médio: 1h - 2h
               </p>
               <a
-                href={purchaseUrl}
+                href="https://pay.kiwify.com.br/ZG3gabG"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handlePurchaseClick}
