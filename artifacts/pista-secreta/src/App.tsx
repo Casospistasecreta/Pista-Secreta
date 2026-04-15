@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import case2Image from "@assets/2.png";
 
 const queryClient = new QueryClient();
 
@@ -93,7 +94,7 @@ function LandingPage() {
               <p className="text-sm text-muted mb-4 line-clamp-2">
                 Dentro do campus, ninguém é inocente. Cada pista leva a outro suspeito.
               </p>
-              <img src="/case-2.png" alt="Caso 002 archive" className="w-full h-32 object-cover rounded border border-primary/10 grayscale group-hover:grayscale-0 transition-all opacity-80" />
+              <img src={case2Image} alt="Caso 002 archive" className="w-full h-32 object-cover rounded border border-primary/10 grayscale group-hover:grayscale-0 transition-all opacity-80" />
             </div>
           </div>
         </section>
