@@ -175,60 +175,107 @@ function LandingPage() {
 
         <div className="h-px ultraviolet-gradient my-12 opacity-50 animate-in fade-in duration-1000 delay-700 fill-mode-both" />
 
-        <section className="bg-white/5 border border-primary/15 rounded-lg p-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-700 fill-mode-both relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
-          
-          <div className="relative z-10">
-            <div className="flex items-baseline gap-3 mb-1">
-              <span className="font-serif text-4xl md:text-5xl font-bold text-primary">R$ 47</span>
-              <span className="text-sm text-muted">por caso · acesso completo e imediato</span>
-            </div>
-            
-            <p className="font-mono text-xs text-muted tracking-wide mb-8">
-              Ideal para 2–6 pessoas · date, amigos ou família
-              <br />
-              <br />
-              Tempo médio: 1h - 2h
-            </p>
-
-            <a 
-              href={purchaseUrl}
-              target="_blank" 
-              rel="noopener noreferrer"
-              onClick={handlePurchaseClick}
-              className="block w-full bg-primary/90 hover:bg-primary text-background border-none rounded p-4 font-serif text-lg font-bold text-center mb-8 transition-colors shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)]"
-            >Começar Investigação</a>
-
-            <div className="border-t border-primary/10 pt-6">
-              <p className="text-xs text-muted text-center italic mb-4">
-                ou entre na lista — seja o primeiro a saber dos novos casos
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Input 
-                  type="email" 
-                  placeholder="seu@email.com" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={`bg-white/5 border-${error ? 'destructive' : 'primary/20'} focus-visible:ring-primary/30 h-12 font-serif text-base placeholder:text-primary/30`}
-                />
-                <Button 
-                  onClick={handleSignup}
-                  variant="outline" 
-                  className="h-12 font-mono text-xs tracking-wider uppercase border-primary/25 hover:border-primary/40 hover:bg-white/5 hover:text-primary whitespace-nowrap"
-                >
-                  Entrar na lista
-                </Button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-700 fill-mode-both">
+          <section className="bg-white/5 border border-primary/15 rounded-lg p-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
+            <div className="relative z-10">
+              <h2 className="font-serif text-lg font-bold text-primary mb-4">O Caso Wendel Jr</h2>
+              <div className="flex items-baseline gap-3 mb-1">
+                <span className="font-serif text-4xl md:text-5xl font-bold text-primary">R$ 47</span>
+                <span className="text-sm text-muted">por caso · acesso completo e imediato</span>
               </div>
-              
-              {success && (
-                <div className="mt-4 p-3 bg-primary/5 border border-primary/20 rounded text-sm text-primary text-center italic animate-in fade-in slide-in-from-top-2">
-                  Anotado. Você será avisado quando o próximo caso chegar.
+              <p className="font-mono text-xs text-muted tracking-wide mb-8">
+                Ideal para 2–6 pessoas · date, amigos ou família
+                <br />
+                <br />
+                Tempo médio: 1h - 2h
+              </p>
+              <a
+                href={purchaseUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handlePurchaseClick}
+                className="block w-full bg-primary/90 hover:bg-primary text-background border-none rounded p-4 font-serif text-lg font-bold text-center mb-8 transition-colors shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)]"
+              >Começar Investigação</a>
+              <div className="border-t border-primary/10 pt-6">
+                <p className="text-xs text-muted text-center italic mb-4">
+                  ou entre na lista — seja o primeiro a saber dos novos casos
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Input
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={`bg-white/5 border-${error ? 'destructive' : 'primary/20'} focus-visible:ring-primary/30 h-12 font-serif text-base placeholder:text-primary/30`}
+                  />
+                  <Button
+                    onClick={handleSignup}
+                    variant="outline"
+                    className="h-12 font-mono text-xs tracking-wider uppercase border-primary/25 hover:border-primary/40 hover:bg-white/5 hover:text-primary whitespace-nowrap"
+                  >
+                    Entrar na lista
+                  </Button>
                 </div>
-              )}
+                {success && (
+                  <div className="mt-4 p-3 bg-primary/5 border border-primary/20 rounded text-sm text-primary text-center italic animate-in fade-in slide-in-from-top-2">
+                    Anotado. Você será avisado quando o próximo caso chegar.
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          <section className="bg-white/5 border border-primary/15 rounded-lg p-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
+            <div className="relative z-10">
+              <h2 className="font-serif text-lg font-bold text-primary mb-4">O Caso Universitário</h2>
+              <div className="flex items-baseline gap-3 mb-1">
+                <span className="font-serif text-4xl md:text-5xl font-bold text-primary">R$ 47</span>
+                <span className="text-sm text-muted">por caso · acesso completo e imediato</span>
+              </div>
+              <p className="font-mono text-xs text-muted tracking-wide mb-8">
+                Ideal para 2–6 pessoas · date, amigos ou família
+                <br />
+                <br />
+                Tempo médio: 1h - 2h
+              </p>
+              <a
+                href={purchaseUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handlePurchaseClick}
+                className="block w-full bg-primary/90 hover:bg-primary text-background border-none rounded p-4 font-serif text-lg font-bold text-center mb-8 transition-colors shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)]"
+              >Começar Investigação</a>
+              <div className="border-t border-primary/10 pt-6">
+                <p className="text-xs text-muted text-center italic mb-4">
+                  ou entre na lista — seja o primeiro a saber dos novos casos
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Input
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={`bg-white/5 border-${error ? 'destructive' : 'primary/20'} focus-visible:ring-primary/30 h-12 font-serif text-base placeholder:text-primary/30`}
+                  />
+                  <Button
+                    onClick={handleSignup}
+                    variant="outline"
+                    className="h-12 font-mono text-xs tracking-wider uppercase border-primary/25 hover:border-primary/40 hover:bg-white/5 hover:text-primary whitespace-nowrap"
+                  >
+                    Entrar na lista
+                  </Button>
+                </div>
+                {success && (
+                  <div className="mt-4 p-3 bg-primary/5 border border-primary/20 rounded text-sm text-primary text-center italic animate-in fade-in slide-in-from-top-2">
+                    Anotado. Você será avisado quando o próximo caso chegar.
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        </div>
 
         <footer className="mt-12 animate-in fade-in duration-1000 delay-1000">
           <p className="text-[10px] md:text-xs text-primary/25 text-center font-mono tracking-widest uppercase">
