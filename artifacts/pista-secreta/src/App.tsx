@@ -181,7 +181,7 @@ function LandingPage() {
             <div className="relative z-10">
               <h2 className="font-serif text-lg font-bold text-primary mb-4">O Caso Wendel Jr</h2>
               <div className="flex items-baseline gap-3 mb-1">
-                <span className="font-serif text-4xl md:text-5xl font-bold text-primary">R$ 47</span>
+                <span className="font-serif text-4xl md:text-5xl font-bold text-primary whitespace-nowrap">R$ 47</span>
                 <span className="text-sm text-muted">por caso · acesso completo e imediato</span>
               </div>
               <p className="font-mono text-xs text-muted tracking-wide mb-8">
@@ -231,7 +231,7 @@ function LandingPage() {
             <div className="relative z-10">
               <h2 className="font-serif text-lg font-bold text-primary mb-4">O Caso Universitário</h2>
               <div className="flex items-baseline gap-3 mb-1">
-                <span className="font-serif text-4xl md:text-5xl font-bold text-primary">R$ 47</span>
+                <span className="font-serif text-4xl md:text-5xl font-bold text-primary whitespace-nowrap">R$ 47</span>
                 <span className="text-sm text-muted">por caso · acesso completo e imediato</span>
               </div>
               <p className="font-mono text-xs text-muted tracking-wide mb-8">
