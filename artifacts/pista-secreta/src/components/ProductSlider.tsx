@@ -3,7 +3,7 @@ import { useState } from "react";
 const images = [
   { src: "/product-1.jpg", caption: "Envelopes lacrados com pistas" },
   { src: "/product-2.jpg", caption: "Documentos e fotos do caso" },
-  { src: "/product-3.jpg", caption: "Material impresso completo" },
+  { src: "/product-3.jpg", caption: "Vídeos e áudios gravados ambientados na Trama" },
   { src: "/product-4.jpg", caption: "Experiência para grupos" },
 ];
 
