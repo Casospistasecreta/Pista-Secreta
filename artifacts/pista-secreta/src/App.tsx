@@ -97,7 +97,13 @@ function LandingPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="relative bg-white/5 border border-primary/15 rounded-md p-6 overflow-hidden group hover:border-primary/30 transition-colors">
+            <a
+              href="https://pay.kiwify.com.br/LfosEmV"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handlePurchaseClick}
+              className="relative bg-white/5 border border-primary/15 rounded-md p-6 overflow-hidden group hover:border-primary/30 transition-colors block"
+            >
               <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70 group-hover:opacity-100 transition-opacity" />
               <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity rotate-12 scale-150 w-32 h-32 blur-xl bg-secondary rounded-full mix-blend-screen pointer-events-none" />
               
@@ -112,7 +118,7 @@ function LandingPage() {
                 Uma morte cercada de segredos. Quem tinha motivo? Quem estava lá naquela noite?
               </p>
               <img src={case1Image} alt="Caso 001 envelope" className="w-full h-32 object-cover rounded border border-primary/10 grayscale group-hover:grayscale-0 transition-all opacity-80" />
-            </div>
+            </a>
 
             <a
               href="https://pay.kiwify.com.br/ZG3gabG"
