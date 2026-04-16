@@ -133,55 +133,9 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500 fill-mode-both">
-          <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
-            O que está no arquivo
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {[
-              "3 envelopes com pistas impressas",
-              "Documentos e fotos do caso",
-              "Áudios de interrogatório",
-              "Vídeos ambientados na trama",
-              "Playlist temática exclusiva",
-              "PDF completo para imprimir"
-            ].map((item, i) => (
-              <div key={i} className="flex gap-3 items-start text-sm text-muted">
-                <span className="text-primary/80 mt-0.5 text-lg font-serif">›</span>
-                <span className="leading-snug">{item}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+        <div className="h-px ultraviolet-gradient my-12 opacity-50 animate-in fade-in duration-1000 delay-400 fill-mode-both" />
 
-        <ProductSlider />
-
-        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-600 fill-mode-both">
-          <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
-            Para quem é isso?
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {[
-              "Pessoas que amam mistério e investigação",
-              "Amigos em busca de desafios",
-              "Casais que querem algo diferente",
-              "Dates fora da caixinha"
-            ].map((item, i) => (
-              <div key={i} className="flex gap-3 items-start text-sm text-muted">
-                <span className="text-primary/80 mt-0.5 text-lg font-serif">›</span>
-                <span className="leading-snug">{item}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <TestimonialsSlider />
-
-        <div className="h-px ultraviolet-gradient my-12 opacity-50 animate-in fade-in duration-1000 delay-700 fill-mode-both" />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-700 fill-mode-both">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-400 fill-mode-both">
           <section className="bg-white/5 border border-primary/15 rounded-lg p-8 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
             <div className="relative z-10">
@@ -282,6 +236,52 @@ function LandingPage() {
             </div>
           </section>
         </div>
+
+        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500 fill-mode-both">
+          <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
+            O que está no arquivo
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              "3 envelopes com pistas impressas",
+              "Documentos e fotos do caso",
+              "Áudios de interrogatório",
+              "Vídeos ambientados na trama",
+              "Playlist temática exclusiva",
+              "PDF completo para imprimir"
+            ].map((item, i) => (
+              <div key={i} className="flex gap-3 items-start text-sm text-muted">
+                <span className="text-primary/80 mt-0.5 text-lg font-serif">›</span>
+                <span className="leading-snug">{item}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <ProductSlider />
+
+        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-600 fill-mode-both">
+          <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
+            Para quem é isso?
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              "Pessoas que amam mistério e investigação",
+              "Amigos em busca de desafios",
+              "Casais que querem algo diferente",
+              "Dates fora da caixinha"
+            ].map((item, i) => (
+              <div key={i} className="flex gap-3 items-start text-sm text-muted">
+                <span className="text-primary/80 mt-0.5 text-lg font-serif">›</span>
+                <span className="leading-snug">{item}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <TestimonialsSlider />
 
         <footer className="mt-12 animate-in fade-in duration-1000 delay-1000">
           <p className="text-[10px] md:text-xs text-primary/25 text-center font-mono tracking-widest uppercase">
