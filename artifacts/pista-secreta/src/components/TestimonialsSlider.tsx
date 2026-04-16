@@ -17,7 +17,7 @@ const testimonials = [
     name: "Camila Torres",
     location: "Rio de Janeiro, RJ",
     stars: 5,
-    text: "Fiz com meu grupo de amigas numa sexta à noite. Todo mundo amou. Já queremos o próximo caso.",
+    text: "Fiz com meu grupo de amigas pós a aula. A gente amou. Já queremos o próximo caso.",
   },
   {
     name: "Lucas Mendes",
