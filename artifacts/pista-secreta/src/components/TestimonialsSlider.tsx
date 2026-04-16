@@ -11,7 +11,7 @@ const testimonials = [
     name: "Rafael Souza",
     location: "Belo Horizonte, MG",
     stars: 5,
-    text: "A qualidade das pistas e dos áudios é impressionante. A gente realmente se sente investigando um caso real.",
+    text: "Eu e minha namorada não concordamos no final. Ela acertou e eu não, mas só da experiência já valeu o pato!",
   },
   {
     name: "Camila Torres",
