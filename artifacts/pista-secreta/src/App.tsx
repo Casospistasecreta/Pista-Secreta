@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import case1Image from "@assets/1.png";
 import case2Image from "@assets/2.png";
+import { ProductSlider } from "@/components/ProductSlider";
+import { TestimonialsSlider } from "@/components/TestimonialsSlider";
 
 const queryClient = new QueryClient();
 const purchaseUrl = "https://kiwify.app/CzueX7E";
@@ -153,6 +155,8 @@ function LandingPage() {
           </div>
         </section>
 
+        <ProductSlider />
+
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-600 fill-mode-both">
           <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
             Para quem é isso?
@@ -172,6 +176,8 @@ function LandingPage() {
             ))}
           </div>
         </section>
+
+        <TestimonialsSlider />
 
         <div className="h-px ultraviolet-gradient my-12 opacity-50 animate-in fade-in duration-1000 delay-700 fill-mode-both" />
 
