@@ -23,7 +23,7 @@ const testimonials = [
     name: "Lucas Mendes",
     location: "Curitiba, PR",
     stars: 5,
-    text: "Presente perfeito para quem ama true crime. Minha namorada ficou obcecada. Compramos os dois casos.",
+    text: "Presente perfeito para quem ama mistério e suspense. Minha namorada ficou obcecada. Compramos os dois casos.",
   },
 ];
 
