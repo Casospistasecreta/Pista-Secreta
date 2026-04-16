@@ -86,7 +86,7 @@ function LandingPage() {
             <br />
             Até Agora...
           </h1>
-          <p className="text-lg text-muted leading-relaxed max-w-lg">Você terá acesso às mesmas provas que um investigador teria: interrogatórios, arquivos ocultos e pistas do crime. 
+          <p className="text-lg text-muted leading-relaxed max-w-lg font-bold">Você terá acesso às mesmas provas que um investigador teria: interrogatórios, arquivos ocultos e pistas do crime. 
           Uma experiência investigativa imersiva para grupos de 2 a 6 pessoas. Provas reais, interrogatórios gravados, envelopes lacrados e um assassinato que precisa ser resolvido.</p>
         </header>
 
