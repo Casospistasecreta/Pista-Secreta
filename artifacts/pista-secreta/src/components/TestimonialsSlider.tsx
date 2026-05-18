@@ -11,7 +11,7 @@ const testimonials = [
     name: "Rafael Souza",
     location: "Belo Horizonte, MG",
     stars: 5,
-    text: "Eu e minha namorada não concordamos no final. Ela acertou e eu não, mas só da experiência já valeu o pato!",
+    text: "Eu e minha namorada não concordamos no final. Ela acertou e jogou na minha cara, mas só da experiência já valeu o pato!",
   },
   {
     name: "Camila Torres",
