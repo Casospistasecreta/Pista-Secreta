@@ -90,6 +90,18 @@ function LandingPage() {
           Uma experiência investigativa imersiva para grupos de 2 a 6 pessoas. Provas reais, interrogatórios gravados, envelopes lacrados e um assassinato que precisa ser resolvido.</p>
         </header>
 
+        <div className="flex justify-center my-8 animate-in fade-in duration-1000 delay-200 fill-mode-both">
+          <a
+            href="https://pay.kiwify.com.br/LfosEmV"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handlePurchaseClick}
+            className="bg-primary/90 hover:bg-primary text-background rounded px-8 py-4 font-serif text-lg font-bold transition-colors shadow-[0_0_20px_rgba(255,250,205,0.15)] hover:shadow-[0_0_35px_rgba(255,250,205,0.25)]"
+          >
+            Comece a Investigação
+          </a>
+        </div>
+
         <div className="h-px ultraviolet-gradient my-12 opacity-50 animate-in fade-in duration-1000 delay-300 fill-mode-both" />
 
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300 fill-mode-both">
