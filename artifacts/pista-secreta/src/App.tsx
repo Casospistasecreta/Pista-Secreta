@@ -196,28 +196,6 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500 fill-mode-both">
-          <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
-            O que está no arquivo
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {[
-              "3 envelopes com pistas impressas",
-              "Documentos e fotos do caso",
-              "Áudios de interrogatório",
-              "Vídeos ambientados na trama",
-              "Playlist temática exclusiva",
-              "PDF completo para imprimir"
-            ].map((item, i) => (
-              <div key={i} className="flex gap-3 items-start text-sm text-muted">
-                <span className="text-primary/80 mt-0.5 text-lg font-serif">›</span>
-                <span className="leading-snug">{item}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-600 fill-mode-both">
           <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
             Para quem é isso?
