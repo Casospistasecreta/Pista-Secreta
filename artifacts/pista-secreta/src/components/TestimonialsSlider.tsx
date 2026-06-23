@@ -5,7 +5,7 @@ const testimonials = [
     name: "Ana Lima",
     location: "São Paulo, SP",
     stars: 5,
-    text: "Passamos 2 horas tentando resolver e não paramos de rir e discutir as teorias. Melhor date que já fiz na vida.",
+    text: "Passamos um bocado resolvendo e não paramos de rir e discutir as teorias. Melhor date que já fiz na vida.",
   },
   {
     name: "Rafael Souza",
