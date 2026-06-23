@@ -208,8 +208,8 @@ function LandingPage() {
               "Casais que querem algo diferente",
               "Dates fora da caixinha"
             ].map((item, i) => (
-              <div key={i} className="flex gap-3 items-start text-sm text-muted">
-                <span className="text-primary/80 mt-0.5 text-lg font-serif">›</span>
+              <div key={i} className="flex gap-3 items-center text-sm text-muted">
+                <span className="text-primary/80 text-lg font-serif">›</span>
                 <span className="leading-snug">{item}</span>
               </div>
             ))}
