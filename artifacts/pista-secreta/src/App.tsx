@@ -112,113 +112,89 @@ function LandingPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a
-              href="https://pay.kiwify.com.br/LfosEmV"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handlePurchaseClick}
-              className="relative bg-white/5 border border-primary/15 rounded-md p-6 overflow-hidden group hover:border-primary/30 transition-colors block"
-            >
-              <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity rotate-12 scale-150 w-32 h-32 blur-xl bg-secondary rounded-full mix-blend-screen pointer-events-none" />
-              
-              <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                <span>Caso 001 - ARQUIVO CONFIDENCIAL</span>
-                <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/40 -rotate-2">
-                  Em aberto
-                </span>
-              </div>
-              <h3 className="font-serif text-xl font-bold mb-2">O Caso Wendel Jr</h3>
-              <p className="text-sm text-muted mb-4 line-clamp-2">
-                Uma morte cercada de segredos. Quem tinha motivo? Quem estava lá naquela noite?
-              </p>
-              <img src={case1Image} alt="Caso 001 envelope" className="w-full h-32 object-cover rounded border border-primary/10 grayscale group-hover:grayscale-0 transition-all opacity-80" />
-            </a>
+            {/* Card 1 */}
+            <div className="relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col">
+              <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
 
-            <a
-              href="https://pay.kiwify.com.br/ZG3gabG"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handlePurchaseClick}
-              className="relative bg-white/5 border border-primary/15 rounded-md p-6 overflow-hidden group hover:border-primary/30 transition-colors block"
-            >
-              <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity rotate-12 scale-150 w-32 h-32 blur-xl bg-secondary rounded-full mix-blend-screen pointer-events-none" />
-              
-              <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                <span>Caso 002 - ARQUIVO CONFIDENCIAL</span>
-                <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/40 -rotate-2">
-                  Em aberto
-                </span>
+              <div className="p-6 pb-4">
+                <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
+                  <span>Caso 001 - ARQUIVO CONFIDENCIAL</span>
+                  <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/40 -rotate-2">
+                    Em aberto
+                  </span>
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-2">O Caso Wendel Jr</h3>
+                <p className="text-sm text-muted mb-4">
+                  Uma morte cercada de segredos. Quem tinha motivo? Quem estava lá naquela noite?
+                </p>
+                <img src={case1Image} alt="Caso 001 envelope" className="w-full h-32 object-cover rounded border border-primary/10 opacity-80" />
               </div>
-              <h3 className="font-serif text-xl font-bold mb-2">O Caso Universitário</h3>
-              <p className="text-sm text-muted mb-4 line-clamp-2">
-                Dentro do campus, ninguém é inocente. Cada pista leva a outro suspeito.
-              </p>
-              <img src={case2Image} alt="Caso 002 archive" className="w-full h-32 object-cover rounded border border-primary/10 grayscale group-hover:grayscale-0 transition-all opacity-80" />
-            </a>
+
+              <div className="p-6 pt-4 flex flex-col flex-1 justify-end">
+                <div className="flex flex-col mb-1">
+                  <div className="flex items-center gap-3">
+                    <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">R$ 27</span>
+                    <span className="font-serif text-xl text-muted/60 line-through whitespace-nowrap">R$ 47</span>
+                  </div>
+                  <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">Promoção de Lançamento</span>
+                  <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
+                </div>
+                <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
+                  Ideal para 2–6 pessoas · date, amigos ou família<br />Tempo médio: 1h - 2h
+                </p>
+                <a
+                  href="https://pay.kiwify.com.br/LfosEmV"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={handlePurchaseClick}
+                  className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-colors shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)]"
+                >Começar Investigação</a>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col">
+              <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
+
+              <div className="p-6 pb-4">
+                <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
+                  <span>Caso 002 - ARQUIVO CONFIDENCIAL</span>
+                  <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/40 -rotate-2">
+                    Em aberto
+                  </span>
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-2">O Caso Universitário</h3>
+                <p className="text-sm text-muted mb-4">
+                  Dentro do campus, ninguém é inocente. Cada pista leva a outro suspeito.
+                </p>
+                <img src={case2Image} alt="Caso 002 archive" className="w-full h-32 object-cover rounded border border-primary/10 opacity-80" />
+              </div>
+
+              <div className="p-6 pt-4 flex flex-col flex-1 justify-end">
+                <div className="flex flex-col mb-1">
+                  <div className="flex items-center gap-3">
+                    <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">R$ 27</span>
+                    <span className="font-serif text-xl text-muted/60 line-through whitespace-nowrap">R$ 47</span>
+                  </div>
+                  <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">Promoção de Lançamento</span>
+                  <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
+                </div>
+                <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
+                  Ideal para 2–6 pessoas · date, amigos ou família<br />Tempo médio: 1h - 2h
+                </p>
+                <a
+                  href="https://pay.kiwify.com.br/ZG3gabG"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={handlePurchaseClick}
+                  className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-colors shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)]"
+                >Começar Investigação</a>
+              </div>
+            </div>
           </div>
         </section>
-
-        <div className="h-px ultraviolet-gradient my-12 opacity-50 animate-in fade-in duration-1000 delay-400 fill-mode-both" />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-400 fill-mode-both">
-          <section className="bg-white/5 border border-primary/15 rounded-lg p-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
-            <div className="relative z-10">
-              <h2 className="font-serif text-lg font-bold text-primary mb-4">O Caso Wendel Jr</h2>
-              <div className="flex flex-col mb-1">
-                <div className="flex items-center gap-3">
-                  <span className="font-serif text-4xl md:text-5xl font-bold text-red-400 whitespace-nowrap">R$ 27</span>
-                  <span className="font-serif text-xl text-muted/60 line-through whitespace-nowrap">R$ 47</span>
-                </div>
-                <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">Promoção de Lançamento</span>
-                <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
-              </div>
-              <p className="font-mono text-xs text-muted tracking-wide mb-8">
-                Ideal para 2–6 pessoas · date, amigos ou família
-                <br />
-                <br />
-                Tempo médio: 1h - 2h
-              </p>
-              <a
-                href="https://pay.kiwify.com.br/LfosEmV"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={handlePurchaseClick}
-                className="block w-full bg-primary/90 hover:bg-primary text-background border-none rounded p-4 font-serif text-lg font-bold text-center mb-8 transition-colors shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)]"
-              >Começar Investigação</a>
-            </div>
-          </section>
-
-          <section className="bg-white/5 border border-primary/15 rounded-lg p-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
-            <div className="relative z-10">
-              <h2 className="font-serif text-lg font-bold text-primary mb-4">O Caso Universitário</h2>
-              <div className="flex flex-col mb-1">
-                <div className="flex items-center gap-3">
-                  <span className="font-serif text-4xl md:text-5xl font-bold text-red-400 whitespace-nowrap">R$ 27</span>
-                  <span className="font-serif text-xl text-muted/60 line-through whitespace-nowrap">R$ 47</span>
-                </div>
-                <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">Promoção de Lançamento</span>
-                <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
-              </div>
-              <p className="font-mono text-xs text-muted tracking-wide mb-8">
-                Ideal para 2–6 pessoas · date, amigos ou família
-                <br />
-                <br />
-                Tempo médio: 1h - 2h
-              </p>
-              <a
-                href="https://pay.kiwify.com.br/ZG3gabG"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={handlePurchaseClick}
-                className="block w-full bg-primary/90 hover:bg-primary text-background border-none rounded p-4 font-serif text-lg font-bold text-center mb-8 transition-colors shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)]"
-              >Começar Investigação</a>
-            </div>
-          </section>
-        </div>
 
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500 fill-mode-both">
           <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
