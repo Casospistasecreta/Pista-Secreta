@@ -54,10 +54,9 @@ export function TestimonialsSlider() {
 
   return (
     <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 fill-mode-both">
-      <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
+      <h2 className="font-mono tracking-[0.25em] uppercase text-muted mb-6 text-[21px]">
         O que dizem os investigadores
       </h2>
-
       <div className="relative bg-white/5 border border-primary/15 rounded-md p-8 overflow-hidden min-h-[180px]">
         <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-50" />
 
