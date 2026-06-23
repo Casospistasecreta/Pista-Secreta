@@ -90,6 +90,8 @@ function LandingPage() {
           Uma experiência investigativa imersiva para grupos de 2 a 6 pessoas. Provas reais, interrogatórios gravados, envelopes lacrados e um assassinato que precisa ser resolvido.</p>
         </header>
 
+        <ProductSlider />
+
         <div className="flex justify-center my-8 animate-in fade-in duration-1000 delay-200 fill-mode-both">
           <a
             href="https://pay.kiwify.com.br/LfosEmV"
@@ -291,8 +293,6 @@ function LandingPage() {
             ))}
           </div>
         </section>
-
-        <ProductSlider />
 
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-600 fill-mode-both">
           <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
