@@ -45,13 +45,13 @@ export function ProductSlider() {
           {/* Arrows */}
           <button
             onClick={prev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-background/60 border border-primary/20 rounded text-primary/60 hover:text-primary hover:border-primary/40 transition-colors font-serif text-lg"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/80 border border-primary/40 rounded-md text-primary hover:bg-background hover:border-primary/70 transition-colors font-serif text-3xl shadow-lg"
           >
             ‹
           </button>
           <button
             onClick={next}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-background/60 border border-primary/20 rounded text-primary/60 hover:text-primary hover:border-primary/40 transition-colors font-serif text-lg"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/80 border border-primary/40 rounded-md text-primary hover:bg-background hover:border-primary/70 transition-colors font-serif text-3xl shadow-lg"
           >
             ›
           </button>
