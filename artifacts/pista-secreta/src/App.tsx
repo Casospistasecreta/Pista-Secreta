@@ -196,12 +196,12 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-600 fill-mode-both">
-          <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
+        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-600 fill-mode-both font-bold text-[20px]">
+          <h2 className="font-mono tracking-[0.25em] uppercase text-muted mb-6 text-[26px]">
             Para quem é isso?
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[23px]">
             {[
               "Pessoas que amam mistério e investigação",
               "Amigos em busca de desafios",
