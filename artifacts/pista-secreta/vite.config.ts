@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
+import fs from "fs";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
 const rawPort = process.env.PORT;
@@ -26,9 +27,37 @@ if (!basePath) {
   );
 }
 
+// Plugin that serves static HTML pages under /upsell/ and /upsell2/
+// before Vite's SPA fallback can intercept them.
+function staticHtmlPlugin(): import("vite").Plugin {
+  const staticRoutes: Record<string, string> = {
+    "/upsell/": path.resolve(import.meta.dirname, "public/upsell/index.html"),
+    "/upsell": path.resolve(import.meta.dirname, "public/upsell/index.html"),
+    "/upsell2/": path.resolve(import.meta.dirname, "public/upsell2/index.html"),
+    "/upsell2": path.resolve(import.meta.dirname, "public/upsell2/index.html"),
+  };
+
+  return {
+    name: "static-html-pages",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url?.split("?")[0] ?? "";
+        const filePath = staticRoutes[url];
+        if (filePath && fs.existsSync(filePath)) {
+          res.setHeader("Content-Type", "text/html; charset=utf-8");
+          res.end(fs.readFileSync(filePath));
+          return;
+        }
+        next();
+      });
+    },
+  };
+}
+
 export default defineConfig({
   base: basePath,
   plugins: [
+    staticHtmlPlugin(),
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
