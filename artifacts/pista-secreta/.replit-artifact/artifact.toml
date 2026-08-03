@@ -23,6 +23,22 @@ publicDir = "artifacts/pista-secreta/dist/public"
 serve = "static"
 
 [[services.production.rewrites]]
+from = "/upsell"
+to = "/upsell/index.html"
+
+[[services.production.rewrites]]
+from = "/upsell/"
+to = "/upsell/index.html"
+
+[[services.production.rewrites]]
+from = "/upsell2"
+to = "/upsell2/index.html"
+
+[[services.production.rewrites]]
+from = "/upsell2/"
+to = "/upsell2/index.html"
+
+[[services.production.rewrites]]
 from = "/*"
 to = "/index.html"
 
