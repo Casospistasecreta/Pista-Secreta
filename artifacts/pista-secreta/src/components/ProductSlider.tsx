@@ -183,7 +183,7 @@ export function ProductSlider() {
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent pointer-events-none" />
 
           {/* Caption */}
-          <div className="absolute bottom-4 left-6 right-6">
+          <div className="absolute bottom-4 left-6 right-6 z-20 pointer-events-none">
             <p className="font-mono text-[10px] tracking-widest uppercase text-muted">
               {slides[current].caption}
             </p>
@@ -193,14 +193,14 @@ export function ProductSlider() {
           <button
             onClick={prev}
             aria-label="Imagem anterior"
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/80 border border-primary/40 rounded-md text-primary hover:bg-background hover:border-primary/70 hover:scale-105 active:scale-95 transition-all duration-200 font-serif text-3xl shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
+            className="absolute left-3 top-1/2 z-30 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/90 border border-primary/50 rounded-md text-primary hover:bg-background hover:border-primary/70 hover:scale-105 active:scale-95 transition-all duration-200 font-serif text-3xl shadow-lg touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
           >
             ‹
           </button>
           <button
             onClick={next}
             aria-label="Próxima imagem"
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/80 border border-primary/40 rounded-md text-primary hover:bg-background hover:border-primary/70 hover:scale-105 active:scale-95 transition-all duration-200 font-serif text-3xl shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
+            className="absolute right-3 top-1/2 z-30 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/90 border border-primary/50 rounded-md text-primary hover:bg-background hover:border-primary/70 hover:scale-105 active:scale-95 transition-all duration-200 font-serif text-3xl shadow-lg touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
           >
             ›
           </button>
