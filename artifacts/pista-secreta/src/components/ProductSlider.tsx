@@ -16,7 +16,7 @@ export function ProductSlider() {
   return (
     <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500 fill-mode-both">
       <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
-        O produto em suas mãos
+        O QUE VEM NO CASO
       </h2>
 
       <div className="relative overflow-hidden rounded-md border border-primary/15 bg-white/5">
