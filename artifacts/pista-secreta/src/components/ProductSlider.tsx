@@ -28,11 +28,16 @@ const slides: Slide[] = [
           <div className="self-start bg-white/10 border border-primary/15 rounded-lg rounded-bl-sm px-4 py-2.5 max-w-[70%]">
             <div className="h-1.5 w-14 bg-primary/30 rounded-full" />
           </div>
-        </div>
         <MessageSquare className="absolute top-6 right-6 w-6 h-6 text-primary/25" strokeWidth={1.5} />
-        <p className="absolute bottom-14 left-0 right-0 text-center font-serif text-base md:text-lg font-bold px-8">
+        <p className="text-center font-serif text-base md:text-lg font-bold px-8">
           Você vai precisar investigar o que eles disseram.
         </p>
+        <img
+          src="/slide-conversations.png"
+          alt="Conversas e mensagens dos suspeitos"
+          className="w-full h-20 object-cover rounded border border-primary/20 opacity-80"
+        />
+        </div>
       </div>
     ),
   },
@@ -55,6 +60,11 @@ const slides: Slide[] = [
         <p className="font-serif text-lg md:text-xl font-bold text-center px-6 leading-tight">
           Vários suspeitos.<br />Várias teorias.<br />Uma verdade.
         </p>
+        <img
+          src="/slide-suspects.png"
+          alt="Múltiplos suspeitos e evidências"
+          className="w-40 h-20 object-cover rounded border border-primary/20 opacity-80"
+        />
       </div>
     ),
   },
@@ -68,6 +78,11 @@ const slides: Slide[] = [
           <Play className="w-7 h-7 md:w-8 md:h-8 text-primary/80 ml-1" fill="currentColor" strokeWidth={0} />
         </div>
         <p className="font-serif text-lg md:text-xl font-bold text-center px-6">A verdade está no final.</p>
+        <img
+          src="/slide-confession.png"
+          alt="Confissão em vídeo"
+          className="w-40 h-20 object-cover rounded border border-primary/20 opacity-80"
+        />
       </div>
     ),
   },
@@ -89,6 +104,11 @@ const slides: Slide[] = [
         <p className="font-serif text-lg md:text-xl font-bold text-center px-6 leading-tight">
           Uma investigação.<br />Onde você quiser.
         </p>
+        <img
+          src="/slide-anywhere.png"
+          alt="Investigação em qualquer lugar"
+          className="w-40 h-20 object-cover rounded border border-primary/20 opacity-80"
+        />
       </div>
     ),
   },
@@ -96,7 +116,7 @@ const slides: Slide[] = [
     type: "graphic",
     caption: "Monte sua teoria com quem, como e por quê",
     content: (
-      <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
+      <div className="w-full h-full relative flex flex-col items-center justify-center gap-4 overflow-hidden">
         <div className="grid grid-cols-3 gap-4 md:gap-8 px-6">
           {[
             { q: "QUEM?", Icon: Fingerprint },
@@ -111,6 +131,11 @@ const slides: Slide[] = [
             </div>
           ))}
         </div>
+        <img
+          src="/slide-theory.png"
+          alt="Quadro de investigação para montar teorias"
+          className="w-40 h-20 object-cover rounded border border-primary/20 opacity-80"
+        />
       </div>
     ),
   },
