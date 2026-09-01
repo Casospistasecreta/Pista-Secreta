@@ -125,7 +125,7 @@ function LandingPage() {
                 </div>
                 <h3 className="font-serif text-xl font-bold mb-2">O Caso Wendel Jr</h3>
                 <p className="text-sm text-muted mb-4">
-                  Uma morte cercada de segredos. Quem tinha motivo? Quem estava lá naquela noite?
+                   Futebol e intrigas. Um jogador famoso teve seu fim acidentalmente ou foi orquestrado?
                 </p>
                 <img src={case1Image} alt="Caso 001 envelope" className="w-full h-32 object-cover rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
