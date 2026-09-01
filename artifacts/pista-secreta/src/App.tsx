@@ -77,12 +77,12 @@ function LandingPage() {
           alt="Mesa de investigação com arquivos confidenciais, fotos e uma lupa" 
           className="w-full h-full object-cover opacity-30 mix-blend-luminosity"
         />
-        {/* Atmosfera investigativa sutil — fica sob as camadas de escurecimento acima */}
-        <div className="absolute inset-0 z-[5] pointer-events-none overflow-hidden" aria-hidden="true">
+        {/* Atmosfera investigativa sutil — acima do escurecimento para não ficar invisível, mas ainda inteiramente atrás do texto (protegido pelo z-10 do container de conteúdo, fora deste bloco) */}
+        <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden" aria-hidden="true">
           <div className="absolute -top-10 -right-10 w-72 h-72 bg-secondary/10 blur-[100px] rounded-full mix-blend-screen animate-atmosphere-drift-1" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 blur-[90px] rounded-full mix-blend-screen animate-atmosphere-drift-2" />
           <svg
-            className="absolute top-6 right-6 w-40 h-40 md:w-56 md:h-56 opacity-[0.16]"
+            className="absolute top-6 right-6 w-40 h-40 md:w-56 md:h-56 opacity-[0.12]"
             viewBox="0 0 200 200"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
