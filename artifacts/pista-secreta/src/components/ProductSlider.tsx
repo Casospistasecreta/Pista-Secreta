@@ -16,8 +16,15 @@ const slides: Slide[] = [
     caption: "Conversas e mensagens dos suspeitos",
     content: (
       <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
+        <img
+          src="/slide-conversations.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-background/55" />
         <div className="absolute top-1/4 left-1/4 w-56 h-56 bg-secondary/10 blur-[90px] rounded-full mix-blend-screen" />
-        <div className="relative flex flex-col gap-3 px-8 w-full max-w-xs">
+        <div className="relative z-10 flex flex-col gap-3 px-8 w-full max-w-xs">
           <div className="self-start bg-white/10 border border-primary/15 rounded-lg rounded-bl-sm px-4 py-2.5 max-w-[80%]">
             <div className="h-1.5 w-24 bg-primary/30 rounded-full mb-1.5" />
             <div className="h-1.5 w-16 bg-primary/20 rounded-full" />
@@ -28,15 +35,10 @@ const slides: Slide[] = [
           <div className="self-start bg-white/10 border border-primary/15 rounded-lg rounded-bl-sm px-4 py-2.5 max-w-[70%]">
             <div className="h-1.5 w-14 bg-primary/30 rounded-full" />
           </div>
-        <MessageSquare className="absolute top-6 right-6 w-6 h-6 text-primary/25" strokeWidth={1.5} />
+        <MessageSquare className="absolute top-6 right-6 z-10 w-6 h-6 text-primary/70" strokeWidth={1.5} />
         <p className="text-center font-serif text-base md:text-lg font-bold px-8">
           Você vai precisar investigar o que eles disseram.
         </p>
-        <img
-          src="/slide-conversations.png"
-          alt="Conversas e mensagens dos suspeitos"
-          className="w-full h-20 object-cover rounded border border-primary/20 opacity-80"
-        />
         </div>
       </div>
     ),
@@ -46,8 +48,15 @@ const slides: Slide[] = [
     caption: "Múltiplos suspeitos, teorias e álibis",
     content: (
       <div className="w-full h-full relative flex flex-col items-center justify-center gap-5 overflow-hidden">
+        <img
+          src="/slide-suspects.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-background/55" />
         <div className="absolute -top-10 -left-10 w-56 h-56 bg-secondary/10 blur-[90px] rounded-full mix-blend-screen" />
-        <div className="flex gap-3">
+        <div className="relative z-10 flex gap-3">
           {[0, 1, 2, 3].map((i) => (
             <div
               key={i}
@@ -57,14 +66,9 @@ const slides: Slide[] = [
             </div>
           ))}
         </div>
-        <p className="font-serif text-lg md:text-xl font-bold text-center px-6 leading-tight">
+        <p className="relative z-10 font-serif text-lg md:text-xl font-bold text-center px-6 leading-tight">
           Vários suspeitos.<br />Várias teorias.<br />Uma verdade.
         </p>
-        <img
-          src="/slide-suspects.png"
-          alt="Múltiplos suspeitos e evidências"
-          className="w-40 h-20 object-cover rounded border border-primary/20 opacity-80"
-        />
       </div>
     ),
   },
@@ -73,16 +77,18 @@ const slides: Slide[] = [
     caption: "Confissão em vídeo no final do Caso",
     content: (
       <div className="w-full h-full relative flex flex-col items-center justify-center gap-4 overflow-hidden bg-black/10">
-        <div className="absolute inset-6 border border-primary/15 rounded-md pointer-events-none" />
-        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-primary/40 flex items-center justify-center bg-white/5">
-          <Play className="w-7 h-7 md:w-8 md:h-8 text-primary/80 ml-1" fill="currentColor" strokeWidth={0} />
-        </div>
-        <p className="font-serif text-lg md:text-xl font-bold text-center px-6">A verdade está no final.</p>
         <img
           src="/slide-confession.png"
-          alt="Confissão em vídeo"
-          className="w-40 h-20 object-cover rounded border border-primary/20 opacity-80"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
         />
+        <div className="absolute inset-0 bg-background/55" />
+        <div className="absolute inset-6 z-10 border border-primary/35 rounded-md pointer-events-none" />
+        <div className="relative z-10 w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-primary/70 flex items-center justify-center bg-background/45">
+          <Play className="w-7 h-7 md:w-8 md:h-8 text-primary/80 ml-1" fill="currentColor" strokeWidth={0} />
+        </div>
+        <p className="relative z-10 font-serif text-lg md:text-xl font-bold text-center px-6">A verdade está no final.</p>
       </div>
     ),
   },
@@ -91,8 +97,15 @@ const slides: Slide[] = [
     caption: "Uma investigação  onde quiser (Em casa, no Date ou com Amigos)",
     content: (
       <div className="w-full h-full relative flex flex-col items-center justify-center gap-5 overflow-hidden">
+        <img
+          src="/slide-anywhere.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-background/55" />
         <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-secondary/10 blur-[90px] rounded-full mix-blend-screen" />
-        <div className="flex items-center gap-4">
+        <div className="relative z-10 flex items-center gap-4">
           <div className="w-14 h-10 md:w-16 md:h-11 border border-primary/25 rounded-sm bg-white/5 flex items-center justify-center">
             <Laptop className="w-5 h-5 text-primary/50" strokeWidth={1.5} />
           </div>
@@ -101,14 +114,9 @@ const slides: Slide[] = [
             <Smartphone className="w-4 h-4 text-primary/50" strokeWidth={1.5} />
           </div>
         </div>
-        <p className="font-serif text-lg md:text-xl font-bold text-center px-6 leading-tight">
+        <p className="relative z-10 font-serif text-lg md:text-xl font-bold text-center px-6 leading-tight">
           Uma investigação.<br />Onde você quiser.
         </p>
-        <img
-          src="/slide-anywhere.png"
-          alt="Investigação em qualquer lugar"
-          className="w-40 h-20 object-cover rounded border border-primary/20 opacity-80"
-        />
       </div>
     ),
   },
@@ -117,7 +125,14 @@ const slides: Slide[] = [
     caption: "Monte sua teoria com quem, como e por quê",
     content: (
       <div className="w-full h-full relative flex flex-col items-center justify-center gap-4 overflow-hidden">
-        <div className="grid grid-cols-3 gap-4 md:gap-8 px-6">
+        <img
+          src="/slide-theory.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-background/55" />
+        <div className="relative z-10 grid grid-cols-3 gap-4 md:gap-8 px-6">
           {[
             { q: "QUEM?", Icon: Fingerprint },
             { q: "COMO?", Icon: Search },
@@ -131,11 +146,6 @@ const slides: Slide[] = [
             </div>
           ))}
         </div>
-        <img
-          src="/slide-theory.png"
-          alt="Quadro de investigação para montar teorias"
-          className="w-40 h-20 object-cover rounded border border-primary/20 opacity-80"
-        />
       </div>
     ),
   },
