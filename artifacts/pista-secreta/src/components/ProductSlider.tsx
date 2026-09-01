@@ -7,7 +7,7 @@ type Slide =
   | { type: "graphic"; caption: string; content: ReactNode };
 
 const slides: Slide[] = [
-  { type: "photo", src: "/product-1.jpg", caption: "Envelopes lacrados com pistas" },
+  { type: "photo", src: "/product-1.jpg", caption: "Envelopes Digitais com Pistas" },
   { type: "photo", src: "/product-2.jpg", caption: "Documentos e fotos do caso" },
   { type: "photo", src: "/product-3.jpg", caption: "Arquivos multimídia extraídos da investigação" },
   { type: "photo", src: "/product-4.jpg", caption: "Experiência para grupos" },
@@ -60,7 +60,7 @@ const slides: Slide[] = [
   },
   {
     type: "graphic",
-    caption: "Confissão em vídeo — assista quando estiver pronto",
+    caption: "Confissão em vídeo no final do Caso",
     content: (
       <div className="w-full h-full relative flex flex-col items-center justify-center gap-4 overflow-hidden bg-black/10">
         <div className="absolute inset-6 border border-primary/15 rounded-md pointer-events-none" />
@@ -73,7 +73,7 @@ const slides: Slide[] = [
   },
   {
     type: "graphic",
-    caption: "Em casa, no date ou com os amigos",
+    caption: "Uma investigação  onde quiser (Em casa, no Date ou com Amigos)",
     content: (
       <div className="w-full h-full relative flex flex-col items-center justify-center gap-5 overflow-hidden">
         <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-secondary/10 blur-[90px] rounded-full mix-blend-screen" />
