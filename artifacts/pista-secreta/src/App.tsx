@@ -2,6 +2,7 @@ import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import NotFound from "@/pages/not-found";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,10 @@ import case1Image from "@assets/1.png";
 import case2Image from "@assets/2.png";
 import { ProductSlider } from "@/components/ProductSlider";
 import { TestimonialsSlider } from "@/components/TestimonialsSlider";
+import {
+  Search, Users, Heart, Compass,
+  Folder, Image as ImageIcon, ClipboardList, MessageSquare, Mic, Video, Music,
+} from "lucide-react";
 
 const queryClient = new QueryClient();
 const purchaseUrl = "https://kiwify.app/CzueX7E";
@@ -22,6 +27,7 @@ function LandingPage() {
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [caseModalOpen, setCaseModalOpen] = useState(false);
   const [purchaseClicks, setPurchaseClicks] = useState<number | null>(null);
   const showStats = new URLSearchParams(window.location.search).get("stats") === "1";
 
@@ -71,6 +77,24 @@ function LandingPage() {
           alt="Mesa de investigação com arquivos confidenciais, fotos e uma lupa" 
           className="w-full h-full object-cover opacity-30 mix-blend-luminosity"
         />
+        {/* Atmosfera investigativa sutil — fica sob as camadas de escurecimento acima */}
+        <div className="absolute inset-0 z-[5] pointer-events-none overflow-hidden" aria-hidden="true">
+          <div className="absolute -top-10 -right-10 w-72 h-72 bg-secondary/10 blur-[100px] rounded-full mix-blend-screen animate-atmosphere-drift-1" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 blur-[90px] rounded-full mix-blend-screen animate-atmosphere-drift-2" />
+          <svg
+            className="absolute top-6 right-6 w-40 h-40 md:w-56 md:h-56 opacity-[0.16]"
+            viewBox="0 0 200 200"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g className="animate-atmosphere-threads">
+              <path d="M100 40 C 60 90, 150 110, 40 160" stroke="#dc2626" strokeWidth="1" fill="none" />
+              <path d="M100 40 C 140 70, 60 130, 150 150" stroke="#dc2626" strokeWidth="1" fill="none" />
+            </g>
+            <circle cx="100" cy="40" r="7" fill="none" stroke="#dc2626" strokeWidth="0.5" opacity="0.5" />
+            <circle cx="100" cy="40" r="4" fill="#dc2626" className="animate-atmosphere-pin" />
+          </svg>
+        </div>
       </div>
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-12 md:py-24">
         <header className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 fill-mode-both">
@@ -92,16 +116,74 @@ function LandingPage() {
         <ProductSlider />
 
         <div className="flex justify-center my-8 animate-in fade-in duration-1000 delay-200 fill-mode-both">
-          <a
-            href="https://pay.kiwify.com.br/LfosEmV"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={handlePurchaseClick}
+          <button
+            type="button"
+            onClick={() => setCaseModalOpen(true)}
             className="bg-primary/90 hover:bg-primary text-background rounded px-8 py-4 font-serif text-lg font-bold transition-all duration-300 ease-out shadow-[0_0_24px_rgba(255,250,205,0.2)] hover:shadow-[0_0_42px_rgba(255,250,205,0.38)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Comece a Investigação
-          </a>
+          </button>
         </div>
+
+        <Dialog open={caseModalOpen} onOpenChange={setCaseModalOpen}>
+          <DialogContent className="bg-background border-primary/20 text-foreground max-w-2xl">
+            <DialogTitle className="font-serif text-2xl font-bold mb-0">Escolha seu caso</DialogTitle>
+            <DialogDescription className="font-mono text-[10px] tracking-widest uppercase text-muted mb-2">
+              Duas investigações disponíveis
+            </DialogDescription>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+              <div className="relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col">
+                <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
+                <div className="p-4">
+                  <div className="font-mono text-[9px] tracking-widest text-muted mb-2">CASO 001</div>
+                  <h4 className="font-serif text-lg font-bold mb-1">O Caso Wendel Jr</h4>
+                  <p className="text-xs text-muted mb-3 leading-snug">
+                    Futebol e intrigas. Um jogador famoso teve seu fim acidentalmente ou foi orquestrado?
+                  </p>
+                  <img src={case1Image} alt="Caso 001" className="w-full h-20 object-cover rounded border border-primary/10 opacity-90 mb-3" />
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="font-serif text-xl font-bold text-red-400">R$ 27</span>
+                    <span className="font-serif text-sm text-muted/60 line-through">R$ 47</span>
+                  </div>
+                  <a
+                    href="https://pay.kiwify.com.br/LfosEmV"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={handlePurchaseClick}
+                    className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-2.5 font-serif text-sm font-bold text-center transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  >
+                    Escolher este caso
+                  </a>
+                </div>
+              </div>
+
+              <div className="relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col">
+                <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
+                <div className="p-4">
+                  <div className="font-mono text-[9px] tracking-widest text-muted mb-2">CASO 002</div>
+                  <h4 className="font-serif text-lg font-bold mb-1">O Caso Universitário</h4>
+                  <p className="text-xs text-muted mb-3 leading-snug">
+                    Dentro do campus, ninguém é inocente. Cada pista leva a outro suspeito.
+                  </p>
+                  <img src={case2Image} alt="Caso 002" className="w-full h-20 object-cover rounded border border-primary/10 opacity-90 mb-3" />
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="font-serif text-xl font-bold text-red-400">R$ 27</span>
+                    <span className="font-serif text-sm text-muted/60 line-through">R$ 47</span>
+                  </div>
+                  <a
+                    href="https://pay.kiwify.com.br/ZG3gabG"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={handlePurchaseClick}
+                    className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-2.5 font-serif text-sm font-bold text-center transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  >
+                    Escolher este caso
+                  </a>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <div className="h-px ultraviolet-gradient my-12 opacity-50 animate-in fade-in duration-1000 delay-300 fill-mode-both" />
 
@@ -122,6 +204,20 @@ function LandingPage() {
                   <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
                     Em aberto
                   </span>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <span
+                        key={n}
+                        className={`block w-3 h-1.5 rounded-sm ${
+                          n <= 4 ? "bg-secondary/80" : "bg-primary/15 border border-primary/20"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-mono text-[9px] text-muted/70">4/5</span>
                 </div>
                 <h3 className="font-serif text-xl font-bold mb-2">O Caso Wendel Jr</h3>
                 <p className="text-sm text-muted mb-4">
@@ -165,6 +261,20 @@ function LandingPage() {
                     Em aberto
                   </span>
                 </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <span
+                        key={n}
+                        className={`block w-3 h-1.5 rounded-sm ${
+                          n <= 3 ? "bg-secondary/80" : "bg-primary/15 border border-primary/20"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-mono text-[9px] text-muted/70">3/5</span>
+                </div>
                 <h3 className="font-serif text-xl font-bold mb-2">O Caso Universitário</h3>
                 <p className="text-sm text-muted mb-4">
                   Dentro do campus, ninguém é inocente. Cada pista leva a outro suspeito.
@@ -204,14 +314,70 @@ function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {[
-              "Pessoas que amam mistério e investigação",
-              "Amigos em busca de desafios",
-              "Casais que querem algo diferente",
-              "Dates fora da caixinha"
+              { text: "Pessoas que amam mistério e investigação", Icon: Search },
+              { text: "Amigos em busca de desafios", Icon: Users },
+              { text: "Casais que querem algo diferente", Icon: Heart },
+              { text: "Dates fora da caixinha", Icon: Compass },
             ].map((item, i) => (
               <div key={i} className="flex gap-3 items-center text-muted text-base md:text-lg font-medium">
+                <span className="shrink-0 w-7 h-7 flex items-center justify-center rounded border border-primary/20 bg-white/5 text-primary/70 -rotate-2">
+                  <item.Icon className="w-3.5 h-3.5" strokeWidth={1.75} />
+                </span>
                 <span className="text-primary/80 text-lg font-serif shrink-0">›</span>
-                <span className="leading-snug">{item}</span>
+                <span className="leading-snug">{item.text}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-700 fill-mode-both">
+          <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
+            Como funciona
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4">
+            {[
+              { n: "01", title: "Compre", desc: "Receba seu caso investigativo." },
+              { n: "02", title: "Investigue", desc: "Analise documentos, evidências, depoimentos, áudios e vídeos." },
+              { n: "03", title: "Descubra", desc: "Monte sua teoria e descubra se você conseguiu solucionar o caso." },
+            ].map((step, i) => (
+              <div
+                key={i}
+                className={`flex flex-col gap-1 ${
+                  i > 0 ? "sm:pl-4 sm:border-l sm:border-primary/10 pt-4 sm:pt-0 border-t sm:border-t-0 border-primary/10" : ""
+                }`}
+              >
+                <span className="font-serif text-2xl font-bold text-primary/70">{step.n}</span>
+                <h3 className="font-serif text-base font-bold">{step.title}</h3>
+                <p className="text-sm text-muted leading-snug">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-800 fill-mode-both">
+          <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
+            O kit de evidências
+          </h2>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: "Dossiê", Icon: Folder },
+              { label: "Fotografias", Icon: ImageIcon },
+              { label: "Laudos", Icon: ClipboardList },
+              { label: "Conversas", Icon: MessageSquare },
+              { label: "Áudios", Icon: Mic },
+              { label: "Vídeos", Icon: Video },
+              { label: "Trilha sonora", Icon: Music },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="group flex flex-col items-center gap-2 bg-white/5 border border-primary/15 rounded-lg py-4 px-2 text-center transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07]"
+              >
+                <span className="w-9 h-9 flex items-center justify-center rounded border border-primary/25 bg-white/5 text-primary/80 -rotate-2 group-hover:rotate-0 transition-transform duration-300">
+                  <item.Icon className="w-4 h-4" strokeWidth={1.75} />
+                </span>
+                <span className="font-mono text-[9px] tracking-widest uppercase text-muted">{item.label}</span>
               </div>
             ))}
           </div>
