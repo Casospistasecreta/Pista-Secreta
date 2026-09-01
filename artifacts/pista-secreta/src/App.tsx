@@ -96,6 +96,11 @@ function LandingPage() {
           </svg>
         </div>
       </div>
+      <div className="smoke-overlay" aria-hidden="true">
+        <div className="smoke-wisp smoke-wisp-one" />
+        <div className="smoke-wisp smoke-wisp-two" />
+        <div className="smoke-wisp smoke-wisp-three" />
+      </div>
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-12 md:py-24">
         <header className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 fill-mode-both">
           <div className="flex items-center gap-4 mb-8">
