@@ -84,7 +84,6 @@ const slides: Slide[] = [
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-background/55" />
-        <div className="absolute inset-6 z-10 border border-primary/35 rounded-md pointer-events-none" />
         <div className="relative z-10 w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-primary/70 flex items-center justify-center bg-background/45">
           <Play className="w-7 h-7 md:w-8 md:h-8 text-primary/80 ml-1" fill="currentColor" strokeWidth={0} />
         </div>
