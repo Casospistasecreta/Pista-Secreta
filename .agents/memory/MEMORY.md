@@ -1,0 +1,1 @@
+- [Investigação Digital](investigacao-integration.md) — keep the device experience lazy-loaded and CSS-isolated from the landing page.

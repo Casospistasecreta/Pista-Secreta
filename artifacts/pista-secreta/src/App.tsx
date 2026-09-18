@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import NotFound from "@/pages/not-found";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import case1Image from "@assets/1.png";
@@ -19,6 +19,7 @@ import {
 
 const queryClient = new QueryClient();
 const purchaseUrl = "https://kiwify.app/CzueX7E";
+const InvestigacaoPage = lazy(() => import("@/investigacao/InvestigacaoPage"));
 
 // Case/product metadata used for analytics events (view_case / click_buy).
 const CASES: Record<CaseName, { name: CaseName; productName: string; value: number }> = {
@@ -459,9 +460,16 @@ function LandingPage() {
 }
 
 function Router() {
+  const investigacao = (
+    <Suspense fallback={<div style={{ minHeight: "100dvh", background: "#060409" }} />} >
+      <InvestigacaoPage />
+    </Suspense>
+  );
   return (
     <Switch>
       <Route path="/" component={LandingPage} />
+      <Route path="/investigacao">{investigacao}</Route>
+      <Route path="/investigacao/:slug">{investigacao}</Route>
       <Route component={NotFound} />
     </Switch>
   );
