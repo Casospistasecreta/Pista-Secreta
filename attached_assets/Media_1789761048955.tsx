@@ -1,0 +1,198 @@
+import { useEffect, useRef, useState } from "react";
+import { ImageIcon, Pause, Play, Video } from "lucide-react";
+import type { AudioRef, MediaRef } from "../types";
+
+/** Hash estável para gerar placeholders determinísticos a partir de uma string. */
+function hash(seed: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i += 1) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h);
+}
+
+function palette(seed: string) {
+  const h = hash(seed);
+  const hue = 250 + (h % 50) - 20; // faixa violeta
+  const hue2 = 38 + (h % 18); // faixa bege
+  const angle = h % 180;
+  return {
+    a: `hsl(${hue} 42% ${14 + (h % 7)}%)`,
+    b: `hsl(${hue + 18} 34% ${26 + (h % 9)}%)`,
+    c: `hsl(${hue2} 28% ${52 + (h % 10)}% / 0.28)`,
+    angle,
+    x: 20 + (h % 60),
+    y: 20 + ((h >> 3) % 60),
+  };
+}
+
+export function initials(name: string): string {
+  const clean = name.replace(/[^\p{L}\s]/gu, "").trim();
+  if (!clean) return "?";
+  const parts = clean.split(/\s+/);
+  const first = parts[0]?.[0] ?? "";
+  const second = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? "") : "";
+  return (first + second).toUpperCase();
+}
+
+/**
+ * Placeholder de foto/vídeo. Se `media.src` existir, mostra a imagem real —
+ * é por aqui que o conteúdo definitivo entra, sem tocar na interface.
+ */
+export function Photo({
+  media,
+  className = "",
+  rounded = "rounded-xl",
+  showKindBadge = true,
+}: {
+  media: MediaRef;
+  className?: string;
+  rounded?: string;
+  showKindBadge?: boolean;
+}) {
+  const p = palette(media.seed);
+
+  if (media.src) {
+    return (
+      <img
+        src={media.src}
+        alt={media.caption ?? "Mídia do dispositivo"}
+        className={`h-full w-full object-cover ${rounded} ${className}`}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={`relative h-full w-full overflow-hidden ${rounded} ${className}`}
+      style={{
+        background: `linear-gradient(${p.angle}deg, ${p.a}, ${p.b})`,
+      }}
+      aria-hidden="true"
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(60% 60% at ${p.x}% ${p.y}%, ${p.c}, transparent 70%)`,
+        }}
+      />
+      <div className="absolute inset-0 flex items-center justify-center">
+        {media.kind === "video" ? (
+          <Video size={18} className="opacity-25" />
+        ) : (
+          <ImageIcon size={18} className="opacity-25" />
+        )}
+      </div>
+      {showKindBadge && media.kind === "video" && (
+        <span className="inv-mono absolute bottom-1.5 right-2 text-[10px] tracking-wide opacity-70">
+          {media.durationSec ? `0:${String(media.durationSec).padStart(2, "0")}` : "VÍDEO"}
+        </span>
+      )}
+    </div>
+  );
+}
+
+export function Avatar({
+  name,
+  seed,
+  src,
+  size = 44,
+  ring = false,
+}: {
+  name: string;
+  seed: string;
+  src?: string;
+  size?: number;
+  ring?: boolean;
+}) {
+  const p = palette(seed);
+  return (
+    <div
+      className={`relative shrink-0 overflow-hidden rounded-full ${
+        ring ? "ring-1 ring-[var(--inv-line-strong)]" : ""
+      }`}
+      style={{
+        width: size,
+        height: size,
+        background: `linear-gradient(140deg, ${p.a}, ${p.b})`,
+      }}
+    >
+      {src ? (
+        <img src={src} alt={name} className="h-full w-full object-cover" />
+      ) : (
+        <span
+          className="inv-mono absolute inset-0 flex items-center justify-center tracking-wide text-[var(--inv-text)]/70"
+          style={{ fontSize: Math.max(10, size * 0.32) }}
+        >
+          {initials(name)}
+        </span>
+      )}
+    </div>
+  );
+}
+
+/** Player de áudio simulado (não há arquivo real nesta fase). */
+export function AudioPlayer({ audio, accent }: { audio: AudioRef; accent: string }) {
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const timer = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!playing) {
+      if (timer.current !== null) window.clearInterval(timer.current);
+      return;
+    }
+    timer.current = window.setInterval(() => {
+      setProgress((prev) => {
+        const next = prev + 100 / (audio.durationSec * 10);
+        if (next >= 100) {
+          setPlaying(false);
+          return 0;
+        }
+        return next;
+      });
+    }, 100);
+    return () => {
+      if (timer.current !== null) window.clearInterval(timer.current);
+    };
+  }, [playing, audio.durationSec]);
+
+  const bars = 26;
+
+  return (
+    <div className="flex min-w-[190px] items-center gap-3">
+      <button
+        type="button"
+        onClick={() => setPlaying((v) => !v)}
+        className="inv-press flex h-9 w-9 items-center justify-center rounded-full"
+        style={{ background: accent }}
+        aria-label={playing ? "Pausar áudio" : "Reproduzir áudio"}
+      >
+        {playing ? <Pause size={15} fill="currentColor" /> : <Play size={15} fill="currentColor" />}
+      </button>
+      <div className="flex-1">
+        <div className="flex h-6 items-center gap-[3px]">
+          {Array.from({ length: bars }).map((_, i) => {
+            const h = 6 + (hash(`${audio.id}-${i}`) % 14);
+            const active = (i / bars) * 100 <= progress;
+            return (
+              <span
+                key={i}
+                className="w-[2px] rounded-full transition-opacity"
+                style={{
+                  height: h,
+                  background: active ? accent : "currentColor",
+                  opacity: active ? 1 : 0.28,
+                }}
+              />
+            );
+          })}
+        </div>
+        <span className="inv-mono text-[10px] opacity-60">
+          {`0:${String(audio.durationSec).padStart(2, "0")}`}
+        </span>
+      </div>
+    </div>
+  );
+}
