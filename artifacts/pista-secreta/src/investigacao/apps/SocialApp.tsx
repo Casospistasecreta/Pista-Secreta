@@ -11,7 +11,15 @@ const ACCENT = "#e2a0ff";
 function Carousel({ post }: { post: SocialPost }) {
   const [index, setIndex] = useState(0);
   const media = post.media[index] ?? post.media[0];
-  return <div className="relative aspect-[4/5] w-full"><Photo media={media} rounded="rounded-none" />{post.media.length > 1 && <><div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">{post.media.map((item, i) => <button key={item.id} type="button" onClick={() => setIndex(i)} className="h-1.5 w-1.5 rounded-full" style={{ background: "#fff", opacity: i === index ? .95 : .35 }} aria-label={`Foto ${i + 1}`} />)}</div><span className="inv-mono absolute right-3 top-3 rounded-full bg-black/45 px-2 py-0.5 text-[10px]">{index + 1}/{post.media.length}</span></>}</div>;
+  return <div className="relative flex w-full justify-center bg-black/40">
+    {media.src
+      ? <img src={media.src} alt={media.caption ?? "Mídia do dispositivo"} className="block h-auto max-h-[560px] w-full object-contain" />
+      : <div className="aspect-[4/5] w-full"><Photo media={media} rounded="rounded-none" /></div>}
+    {post.media.length > 1 && <>
+      <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">{post.media.map((item, i) => <button key={item.id} type="button" onClick={() => setIndex(i)} className="h-1.5 w-1.5 rounded-full" style={{ background: "#fff", opacity: i === index ? .95 : .35 }} aria-label={`Foto ${i + 1}`} />)}</div>
+      <span className="inv-mono absolute right-3 top-3 rounded-full bg-black/45 px-2 py-0.5 text-[10px]">{index + 1}/{post.media.length}</span>
+    </>}
+  </div>;
 }
 
 function PostCard({ post, compact = false }: { post: SocialPost; compact?: boolean }) {
