@@ -1,0 +1,262 @@
+import type { SocialComment, SocialData, SocialPost } from "../../types";
+import { asset, photo } from "./helpers";
+
+/*
+ * Feed do PicLike, da publicação mais recente para a mais antiga.
+ * Ajuste autorizado: o post "Domingão" da Shirley foi movido de 07/jan (quarta)
+ * para 04/jan (domingo). Curtidas e o dia dos comentários são valores menores
+ * adicionados para o layout (o roteiro não os traz).
+ */
+
+const comments = (day: string, rows: Array<[string, string]>): SocialComment[] =>
+  rows.map(([author, text], i) => ({ id: `c${i + 1}`, author, text, at: day }));
+
+const posts: SocialPost[] = [
+  {
+    id: "post-0216",
+    author: "@jornaldigitalvarginha",
+    media: [photo("sp-0216", "piklike/foto-0216.webp")],
+    caption: "Manchete Jornal Varginha dia 20 de Janeiro de 2026",
+    at: "21 JAN · 14:35",
+    place: "Varginha",
+    likes: 312,
+    comments: comments("21 JAN", [
+      ["@Wesleytigo", "Bizarro! Comprava sempre lá. Não compro mais"],
+      ["@jesuinonaza", "Tragédia"],
+      ["@luciadimelo", "Gentee, o que será que fez isso?"],
+      ["@rodrigoneto", "Deve ter algo apodrecendo no lago."],
+    ]),
+  },
+  {
+    id: "post-0215",
+    author: "@mariamoreira",
+    media: [photo("sp-0215", "piklike/foto-0215.webp")],
+    caption: "Vendo Filtro de Barro (Novinho em folha)",
+    at: "15 JAN · 13:05",
+    place: "Varginha",
+    likes: 9,
+    comments: comments("15 JAN", [
+      ["@Shirleymarco", "Quanto tá? o meu já tá bem ressecado"],
+      ["@juditeama", "Já sinto o gostinho da água"],
+      ["@Izamoreira", "Que nostalgia!"],
+    ]),
+  },
+  {
+    id: "post-0214",
+    author: "@coisasdevó",
+    media: [photo("sp-0214", "piklike/foto-0214.webp")],
+    caption: "Quem ama cuida.",
+    at: "13 JAN · 09:20",
+    likes: 1840,
+    comments: comments("13 JAN", [
+      ["@luciana_martins", "É importante preservar a imagem dos mais velhos"],
+      ["@mari_souza", "Um dia será a gente"],
+    ]),
+  },
+  {
+    id: "post-0213",
+    author: "@gatosloucos",
+    media: [photo("sp-0213", "piklike/foto-0213.webp")],
+    caption: "Dia de banho no gatinho",
+    at: "12 JAN · 15:17",
+    likes: 2406,
+    comments: comments("12 JAN", [
+      ["@Kelly_jota", "kkkkk fofo"],
+      ["@Sidilei88", "Bicho feio"],
+      ["@Odetedejesus", "Parece o Et de Varginha"],
+      ["@Betograppa", "@odetedejesus como voce sabe?"],
+      ["@Odetedejesus", "@Betograppa eu já vi!!"],
+    ]),
+  },
+  {
+    id: "post-0212",
+    author: "@Borgessebastiao",
+    media: [photo("sp-0212", "piklike/foto-0212.webp")],
+    caption: "Sigo na minha. Não preciso de ninguém",
+    at: "11 JAN · 21:16",
+    likes: 14,
+    comments: comments("11 JAN", [
+      ["@marcosribeiro", "Alguma coisa aconteceu aí hein kkkkk"],
+      ["@sebastiao_92", "Só falei uma verdade."],
+      ["@lucasferreira", "Quem sabe, sabe…"],
+    ]),
+  },
+  {
+    id: "post-0211",
+    author: "@Aerovias",
+    media: [photo("sp-0211", "piklike/foto-0211.webp")],
+    caption: "Viajar a dois fica ainda melhor. Aproveite nossas condições especiais para casais e planeje a próxima viagem.",
+    at: "10 JAN · 14:30",
+    place: "Bora Bora",
+    likes: 987,
+    comments: comments("10 JAN", [
+      ["@julianacosta", "Quanto esta para duas pessoas?"],
+      ["@rafael_92", "Falam que é lindo lá"],
+      ["@amandinha", "Queria poder ir"],
+      ["@lucasferreira", "Tem promoção pra viagem em Fevereiro?"],
+      ["@carolzinha", "O Céu mais azul de todo planeta"],
+    ]),
+  },
+  {
+    id: "post-0210",
+    author: "@Shirleymarco",
+    // Mesma imagem da foto enviada por mensagem (mensagens/foto-012121).
+    media: [photo("sp-0210", "mensagens/foto-012121.webp")],
+    caption: "Domingão do jeito que a gente gosta: família, churrasco e muita conversa",
+    at: "04 JAN · 16:37",
+    place: "Varginha",
+    likes: 47,
+    comments: comments("04 JAN", [
+      ["@maisa_oliveira", "Foi bom demais"],
+      ["@humberto_92", "Carne tava boa demais"],
+      ["@marianamarco", "Shirley, depois me manda as fotos!"],
+      ["@lucasferreira", "Essa família reunida é coisa rara"],
+      ["@patricia_ff", "Próximo tem que ser aqui em casa hein"],
+      ["@robertopires", "Só faltou chamar a gente kkkkk"],
+    ]),
+  },
+  {
+    id: "post-029",
+    author: "@averdade",
+    media: [photo("sp-029", "piklike/foto-029.webp")],
+    caption: "Esta é uma ilustração baseada nos relatos divulgados pelos moradores.",
+    at: "27 DEZ · 18:22",
+    likes: 653,
+    comments: comments("27 DEZ", [
+      ["@eduardopaes", "Essa descrição bate muito com o que eu já ouvi"],
+      ["@biafreitas", "Eu teria saído correndo na hora"],
+      ["@rodrigo_77", "Todo mundo fala algo diferente"],
+      ["@ufologiareal", "A descrição original falava dos olhos vermelhos"],
+      ["@carlosvga", "Minha tia descreveu praticamente assim"],
+      ["@felipe_nunes", "Até hoje ninguém explica direito essa história"],
+    ]),
+  },
+  {
+    id: "post-028",
+    author: "@Varginhalocal",
+    media: [photo("sp-028", "piklike/foto-028.webp")],
+    caption:
+      "Alunos de escolas da cidade receberam uma visita inesperada nesta semana. Um homem vestido de Papai Noel chegou de motocicleta e distribuiu presentes e alguns quitutes para as crianças. O curioso é que, até o momento, ninguém sabe quem está por trás da ação.",
+    at: "23 DEZ · 15:19",
+    place: "Varginha",
+    likes: 1275,
+    comments: comments("23 DEZ", [
+      ["@carolzinha", "Que coisa mais linda"],
+      ["@varginhense_raiz", "Alguém sabe quem é esse Papai Noel?"],
+      ["@andreoliveira", "Vi essa moto passando ontem pela cidade kkkkk"],
+      ["@julianaalves", "As crianças devem ter amado"],
+      ["@thiagoribas", "Será que ele faz isso todo ano?"],
+      ["@marcelovga", "Ninguém descobriu ainda quem é?"],
+      ["@patricia_87", "Muito legal essa iniciativa!"],
+    ]),
+  },
+  {
+    id: "post-027",
+    author: "@Firminotrans",
+    media: [photo("sp-027", "piklike/foto-027.webp")],
+    caption: "Na estrada, cada entrega carrega uma história. Há décadas levando mais do que cargas: compromisso, confiança e segurança.",
+    at: "18 DEZ · 19:21",
+    place: "Brasil",
+    likes: 421,
+    comments: comments("18 DEZ", [
+      ["@joaosilva", "Empresa séria demais"],
+      ["@marcosribeiro", "Bichão bonito da peste"],
+      ["@caminhoneirosp", "Quem vive na estrada sabe a importância de uma transportadora boa"],
+      ["@deboramartins", "To precisando fazer uma mudança"],
+      ["@paulohenrique", "É verdade que eles são de Varginha mesmo?"],
+    ]),
+  },
+  {
+    id: "post-026",
+    author: "@ufocatolicos",
+    media: [photo("sp-026", "piklike/foto-026.webp")],
+    caption: "Moradores dizem que não é a primeira vez que algo parecido aparece no céu.",
+    at: "14 DEZ · 10:19",
+    place: "Varginha",
+    likes: 538,
+    comments: comments("14 DEZ", [
+      ["@thiagomg", "Eu já vi uma luz parecida anos atrás"],
+      ["@varginhense_raiz", "De novo isso?"],
+      ["@julio_ufologia", "Isso não parece avião não"],
+      ["@Azimov", "Perto da Estrada das Flores da pra ver todo mês"],
+      ["@jotamg", "Gente, provavelmente é só avião kkkkk"],
+      ["@marcelovga", "@jotamg avião parado desse jeito?"],
+    ]),
+  },
+  {
+    id: "post-024",
+    author: "@Reencontrofamiliar",
+    media: [photo("sp-024", "piklike/foto-024.webp")],
+    caption: "HELENA MARTINS ESTÁ PROCURANDO SUA FAMÍLIA BIOLÓGICA. Ela tem poucas informações sobre seu passado e espera que alguém possa reconhecer essa história.",
+    at: "28 NOV · 15:55",
+    place: "Goiânia",
+    likes: 204,
+    comments: comments("28 NOV", [
+      ["@mari_souza", "Espero muito que ela encontre."],
+      ["@familiasdobrasil", "Helena, você sabe o nome da sua mãe biológica?"],
+      ["@lucianamartins", "Será que alguém da família está procurando por ela também?"],
+      ["@andreoliveira", "Compartilhando. Vai que alguém reconhece."],
+    ]),
+  },
+  {
+    id: "post-023",
+    author: "@Shirleymarco",
+    media: [photo("sp-023", "piklike/foto-023.webp")],
+    caption: "Bolo, café e uma tarde boa com a minha amiga Odete",
+    at: "22 OUT · 15:22",
+    place: "Varginha",
+    likes: 63,
+    comments: comments("22 OUT", [
+      ["@sandraferreira", "Qualquer dia quero esse café também kkkkk"],
+      ["@patricia_ff", "Dona Odete é uma querida"],
+    ]),
+  },
+  {
+    id: "post-022",
+    author: "@Deiseborges_s2",
+    media: [photo("sp-022", "piklike/foto-022.webp")],
+    caption: "TBT Música boa, gente bonita e zero vontade de ir embora",
+    at: "08 OUT · 20:55",
+    place: "Lollapalooza",
+    likes: 388,
+    comments: comments("08 OUT", [
+      ["@amandinha", "AMO FIFTY HARMONY"],
+      ["@brunomartins", "Lolla é outro nível"],
+      ["@carolzinha", "Dia bom amg"],
+      ["@rafael_92", "Esse look te deixou uma gata"],
+      ["@lucasferreira", "Ano que vem eu vou junto"],
+    ]),
+  },
+  {
+    id: "post-021",
+    author: "@Azimov",
+    media: [photo("sp-021", "piklike/foto-021.webp")],
+    caption: "Moradores registram mais um avistamento nos céus de Varginha. Participe das Reuniões Mensais para o Arrebatamento",
+    at: "30 SET · 21:47",
+    likes: 176,
+    comments: comments("30 SET", [
+      ["@larissamg", "Eu vi isso ontem também!"],
+      ["@vinicius_oliveira", "Parece estar muito baixo"],
+      ["@brunocosta", "Alguém sabe exatamente onde acontece isso?"],
+      ["@Azimov", "@brunocosta Perto da Estrada das Flores há um Terreno Baldio"],
+      ["@observadordecoisas", "Não parece um avião convencional"],
+      ["@sandropaiv", "@brunocosta Sai dessa louco!!"],
+      ["@andreluiz", "Provavelmente drone, pessoal kkkkk"],
+    ]),
+  },
+];
+
+export const social: SocialData = {
+  profile: {
+    handle: "@Odetedejesus",
+    displayName: "Odete de Jesus",
+    bio: "Varginha, MG",
+    avatarSeed: "odete",
+    avatarSrc: asset("fotos/img-160720232.webp"),
+    posts: 0,
+    followers: 41,
+    following: 87,
+  },
+  posts,
+  people: [],
+};

@@ -212,6 +212,8 @@ export interface Transaction {
   method?: string;
   category?: string;
   redacted?: boolean;
+  /** Transação trancada: detalhes só aparecem após informar o PIN. */
+  lock?: Lock;
 }
 
 export interface BankDay {
@@ -266,6 +268,8 @@ export interface DeviceConfig {
   dateLabel: string;
   /** Hora "congelada" do dispositivo. Se ausente, usa o relógio real. */
   frozenTime?: string;
+  /** Imagem de fundo da tela de bloqueio (opcional). */
+  wallpaperSrc?: string;
 }
 
 export interface CaseData {
@@ -281,6 +285,29 @@ export interface CaseData {
   locations: LocationDay[];
   bank: BankData;
   notes: Note[];
+  /** Texto de abertura exibido no topo de "Meu caso" (opcional). */
+  briefing?: string[];
+  /** Resposta final do caso (opcional). Sem isto, "Meu caso" só lista evidências. */
+  finalAnswer?: FinalAnswerConfig;
+}
+
+/* ------------------------------------------------------------------ */
+/* Resposta final                                                      */
+/* ------------------------------------------------------------------ */
+
+export interface FinalQuestion {
+  id: string;
+  prompt: string;
+  options: { id: string; text: string }[];
+  correctOptionId: string;
+}
+
+export interface FinalAnswerConfig {
+  /** Texto introdutório da tela de resposta. */
+  intro?: string;
+  questions: FinalQuestion[];
+  /** Relatório exibido somente depois que todas as respostas estão corretas. */
+  report: { title: string; subtitle?: string; paragraphs: string[]; closing?: string };
 }
 
 /* ------------------------------------------------------------------ */
