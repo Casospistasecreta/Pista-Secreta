@@ -18,5 +18,8 @@ export const photo = (id: string, path: string, takenAt?: string): MediaRef => (
 /** Mensagem enviada por Odete (dona do aparelho). */
 export const me = (id: string, at: string, text?: string, media?: MediaRef): Message => ({ id, from: "victim", at, text, media });
 
+/** Registro de chamada (sem texto). */
+export const callLog = (id: string, from: "victim" | "them", at: string, call: NonNullable<Message["call"]>): Message => ({ id, from, at, call });
+
 /** Mensagem recebida por Odete. */
 export const them = (id: string, at: string, text?: string, media?: MediaRef): Message => ({ id, from: "them", at, text, media });

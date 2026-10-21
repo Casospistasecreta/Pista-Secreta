@@ -1,5 +1,5 @@
 import type { Conversation } from "../../types";
-import { asset, me, photo, them } from "./helpers";
+import { asset, callLog, me, photo, them } from "./helpers";
 
 /*
  * Datas: o roteiro não traz o ano. Out–Dez = 2025, Jan–Fev = 2026
@@ -96,7 +96,7 @@ const afonso: Conversation = {
   id: "c-afonso",
   person: { id: "p-afonso", name: "Afonso", avatarSeed: "afonso", avatarSrc: asset("perfis/afonso.webp") },
   preview: "Conteúdo protegido",
-  time: "06 JAN",
+  time: "16 JAN",
   archived: true,
   lock: { passcode: "6969" },
   messages: [
@@ -119,7 +119,26 @@ const afonso: Conversation = {
     them("m17", "05 JAN · 22:23", "Você não sai da minha cabeça. Amanhã eu te pego ein"),
     me("m18", "06 JAN · 07:22", "Lembrando que esse é nosso quinto encontro"),
     them("m19", "06 JAN · 17:54", "Já sei. To chegando!! bora bora"),
+    me("m20", "16 JAN · 13:26", "Acabei de receber uma ligação"),
+    me("m21", "16 JAN · 13:27", "VOCÊ ESTÁ CASADO ESSE TEMPO TODO"),
+    me("m22", "16 JAN · 13:27", "Seu porco. Sua mulher descobriu tudo e espero do fundo do meu coração que ela te deixe."),
+    me("m23", "16 JAN · 13:28", "Não dá mais para confiar em ninguém nesse mundo"),
+    them("m24", "16 JAN · 13:31", "E dai? Eu posso aguentar as duas e algumas mais"),
+    them("m25", "16 JAN · 13:31", "Ela não vai me deixar e se você deixar eu arrumo outra velha qualquer"),
+    me("m26", "16 JAN · 13:57", "Seu murcho. você não é nada"),
+    them("m27", "16 JAN · 15:11", "Para de drama, deixa eu te levar para sair. Aquela procura está quase se encaminhando."),
+    them("m28", "16 JAN · 15:13", "Você não quer saber onde ele está?"),
+    me("m29", "16 JAN · 15:34", "Eu já sei onde ele está. Bem longe de você."),
+    callLog("m30", "them", "16 JAN · 15:46", { kind: "missed", count: 3 }),
   ],
+};
+
+const ligacao: Conversation = {
+  id: "c-desconhecido-ligacao",
+  person: { id: "p-desconhecido-ligacao", name: "Número desconhecido", avatarSeed: "desconhecido-ligacao", avatarSrc: asset("perfis/desconhecido.webp") },
+  preview: "1 ligação recebida · 00:34:19",
+  time: "16 JAN",
+  messages: [callLog("m01", "them", "16 JAN · 12:47", { kind: "received", count: 1, duration: "00:34:19" })],
 };
 
 const azimov: Conversation = {
@@ -169,4 +188,4 @@ const nova: Conversation = {
 };
 
 /** Ordenadas pela mensagem mais recente, como num aplicativo real. */
-export const messages: Conversation[] = [sebastiao, shirley, luisDesconhecido, deise, nova, azimov, afonso];
+export const messages: Conversation[] = [sebastiao, shirley, luisDesconhecido, ligacao, deise, nova, azimov, afonso];

@@ -84,6 +84,8 @@ export interface Message {
   deleted?: boolean;
   /** Separador de data exibido acima da mensagem. */
   dayLabel?: string;
+  /** Registro de chamada (recebida, perdida ou feita), exibido no lugar do texto. */
+  call?: { kind: "received" | "missed" | "outgoing"; count?: number; duration?: string };
 }
 
 export interface Conversation {
