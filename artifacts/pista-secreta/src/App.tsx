@@ -371,31 +371,49 @@ function LandingPage() {
             </div>
 
             {/* Card 3 — Caso Dona Odete (Investigação Digital) */}
-            <div ref={case3CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)] md:col-span-2">
+            <div ref={case3CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
               <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
               <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
 
               <div className="p-6 pb-4">
                 <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                  <span>Investigação Digital</span>
+                  <span>Caso 003 - ARQUIVO CONFIDENCIAL</span>
                   <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
                     Em aberto
                   </span>
                 </div>
-                <h3 className="font-serif text-xl font-bold mb-1">Caso Dona Odete</h3>
-                <p className="font-serif text-base font-bold text-primary mb-2">
-                  Uma vida inteira de segredos. Um desaparecimento sem respostas.
-                </p>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <span
+                        key={n}
+                        className={`block w-3 h-1.5 rounded-sm ${
+                          n <= 2 ? "bg-secondary/80" : "bg-primary/15 border border-primary/20"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-mono text-[9px] text-muted/70">2/5</span>
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-2">Caso Dona Odete</h3>
                 <p className="text-sm text-muted mb-4">
                   Varginha, Minas Gerais. Dona Odete desapareceu, e seu celular pode guardar as pistas que faltam para reconstruir essa história. Explore conversas, investigue perfis, conecte informações e descubra o que está por trás do desaparecimento.
                 </p>
-                <img src={case3Image} alt="Caso Dona Odete — Investigação Digital" className="w-full h-48 md:h-64 object-cover object-[30%_30%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+                <img src={case3Image} alt="Caso Dona Odete — Investigação Digital" className="w-full h-32 object-cover object-[30%_30%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
               <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
-                <div className="flex flex-col mb-5">
-                  <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">R$ 7,90</span>
+                <div className="flex flex-col mb-1">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">R$ 7,90</span>
+                  </div>
+                  <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">Promoção de Lançamento</span>
+                  <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
                 </div>
+                <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
+                  Ideal para 1–2 pessoas · date, amigos ou família<br />Tempo médio: 30 - 50 min.
+                </p>
                 <a
                   href={DONA_ODETE_CHECKOUT_URL}
                   target="_blank"
