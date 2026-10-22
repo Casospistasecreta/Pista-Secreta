@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import case1Image from "@assets/1.png";
 import case2Image from "@assets/2.png";
+import case3Image from "@assets/caso-dona-odete.jpg";
 import { ProductSlider } from "@/components/ProductSlider";
 import { TestimonialsSlider } from "@/components/TestimonialsSlider";
 import { trackClickBuy, trackViewCase, type CaseName } from "@/lib/analytics";
@@ -19,12 +20,15 @@ import {
 
 const queryClient = new QueryClient();
 const purchaseUrl = "https://kiwify.app/CzueX7E";
+// Checkout direto do Caso Dona Odete (Kiwify).
+const DONA_ODETE_CHECKOUT_URL = "https://pay.kiwify.com.br/Pyk6u44";
 const InvestigacaoPage = lazy(() => import("@/investigacao/InvestigacaoPage"));
 
 // Case/product metadata used for analytics events (view_case / click_buy).
 const CASES: Record<CaseName, { name: CaseName; productName: string; value: number }> = {
   wendel_jr: { name: "wendel_jr", productName: "O Caso Wendel Jr", value: 27 },
   universitario: { name: "universitario", productName: "O Caso Universitário", value: 27 },
+  dona_odete: { name: "dona_odete", productName: "Caso Dona Odete — Investigação Digital", value: 7.9 },
 };
 
 function getApiPath(path: string) {
@@ -40,6 +44,7 @@ function LandingPage() {
   const showStats = new URLSearchParams(window.location.search).get("stats") === "1";
   const case1CardRef = useRef<HTMLDivElement>(null);
   const case2CardRef = useRef<HTMLDivElement>(null);
+  const case3CardRef = useRef<HTMLDivElement>(null);
   const viewedCasesRef = useRef<Set<CaseName>>(new Set());
 
   useEffect(() => {
@@ -64,6 +69,7 @@ function LandingPage() {
     const targets: Array<{ el: HTMLDivElement | null; caseName: CaseName }> = [
       { el: case1CardRef.current, caseName: "wendel_jr" },
       { el: case2CardRef.current, caseName: "universitario" },
+      { el: case3CardRef.current, caseName: "dona_odete" },
     ];
 
     const observer = new IntersectionObserver(
@@ -103,7 +109,7 @@ function LandingPage() {
     setEmail("");
   };
 
-  const handlePurchaseClick = (caseName: CaseName) => {
+  const handlePurchaseClick = (caseName: CaseName, destination: string = purchaseUrl) => {
     const caseInfo = CASES[caseName];
     trackClickBuy({
       case_name: caseInfo.name,
@@ -114,7 +120,7 @@ function LandingPage() {
     fetch(getApiPath("api/analytics/purchase-click"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ destination: purchaseUrl }),
+      body: JSON.stringify({ destination }),
       keepalive: true,
     }).catch(() => {});
   };
@@ -361,6 +367,42 @@ function LandingPage() {
                   onClick={() => handlePurchaseClick("universitario")}
                   className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >Começar Investigação</a>
+              </div>
+            </div>
+
+            {/* Card 3 — Caso Dona Odete (Investigação Digital) */}
+            <div ref={case3CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)] md:col-span-2">
+              <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
+
+              <div className="p-6 pb-4">
+                <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
+                  <span>Investigação Digital</span>
+                  <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
+                    Em aberto
+                  </span>
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-1">Caso Dona Odete</h3>
+                <p className="font-serif text-base font-bold text-primary mb-2">
+                  Uma vida inteira de segredos. Um desaparecimento sem respostas.
+                </p>
+                <p className="text-sm text-muted mb-4">
+                  Varginha, Minas Gerais. Dona Odete desapareceu, e seu celular pode guardar as pistas que faltam para reconstruir essa história. Explore conversas, investigue perfis, conecte informações e descubra o que está por trás do desaparecimento.
+                </p>
+                <img src={case3Image} alt="Caso Dona Odete — Investigação Digital" className="w-full h-48 md:h-64 object-cover object-[30%_30%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+              </div>
+
+              <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
+                <div className="flex flex-col mb-5">
+                  <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">R$ 7,90</span>
+                </div>
+                <a
+                  href={DONA_ODETE_CHECKOUT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handlePurchaseClick("dona_odete", DONA_ODETE_CHECKOUT_URL)}
+                  className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >INVESTIGAR O CASO</a>
               </div>
             </div>
           </div>

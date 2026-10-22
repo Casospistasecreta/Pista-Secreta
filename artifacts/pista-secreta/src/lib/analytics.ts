@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export type CaseName = "wendel_jr" | "universitario";
+export type CaseName = "wendel_jr" | "universitario" | "dona_odete";
 
 export interface CaseEventParams {
   /** Stable identifier for the case/product, e.g. "wendel_jr" */
