@@ -5,9 +5,12 @@ import { AppShell } from "../components/AppShell";
 import { EvidenceToggle } from "../components/EvidenceToggle";
 import { PasscodePrompt } from "../components/PasscodePrompt";
 const ACCENT = "#b7f0e2";
-const money = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+const makeMoney = (currency: "BRL" | "RUB" = "BRL") => (v: number) =>
+  currency === "RUB"
+    ? `${v < 0 ? "-" : ""}₽ ${Math.abs(v).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    : v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 export function BankApp() {
-  const { caseData, current, open, isUnlocked } = useDevice(); const [hidden, setHidden] = useState(false); const bank = caseData.bank;
+  const { caseData, current, open, isUnlocked } = useDevice(); const [hidden, setHidden] = useState(false); const bank = caseData.bank; const money = makeMoney(bank.currency);
   if (current?.view === "transaction") {
     for (const day of bank.days) {
       const t = day.transactions.find((x) => x.id === current.id);

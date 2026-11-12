@@ -47,6 +47,8 @@ export interface MediaRef {
   place?: string;
   /** Duração em segundos (somente vídeo). */
   durationSec?: number;
+  /** Ajuste da imagem no visualizador da galeria. Padrão: "cover" (preenche e corta). "contain" mostra a foto inteira. */
+  fit?: "cover" | "contain";
 }
 
 export interface AudioRef {
@@ -159,6 +161,10 @@ export interface MatchProfile {
   messages?: Message[];
   /** Nome redigido/censurado na lista ("██████"). */
   redacted?: boolean;
+  /** Texto no lugar de "{distanceKm} km" (ex.: "a 40 m de você"). */
+  distanceLabel?: string;
+  /** Linhas extras de "Dados do perfil" (ex.: criado em, local do cadastro). */
+  details?: { label: string; value: string }[];
 }
 
 export interface MatchesData {
@@ -227,6 +233,8 @@ export interface BankDay {
 export interface BankData {
   brand: string;
   holder: string;
+  /** Moeda exibida. Padrão: "BRL" (R$). */
+  currency?: "BRL" | "RUB";
   balance: number;
   days: BankDay[];
 }
@@ -247,6 +255,13 @@ export interface Note {
   link?: { label: string; url: string };
   pinned?: boolean;
   lock?: Lock;
+  /** Gravação associada à nota. O player só aparece quando `src` existir. */
+  audio?: NoteAudio;
+}
+
+export interface NoteAudio {
+  src?: string;
+  label?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -301,15 +316,43 @@ export interface FinalQuestion {
   id: string;
   prompt: string;
   options: { id: string; text: string }[];
-  correctOptionId: string;
+  /** Resposta correta (escolha única). */
+  correctOptionId?: string;
+  /** "multiple" = o jogador marca várias opções; acerta só se marcar exatamente `correctOptionIds`. */
+  type?: "single" | "multiple";
+  correctOptionIds?: string[];
+  /** Somente com `scoring`: pontos da pergunta. */
+  points?: number;
+  /** Somente com `scoring`: pergunta opcional (não bloqueia o envio). */
+  bonus?: boolean;
+  /** Somente com `scoring`: textos exibidos no resultado. */
+  feedback?: {
+    correct?: string;
+    wrong?: string;
+    /** Texto específico para uma alternativa errada (escolha única). */
+    wrongByOption?: Record<string, string>;
+  };
+}
+
+export interface FinalReport {
+  title: string;
+  subtitle?: string;
+  paragraphs: string[];
+  closing?: string;
+}
+
+/** Modo com pontuação: o envio sempre gera um resultado (faixa conforme os pontos) e permite refazer. */
+export interface FinalScoring {
+  tiers: { id: string; label: string; minPoints: number; report: FinalReport }[];
 }
 
 export interface FinalAnswerConfig {
   /** Texto introdutório da tela de resposta. */
   intro?: string;
   questions: FinalQuestion[];
-  /** Relatório exibido somente depois que todas as respostas estão corretas. */
-  report: { title: string; subtitle?: string; paragraphs: string[]; closing?: string };
+  /** Relatório exibido somente depois que todas as respostas estão corretas (modo sem `scoring`). */
+  report: FinalReport;
+  scoring?: FinalScoring;
 }
 
 /* ------------------------------------------------------------------ */

@@ -22,6 +22,13 @@ const queryClient = new QueryClient();
 const purchaseUrl = "https://kiwify.app/CzueX7E";
 // Checkout direto do Caso Dona Odete (Kiwify).
 const DONA_ODETE_CHECKOUT_URL = "https://pay.kiwify.com.br/Pyk6u44";
+// Caso 004 — Rasputin. Preencha estes dois valores quando o produto estiver pronto na Kiwify;
+// enquanto estiverem vazios, o card mostra "Em breve" (sem preço e sem botão de compra).
+const RASPUTIN_CHECKOUT_URL = ""; // ex.: "https://pay.kiwify.com.br/XXXXXXX"
+const RASPUTIN_PRICE = 0; // em reais, ex.: 9.9
+const RASPUTIN_AVAILABLE = RASPUTIN_CHECKOUT_URL !== "" && RASPUTIN_PRICE > 0;
+const RASPUTIN_PRICE_LABEL = `R$ ${RASPUTIN_PRICE.toFixed(2).replace(".", ",")}`;
+const RASPUTIN_CARD_IMAGE = `${import.meta.env.BASE_URL}investigacao/caso-rasputin/card.webp`;
 const InvestigacaoPage = lazy(() => import("@/investigacao/InvestigacaoPage"));
 
 // Case/product metadata used for analytics events (view_case / click_buy).
@@ -29,6 +36,7 @@ const CASES: Record<CaseName, { name: CaseName; productName: string; value: numb
   wendel_jr: { name: "wendel_jr", productName: "O Caso Wendel Jr", value: 27 },
   universitario: { name: "universitario", productName: "O Caso Universitário", value: 27 },
   dona_odete: { name: "dona_odete", productName: "Caso Dona Odete — Investigação Digital", value: 7.9 },
+  rasputin: { name: "rasputin", productName: "Caso Rasputin — Investigação Digital", value: RASPUTIN_PRICE },
 };
 
 function getApiPath(path: string) {
@@ -45,6 +53,7 @@ function LandingPage() {
   const case1CardRef = useRef<HTMLDivElement>(null);
   const case2CardRef = useRef<HTMLDivElement>(null);
   const case3CardRef = useRef<HTMLDivElement>(null);
+  const case4CardRef = useRef<HTMLDivElement>(null);
   const viewedCasesRef = useRef<Set<CaseName>>(new Set());
 
   useEffect(() => {
@@ -70,6 +79,7 @@ function LandingPage() {
       { el: case1CardRef.current, caseName: "wendel_jr" },
       { el: case2CardRef.current, caseName: "universitario" },
       { el: case3CardRef.current, caseName: "dona_odete" },
+      ...(RASPUTIN_AVAILABLE ? [{ el: case4CardRef.current, caseName: "rasputin" as CaseName }] : []),
     ];
 
     const observer = new IntersectionObserver(
@@ -421,6 +431,69 @@ function LandingPage() {
                   onClick={() => handlePurchaseClick("dona_odete", DONA_ODETE_CHECKOUT_URL)}
                   className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >Começar Investigação</a>
+              </div>
+            </div>
+
+            {/* Card 4 — Caso Rasputin (Investigação Digital) */}
+            <div ref={case4CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
+              <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
+
+              <div className="p-6 pb-4">
+                <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
+                  <span>Caso 004 - ARQUIVO HISTÓRICO</span>
+                  <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
+                    Em aberto
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <span
+                        key={n}
+                        className={`block w-3 h-1.5 rounded-sm ${
+                          n <= 4 ? "bg-secondary/80" : "bg-primary/15 border border-primary/20"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-mono text-[9px] text-muted/70">4/5</span>
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-2">Caso Rasputin</h3>
+                <p className="text-sm text-muted mb-4">
+                  Petrogrado, 1916. O homem mais odiado da Rússia desapareceu. O celular dele ainda guarda tudo. Explore mensagens, fotos, perfis e registros de localização, cruze horários e descubra como ele morreu e quem é o culpado.
+                </p>
+                <img src={RASPUTIN_CARD_IMAGE} alt="Caso Rasputin — Investigação Digital" className="w-full h-32 object-cover object-[50%_28%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+              </div>
+
+              <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
+                <div className="flex flex-col mb-1">
+                  {RASPUTIN_AVAILABLE ? (
+                    <>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">{RASPUTIN_PRICE_LABEL}</span>
+                      </div>
+                      <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
+                    </>
+                  ) : (
+                    <span className="font-mono text-[10px] tracking-widest uppercase text-primary/60">Lançamento em breve</span>
+                  )}
+                </div>
+                <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
+                  Ideal para 1–3 pessoas<br />Tempo médio: 60 - 90 min.
+                </p>
+                {RASPUTIN_AVAILABLE ? (
+                  <a
+                    href={RASPUTIN_CHECKOUT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => handlePurchaseClick("rasputin", RASPUTIN_CHECKOUT_URL)}
+                    className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none"
+                  >Começar Investigação</a>
+                ) : (
+                  <div className="block w-full border border-primary/20 text-primary/50 rounded p-4 font-serif text-lg font-bold text-center cursor-not-allowed select-none" aria-disabled="true">Em breve</div>
+                )}
               </div>
             </div>
           </div>
