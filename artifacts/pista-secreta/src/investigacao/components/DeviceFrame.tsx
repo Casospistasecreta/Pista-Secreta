@@ -18,11 +18,11 @@ export function DeviceFrame({ children }: { children: ReactNode }) {
           </button>
         )}
       </div>
-      <div className="relative z-10 flex h-[100dvh] w-full flex-col overflow-hidden bg-[var(--inv-bg)] md:h-[min(860px,92vh)] md:w-[392px] md:rounded-[46px] md:border md:border-white/10 md:shadow-[0_50px_120px_-40px_rgba(0,0,0,0.95),0_0_0_10px_rgba(10,7,17,0.9)]">
-        <div className="pointer-events-none absolute left-1/2 top-2 z-30 hidden h-[26px] w-[104px] -translate-x-1/2 rounded-full bg-black/85 md:block" />
+      <div className="relative z-10 flex h-[100dvh] w-full flex-col overflow-hidden bg-[var(--inv-bg)] md:h-[min(860px,calc(100dvh-4rem))] md:min-h-[520px] md:w-[392px] md:rounded-[46px] md:border md:border-white/10 md:shadow-[0_50px_120px_-40px_rgba(0,0,0,0.95),0_0_0_10px_rgba(10,7,17,0.9)]">
+        <div className="pointer-events-none absolute left-1/2 top-2 z-30 hidden h-[26px] w-[76px] -translate-x-1/2 rounded-full bg-black/85 md:block" />
         <div className="relative flex h-full flex-col md:pt-1">{children}</div>
       </div>
-      <p className="inv-mono pointer-events-none absolute bottom-4 left-1/2 hidden -translate-x-1/2 text-[9px] uppercase tracking-[0.22em] text-[var(--inv-dim-2)] md:block">Evidência digital · uso restrito à investigação</p>
+      <p className="inv-mono pointer-events-none absolute bottom-4 left-1/2 hidden -translate-x-1/2 text-[9px] uppercase tracking-[0.22em] text-[var(--inv-dim-2)] [@media(min-width:768px)_and_(min-height:800px)]:block">Evidência digital · uso restrito à investigação</p>
     </div>
   );
 }

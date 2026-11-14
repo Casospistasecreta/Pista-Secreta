@@ -22,10 +22,9 @@ const queryClient = new QueryClient();
 const purchaseUrl = "https://kiwify.app/CzueX7E";
 // Checkout direto do Caso Dona Odete (Kiwify).
 const DONA_ODETE_CHECKOUT_URL = "https://pay.kiwify.com.br/Pyk6u44";
-// Caso 004 — Rasputin. Preencha estes dois valores quando o produto estiver pronto na Kiwify;
-// enquanto estiverem vazios, o card mostra "Em breve" (sem preço e sem botão de compra).
-const RASPUTIN_CHECKOUT_URL = ""; // ex.: "https://pay.kiwify.com.br/XXXXXXX"
-const RASPUTIN_PRICE = 0; // em reais, ex.: 9.9
+// Caso 004 — Rasputin (Kiwify). Se um dos dois valores ficar vazio/zero, o card volta a mostrar "Em breve".
+const RASPUTIN_CHECKOUT_URL: string = "https://pay.kiwify.com.br/77piF2p";
+const RASPUTIN_PRICE: number = 7.9; // em reais
 const RASPUTIN_AVAILABLE = RASPUTIN_CHECKOUT_URL !== "" && RASPUTIN_PRICE > 0;
 const RASPUTIN_PRICE_LABEL = `R$ ${RASPUTIN_PRICE.toFixed(2).replace(".", ",")}`;
 const RASPUTIN_CARD_IMAGE = `${import.meta.env.BASE_URL}investigacao/caso-rasputin/card.webp`;
@@ -464,7 +463,7 @@ function LandingPage() {
                 <p className="text-sm text-muted mb-4">
                   Petrogrado, 1916. O homem mais odiado da Rússia desapareceu. O celular dele ainda guarda tudo. Explore mensagens, fotos, perfis e registros de localização, cruze horários e descubra como ele morreu e quem é o culpado.
                 </p>
-                <img src={RASPUTIN_CARD_IMAGE} alt="Caso Rasputin — Investigação Digital" className="w-full h-32 object-cover object-[50%_28%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="relative"><img src={RASPUTIN_CARD_IMAGE} alt="Caso Rasputin — Investigação Digital" className="w-full h-32 object-cover object-[50%_28%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" /><span className="pointer-events-none absolute bottom-2 right-2 -rotate-6 rounded-sm border-2 border-red-500/80 bg-black/35 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-red-400/90 backdrop-blur-[1px]">Evidência Nº 0417</span></div>
               </div>
 
               <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">

@@ -29,6 +29,7 @@ export const casoRasputin: CaseData = {
     dateLabel: "terça-feira, 20 de dezembro",
     frozenTime: "18:07",
     wallpaperSrc: asset("wallpaper.webp"),
+    homeWallpaperSrc: asset("home-wallpaper.webp"),
   },
   briefing: [
     "Grigori Yefimovich Rasputin, 47 anos, desapareceu na madrugada de 17 de dezembro de 1916, em Petrogrado. Dois dias depois, um corpo foi retirado do gelo do rio Malaya Nevka. Os jornais já têm uma versão. A polícia já tem outra. Os suspeitos têm uma terceira.",
@@ -37,6 +38,7 @@ export const casoRasputin: CaseData = {
     "Utilize a área “Meu Caso” para registrar evidências relevantes, organizar suas descobertas e, ao final da investigação, enviar sua resposta.",
     "Atenção: todas as datas seguem o calendário juliano, usado na Rússia em 1916. Para chegar às datas do calendário atual, some 13 dias.",
   ],
+  stamp: { agency: "Departamento de Polícia de Petrogrado", code: "Evidência Nº 0417" },
   messages,
   social,
   matches,

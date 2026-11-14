@@ -287,6 +287,8 @@ export interface DeviceConfig {
   frozenTime?: string;
   /** Imagem de fundo da tela de bloqueio (opcional). */
   wallpaperSrc?: string;
+  /** Imagem de fundo da tela inicial (opcional). */
+  homeWallpaperSrc?: string;
 }
 
 export interface CaseData {
@@ -304,6 +306,8 @@ export interface CaseData {
   notes: Note[];
   /** Texto de abertura exibido no topo de "Meu caso" (opcional). */
   briefing?: string[];
+  /** Carimbo exibido em "Meu caso" (ambientação), ex.: { agency: "Departamento de Polícia", code: "Evidência Nº 0417" }. */
+  stamp?: { agency: string; code: string };
   /** Resposta final do caso (opcional). Sem isto, "Meu caso" só lista evidências. */
   finalAnswer?: FinalAnswerConfig;
 }

@@ -24,5 +24,5 @@ function Battery({ percent }: { percent: number }) {
 }
 export function StatusBar({ tone = "default" }: { tone?: "default" | "muted" }) {
   const { caseData } = useDevice(); const time = useDeviceClock();
-  return <div className={`relative z-20 flex shrink-0 items-center justify-between px-5 pb-1 pt-2 text-[11px] ${tone === "muted" ? "text-[var(--inv-dim)]" : "text-[var(--inv-text)]"}`}><span className="inv-mono tracking-wide">{time}</span><div className="flex items-center gap-2"><span className="inv-mono text-[9px] uppercase tracking-[0.16em] opacity-50">{caseData.device.carrier}</span><SignalBars /><Wifi size={12} className="opacity-70" /><Battery percent={caseData.device.batteryPercent} /></div></div>;
+  return <div className={`relative z-20 flex shrink-0 items-center justify-between px-5 pb-1 pt-2 md:pr-4 text-[11px] ${tone === "muted" ? "text-[var(--inv-dim)]" : "text-[var(--inv-text)]"}`}><span className="inv-mono tracking-wide">{time}</span><div className="flex items-center gap-1.5"><span className="inv-mono text-[9px] uppercase tracking-[0.1em] opacity-60">{caseData.device.carrier}</span><SignalBars /><Wifi size={12} className="opacity-70" /><Battery percent={caseData.device.batteryPercent} /></div></div>;
 }

@@ -11,7 +11,7 @@ function MiniMap({ stops, activeId }: { stops: LocationStop[]; activeId?: string
   const points = stops.filter((stop) => stop.point);
   const path = points.map((stop, index) => `${index === 0 ? "M" : "L"} ${stop.point!.x} ${stop.point!.y}`).join(" ");
   return (
-    <div className="relative h-40 overflow-hidden rounded-2xl border bg-[var(--inv-surface)]">
+    <div className="relative h-40 shrink-0 overflow-hidden rounded-2xl border bg-[var(--inv-surface)]">
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
         <path d="M -5 78 L 40 58 L 72 66 L 105 44 M 18 -5 L 26 40 L 20 105" fill="none" stroke="rgba(255,250,205,.07)" strokeWidth="3" />
         {path && <path d={path} fill="none" stroke={ACCENT} strokeWidth=".8" strokeDasharray="2.5 2" vectorEffect="non-scaling-stroke" />}
@@ -65,7 +65,7 @@ export function LocationApp() {
       title="Localização"
       subtitle="Histórico do dispositivo"
       right={<Navigation size={16} />}
-      below={<div className="flex gap-2 pt-3">{caseData.locations.map((item, index) => <button key={item.id} type="button" onClick={() => setDayIndex(index)} className="inv-press inv-mono rounded-full border px-3 py-1.5 text-[10px] uppercase" style={{ borderColor: index === dayIndex ? ACCENT : "var(--inv-line-strong)", color: index === dayIndex ? ACCENT : "var(--inv-dim)" }}>{item.label}</button>)}</div>}
+      below={<div className="inv-hide-scroll -mx-3 flex gap-2 overflow-x-auto px-3 pt-3" role="tablist" aria-label="Dias do histórico">{caseData.locations.map((item, index) => <button key={item.id} type="button" role="tab" aria-selected={index === dayIndex} onClick={(e) => { setDayIndex(index); const chip = e.currentTarget; const row = chip.parentElement; row?.scrollTo({ left: chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2, behavior: "smooth" }); }} className="inv-press inv-mono shrink-0 whitespace-nowrap rounded-full border px-3 py-2 text-[10px] uppercase" style={{ borderColor: index === dayIndex ? ACCENT : "var(--inv-line-strong)", color: index === dayIndex ? ACCENT : "var(--inv-dim)" }}>{item.label}</button>)}</div>}
     >
       {day ? (
         <>

@@ -6,28 +6,19 @@ import { asset } from "./helpers";
  * Ajuste autorizado: na Agenda, a chegada de Papa passou de 19 Dez (segunda) para 20 Dez (terça), como dizem as
  * mensagens de Papai e Mamãe ("na terça").
  *
- * ÁUDIO DO GRAVADOR: quando o arquivo existir, coloque-o em
- * public/investigacao/caso-rasputin/audio/ e troque a linha abaixo por, por exemplo:
- *   const GRAVACAO_AUDIO_SRC: string | undefined = asset("audio/gravacao-0001.mp3");
- * O player aparece sozinho na nota "Gravação 0001".
+ * GRAVADOR: o áudio real (public/investigacao/caso-rasputin/audio/gravacao-0001.mp3) substitui a transcrição em texto do
+ * roteiro. O arquivo original (.mov, 2:13) foi convertido para MP3 e teve cortado o silêncio digital do final (a partir de
+ * 2:05); para trocar o áudio basta substituir esse MP3 mantendo o nome.
  */
-const GRAVACAO_AUDIO_SRC: string | undefined = undefined;
-void asset;
+const GRAVACAO_AUDIO_SRC = asset("audio/gravacao-0001.mp3");
 
 export const notes: Note[] = [
   {
     id: "n-gravacao-0001",
     title: "Gravação 0001",
     at: "17 DEZ · 02:31",
-    preview: "Transcrição automática, baixa confiança.",
-    body: [
-      "17 Dez · 02h31 · duração 15m00s · iniciada por engano (botão lateral) · interrompida pelo limite de 15 minutos · transcrição automática, baixa confiança.\nFalantes identificados pelo sistema como Voz A, B, C, D, E e F.",
-      "[00:00] ruído de tecido; respiração.\n[00:07] ao fundo, gramofone: melodia alegre de marcha, repetida, volume baixo.\n[00:21] Voz A (jovem, calma): “Veja, Grigori Yefimovich, o cristal pesa mais do que parece. Ajoelhe-se e reze um pouco.”\n[00:35] Voz B (grave, sotaque camponês): “Rezo todo dia, filho. Mas este armário é bonito. Quantas gavetinhas…”\n[01:12] ruído de gavetas pequenas.\n[02:04] Voz B: “A princesa demora, Felix.”\n[02:09] Voz A: “Já vai descer. Reze mais um pouco.”",
-      "[02:40] passos no andar de cima; porta; tudo abafado.\n[03:23] Voz A (baixa): “Reze, Grigori.”\n[03:51] [DISPARO 1 — seco]\n[03:52] queda de corpo; vidro quebrando.\n[04:10] silêncio (18 s).\n[04:28] passos descendo; sussurros em russo e em francês.\n[04:41] Voz C (francês): “Il ne respire plus.” (“Ele não respira mais.”)",
-      "[04:47] Voz D (russo): “Tem certeza, doutor?”\n[04:50] Voz C: “Sem pulso.”\n[05:31] porta; passos subindo.\n[10:12] passos descendo, um só par.\n[10:25] Voz A (ofegante): “Grigori Yefimovich?”\n[10:40] movimento arrastado; Voz B (muito baixa, rouca): “Felix… Felix… vou contar tudo à Mamãe.”\n[10:52] grito agudo (Voz A); passos correndo escada acima; um segundo par de passos, mais pesado, logo atrás.",
-      "[11:30] porta de ferro; vento; ar frio.\n[12:02] [DISPARO 2 — seco]\n[12:05] [DISPARO 3 — seco]\n[12:09] [DISPARO 4 — seco]\n[12:31] Voz E (russo, ofegante): “Ele cai! Ele cai!”\n[12:48] corpo caindo na neve.\n[13:20] neve rangendo; vozes sussurrando.",
-      "[13:41] Voz A (histérica): “Ele está vivo! Ele não morre!”\n[13:50] pancadas surdas, repetidas (seis).\n[14:02] [DISPARO 5 — GRAVE, estrondo mais forte e de outro tom que os anteriores]\n[14:03] eco; silêncio.\n[14:11] Voz F (calma, idioma: inglês, confiança 41%): “That’s done.” (“Está feito.”)\n[14:30] Voz A (chorando): “Meu Deus. Meu Deus.”\n[15:00] gravação encerrada automaticamente.",
-    ],
+    preview: "Gravação de voz iniciada por engano.",
+    body: ["Gravação iniciada por engano (botão lateral)."],
     pinned: true,
     audio: { src: GRAVACAO_AUDIO_SRC, label: "Gravação 0001" },
   },
