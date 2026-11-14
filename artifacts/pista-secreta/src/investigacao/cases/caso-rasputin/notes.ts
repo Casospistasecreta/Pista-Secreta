@@ -7,8 +7,8 @@ import { asset } from "./helpers";
  * mensagens de Papai e Mamãe ("na terça").
  *
  * GRAVADOR: o áudio real (public/investigacao/caso-rasputin/audio/gravacao-0001.mp3) substitui a transcrição em texto do
- * roteiro. O arquivo original (.mov, 2:13) foi convertido para MP3 e teve cortado o silêncio digital do final (a partir de
- * 2:05); para trocar o áudio basta substituir esse MP3 mantendo o nome.
+ * roteiro. O MP3 é um trecho editado de uma gravação mais longa; para trocar o áudio basta substituir esse arquivo
+ * mantendo o nome.
  */
 const GRAVACAO_AUDIO_SRC = asset("audio/gravacao-0001.mp3");
 
@@ -17,10 +17,10 @@ export const notes: Note[] = [
     id: "n-gravacao-0001",
     title: "Gravação 0001",
     at: "17 DEZ · 02:31",
-    preview: "Gravação de voz iniciada por engano.",
-    body: ["Gravação iniciada por engano (botão lateral)."],
+    preview: "Trecho de uma gravação mais longa, iniciada por engano.",
+    body: ["Trecho editado de uma gravação mais longa, iniciada por engano (botão lateral)."],
     pinned: true,
-    audio: { src: GRAVACAO_AUDIO_SRC, label: "Gravação 0001" },
+    audio: { src: GRAVACAO_AUDIO_SRC, label: "Trecho editado · Gravação 0001" },
   },
   {
     id: "n-agenda",
