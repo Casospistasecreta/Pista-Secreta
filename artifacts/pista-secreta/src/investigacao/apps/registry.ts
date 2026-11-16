@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { CreditCard, FolderSearch, Heart, Images, MapPin, MessageCircle, NotebookPen, Sparkles } from "lucide-react";
+import { Crown, CreditCard, FolderSearch, Heart, Images, MapPin, MessageCircle, NotebookPen, Sparkles } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { AppId } from "../types";
 import { MessagesApp } from "./MessagesApp";
@@ -10,6 +10,7 @@ import { LocationApp } from "./LocationApp";
 import { BankApp } from "./BankApp";
 import { NotesApp } from "./NotesApp";
 import { CaseFileApp } from "./CaseFileApp";
+import { TabuLiveApp } from "./TabuLiveApp";
 
 export interface AppMeta { id: AppId; name: string; shortName?: string; icon: LucideIcon; accent: string; iconBackground: string; component: ComponentType; dock?: boolean; }
 export const APPS: AppMeta[] = [
@@ -20,6 +21,7 @@ export const APPS: AppMeta[] = [
   { id: "location", name: "Localização", shortName: "Local", icon: MapPin, accent: "#8fb8ff", iconBackground: "linear-gradient(150deg,#12213f,#2f5aa8)", component: LocationApp },
   { id: "bank", name: "NOVA", icon: CreditCard, accent: "#b7f0e2", iconBackground: "linear-gradient(150deg,#0f2b2b,#1d6b60)", component: BankApp },
   { id: "notes", name: "Notas", icon: NotebookPen, accent: "#fffacd", iconBackground: "linear-gradient(150deg,#241d0f,#6b5a2a)", component: NotesApp },
+  { id: "tabulive", name: "TabuLive", icon: Crown, accent: "#a8e6a1", iconBackground: "linear-gradient(150deg,#0f2a1a,#2f7a46)", component: TabuLiveApp },
   { id: "casefile", name: "Meu caso", icon: FolderSearch, accent: "#c7a2ff", iconBackground: "linear-gradient(150deg,#1b1230,#4b2a8a)", component: CaseFileApp, dock: true },
 ];
 export function getApp(id: AppId) { return APPS.find((app) => app.id === id); }

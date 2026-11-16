@@ -13,6 +13,7 @@ export type AppId =
   | "location"
   | "bank"
   | "notes"
+  | "tabulive"
   | "casefile";
 
 /** Uma tela dentro do dispositivo. `view`/`id` são interpretados por cada app. */
@@ -199,6 +200,8 @@ export interface LocationStop {
   redacted?: boolean;
   /** Posição relativa (0–100) no mapa estilizado. */
   point?: { x: number; y: number };
+  /** Casa do tabuleiro (ex.: "e8"), usada quando `locationStyle` do caso é "chess". */
+  square?: string;
 }
 
 export interface LocationDay {
@@ -222,6 +225,8 @@ export interface Transaction {
   redacted?: boolean;
   /** Transação trancada: detalhes só aparecem após informar o PIN. */
   lock?: Lock;
+  /** Linhas extras exibidas na tela de detalhes (ex.: quem pagou). */
+  details?: { label: string; value: string }[];
 }
 
 export interface BankDay {
@@ -310,6 +315,68 @@ export interface CaseData {
   stamp?: { agency: string; code: string };
   /** Resposta final do caso (opcional). Sem isto, "Meu caso" só lista evidências. */
   finalAnswer?: FinalAnswerConfig;
+  /** Aplicativos exibidos na tela inicial. Padrão: todos, exceto "tabulive" (que só aparece nos casos que o declaram). */
+  apps?: AppId[];
+  /** Nomes alternativos dos aplicativos neste caso (ex.: { social: "PIKLIKE" }). */
+  appLabels?: Partial<Record<AppId, string>>;
+  /** Estilo do mapa do app Localização. Padrão: "map". "chess" desenha um tabuleiro e usa `LocationStop.square`. */
+  locationStyle?: "map" | "chess";
+  /** Dados do app TabuLive (xadrez). Só é usado se "tabulive" estiver em `apps`. */
+  tabulive?: TabuLiveData;
+}
+
+/* ------------------------------------------------------------------ */
+/* TabuLive (app de xadrez com desafios que destravam conteúdo)        */
+/* ------------------------------------------------------------------ */
+
+/** Chave de desbloqueio usada pelos apps: "messages:<id>", "notes:<id>", "bank:<id>" ou "gallery:<id>". */
+export interface TabuLiveUnlock {
+  key: string;
+  /** Texto exibido ao resolver ("Conversa arquivada: Pastor D."). */
+  label: string;
+}
+
+export interface TabuLivePuzzle {
+  id: string;
+  title: string;
+  subtitle: string;
+  /** Posição inicial em FEN. */
+  fen: string;
+  /** Objetivo exibido ao jogador. */
+  goal: string;
+  /** Dica deixada pelo dono do aparelho. */
+  hint?: string;
+  /** Lance vencedor em notação brasileira, exibido quando o jogador pede a solução. */
+  solution: string;
+  unlocks: TabuLiveUnlock;
+}
+
+export interface TabuLiveDuel {
+  id: string;
+  title: string;
+  subtitle: string;
+  /** Posição inicial em FEN. O bot joga com a cor oposta à do jogador. */
+  fen: string;
+  playerColor: "w" | "b";
+  /** Quanto o bot erra de propósito (0 a 1). */
+  blunderRate?: number;
+  goal: string;
+  hint?: string;
+  unlocks: TabuLiveUnlock;
+}
+
+export interface TabuLiveFriendChat {
+  id: string;
+  name: string;
+  status?: string;
+  messages: { from: "victim" | "them"; at: string; text: string }[];
+}
+
+export interface TabuLiveData {
+  profile: { name: string; title: string; rating: number; avatarSeed: string; avatarSrc?: string };
+  friends: TabuLiveFriendChat[];
+  puzzles: TabuLivePuzzle[];
+  duel?: TabuLiveDuel;
 }
 
 /* ------------------------------------------------------------------ */

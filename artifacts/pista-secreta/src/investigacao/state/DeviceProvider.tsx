@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { CaseData, EvidenceItem, Screen } from "../types";
+import type { AppId, CaseData, EvidenceItem, Screen } from "../types";
 
 interface PersistedState {
   evidence: EvidenceItem[];
@@ -26,6 +26,10 @@ interface DeviceContextValue {
   goHome: () => void;
   replace: (screen: Screen) => void;
   isUnlocked: (key: string) => boolean;
+  /** Libera um conteúdo trancado sem senha (usado pelos desafios do TabuLive). */
+  grantUnlock: (key: string) => void;
+  /** Nome do aplicativo neste caso (permite renomear, ex.: PicLike -> PIKLIKE). */
+  labelFor: (id: AppId, fallback: string) => string;
   tryUnlock: (key: string, code: string, expected: string) => boolean;
   evidence: EvidenceItem[];
   isEvidence: (id: string) => boolean;
@@ -111,6 +115,10 @@ export function DeviceProvider({
     setUnlocked((prev) => (prev.includes(key) ? prev : [...prev, key]));
     return true;
   }, []);
+  const grantUnlock = useCallback((key: string) => {
+    setUnlocked((prev) => (prev.includes(key) ? prev : [...prev, key]));
+  }, []);
+  const labelFor = useCallback((id: AppId, fallback: string) => caseData.appLabels?.[id] ?? fallback, [caseData.appLabels]);
   const isEvidence = useCallback((id: string) => evidence.some((item) => item.id === id), [evidence]);
   const toggleEvidence = useCallback((item: EvidenceItem) => {
     setEvidence((prev) =>
@@ -135,6 +143,8 @@ export function DeviceProvider({
       goHome,
       replace,
       isUnlocked,
+      grantUnlock,
+      labelFor,
       tryUnlock,
       evidence,
       isEvidence,
@@ -144,7 +154,7 @@ export function DeviceProvider({
     }),
     [
       caseData, deviceUnlocked, unlockDevice, lockDevice, stack, open, back, goHome, replace,
-      isUnlocked, tryUnlock, evidence, isEvidence, toggleEvidence, removeEvidence, clearEvidence,
+      isUnlocked, grantUnlock, labelFor, tryUnlock, evidence, isEvidence, toggleEvidence, removeEvidence, clearEvidence,
     ],
   );
 

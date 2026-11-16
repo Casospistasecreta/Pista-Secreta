@@ -25,16 +25,43 @@ function MiniMap({ stops, activeId }: { stops: LocationStop[]; activeId?: string
   );
 }
 
+
+const LIGHT = "#d9cdf2";
+const DARK = "#7a58b8";
+
+/** Mapa em forma de tabuleiro (casos com `locationStyle: "chess"`). Cada parada usa `square` (ex.: "e8"). */
+function ChessMap({ stops, activeId }: { stops: LocationStop[]; activeId?: string }) {
+  const points = stops.filter((stop) => stop.square && /^[a-h][1-8]$/.test(stop.square));
+  const center = (square: string) => ({ x: (square.charCodeAt(0) - 97) * 12.5 + 6.25, y: (8 - Number(square[1])) * 12.5 + 6.25 });
+  const path = points.map((stop, index) => { const c = center(stop.square!); return `${index === 0 ? "M" : "L"} ${c.x} ${c.y}`; }).join(" ");
+  return (
+    <div className="relative mx-auto aspect-square w-full max-w-[300px] shrink-0 overflow-hidden rounded-2xl border">
+      <div className="absolute inset-0 grid grid-cols-8">
+        {Array.from({ length: 64 }, (_, i) => {
+          const f = i % 8; const r = Math.floor(i / 8);
+          return <span key={i} className="relative" style={{ background: (f + r) % 2 === 1 ? DARK : LIGHT }}>{r === 7 && <span className="absolute bottom-[1px] right-[3px] text-[8px] font-semibold" style={{ color: (f + r) % 2 === 1 ? LIGHT : DARK }}>{String.fromCharCode(97 + f)}</span>}{f === 0 && <span className="absolute left-[3px] top-[1px] text-[8px] font-semibold" style={{ color: (f + r) % 2 === 1 ? LIGHT : DARK }}>{8 - r}</span>}</span>;
+        })}
+      </div>
+      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+        {path && <path d={path} fill="none" stroke="#fffacd" strokeWidth="1" strokeDasharray="2.5 2" opacity=".9" />}
+        {points.map((stop, i) => { const c = center(stop.square!); const active = stop.id === activeId; return <g key={stop.id}><circle cx={c.x} cy={c.y} r={active ? 4.6 : 3.8} fill={stop.redacted ? "#e06a6a" : "#1b1228"} stroke="#fffacd" strokeWidth=".8" /><text x={c.x} y={c.y + 1.4} textAnchor="middle" fontSize="4" fill="#fffacd" fontFamily="ui-monospace,monospace">{i + 1}</text></g>; })}
+      </svg>
+    </div>
+  );
+}
+
 function StopDetail({ stop, dayLabel }: { stop: LocationStop; dayLabel: string }) {
+  const { caseData } = useDevice();
+  const chess = caseData.locationStyle === "chess";
   return (
     <AppShell accent={ACCENT} title={stop.title} subtitle={dayLabel}>
-      <MiniMap stops={[stop]} activeId={stop.id} />
+      {chess ? <ChessMap stops={[stop]} activeId={stop.id} /> : <MiniMap stops={[stop]} activeId={stop.id} />}
       <div className="mt-5 rounded-2xl border bg-[var(--inv-surface)]">
         {[
           ["Entrada", stop.time],
           ["Saída", stop.exitTime ?? "—"],
           ["Tempo no local", stop.durationLabel ?? "—"],
-          ["Endereço", stop.address ?? "Não registrado"],
+          [chess ? "Casa" : "Endereço", stop.address ?? (stop.square ? `Casa ${stop.square}` : "Não registrado")],
         ].map(([label, value], index) => (
           <div key={label} className={`flex justify-between px-4 py-3.5 text-[13px] ${index ? "border-t" : ""}`}>
             <span className="inv-mono text-[10px] uppercase text-[var(--inv-dim-2)]">{label}</span>
@@ -69,7 +96,7 @@ export function LocationApp() {
     >
       {day ? (
         <>
-          <MiniMap stops={day.stops} />
+          {caseData.locationStyle === "chess" ? <ChessMap stops={day.stops} /> : <MiniMap stops={day.stops} />}
           <p className="inv-mono flex items-center gap-1.5 pt-4 text-[10px] uppercase text-[var(--inv-dim-2)]"><MapPin size={11} /> {day.stops.length} paradas registradas</p>
           <div className="pt-5">
             {day.stops.map((stop, index) => (

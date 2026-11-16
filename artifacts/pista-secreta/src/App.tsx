@@ -28,6 +28,12 @@ const RASPUTIN_PRICE: number = 7.9; // em reais
 const RASPUTIN_AVAILABLE = RASPUTIN_CHECKOUT_URL !== "" && RASPUTIN_PRICE > 0;
 const RASPUTIN_PRICE_LABEL = `R$ ${RASPUTIN_PRICE.toFixed(2).replace(".", ",")}`;
 const RASPUTIN_CARD_IMAGE = `${import.meta.env.BASE_URL}investigacao/caso-rasputin/card.webp`;
+// Caso 005 — Peão Envenenado (Kiwify). Preço provisório igual ao dos casos digitais anteriores: ajuste PEAO_PRICE se for diferente.
+const PEAO_CHECKOUT_URL: string = "https://pay.kiwify.com.br/AyH97og";
+const PEAO_PRICE: number = 7.9; // em reais
+const PEAO_AVAILABLE = PEAO_CHECKOUT_URL !== "" && PEAO_PRICE > 0;
+const PEAO_PRICE_LABEL = `R$ ${PEAO_PRICE.toFixed(2).replace(".", ",")}`;
+const PEAO_CARD_IMAGE = `${import.meta.env.BASE_URL}investigacao/caso-peao-envenenado/card.webp`;
 const InvestigacaoPage = lazy(() => import("@/investigacao/InvestigacaoPage"));
 
 // Case/product metadata used for analytics events (view_case / click_buy).
@@ -36,6 +42,7 @@ const CASES: Record<CaseName, { name: CaseName; productName: string; value: numb
   universitario: { name: "universitario", productName: "O Caso Universitário", value: 27 },
   dona_odete: { name: "dona_odete", productName: "Caso Dona Odete — Investigação Digital", value: 7.9 },
   rasputin: { name: "rasputin", productName: "Caso Rasputin — Investigação Digital", value: RASPUTIN_PRICE },
+  peao_envenenado: { name: "peao_envenenado", productName: "Caso Peão Envenenado — Investigação Digital", value: PEAO_PRICE },
 };
 
 function getApiPath(path: string) {
@@ -53,6 +60,7 @@ function LandingPage() {
   const case2CardRef = useRef<HTMLDivElement>(null);
   const case3CardRef = useRef<HTMLDivElement>(null);
   const case4CardRef = useRef<HTMLDivElement>(null);
+  const case5CardRef = useRef<HTMLDivElement>(null);
   const viewedCasesRef = useRef<Set<CaseName>>(new Set());
 
   useEffect(() => {
@@ -79,6 +87,7 @@ function LandingPage() {
       { el: case2CardRef.current, caseName: "universitario" },
       { el: case3CardRef.current, caseName: "dona_odete" },
       ...(RASPUTIN_AVAILABLE ? [{ el: case4CardRef.current, caseName: "rasputin" as CaseName }] : []),
+      ...(PEAO_AVAILABLE ? [{ el: case5CardRef.current, caseName: "peao_envenenado" as CaseName }] : []),
     ];
 
     const observer = new IntersectionObserver(
@@ -488,6 +497,69 @@ function LandingPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => handlePurchaseClick("rasputin", RASPUTIN_CHECKOUT_URL)}
+                    className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none"
+                  >Começar Investigação</a>
+                ) : (
+                  <div className="block w-full border border-primary/20 text-primary/50 rounded p-4 font-serif text-lg font-bold text-center cursor-not-allowed select-none" aria-disabled="true">Em breve</div>
+                )}
+              </div>
+            </div>
+
+            {/* Card 5 — Caso Peão Envenenado (Investigação Digital) */}
+            <div ref={case5CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
+              <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
+
+              <div className="p-6 pb-4">
+                <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
+                  <span>Caso 005 - ARQUIVO CONFIDENCIAL</span>
+                  <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
+                    Em aberto
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <span
+                        key={n}
+                        className={`block w-3 h-1.5 rounded-sm ${
+                          n <= 2 ? "bg-secondary/80" : "bg-primary/15 border border-primary/20"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-mono text-[9px] text-muted/70">2/5</span>
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-2">Peão Envenenado</h3>
+                <p className="text-sm text-muted mb-4">
+                  Entre rivalidades, segredos e movimentos suspeitos, investigue as peças desse tabuleiro, examine as evidências e descubra quem teve o último movimento. Neste jogo, qualquer peça pode esconder um assassino.
+                </p>
+                <div className="relative"><img src={PEAO_CARD_IMAGE} alt="Caso Peão Envenenado — Investigação Digital" className="w-full h-32 object-cover object-[50%_40%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" /><span className="pointer-events-none absolute bottom-2 right-2 -rotate-6 rounded-sm border-2 border-red-500/80 bg-black/35 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-red-400/90 backdrop-blur-[1px]">Evidência Nº 0510</span></div>
+              </div>
+
+              <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
+                <div className="flex flex-col mb-1">
+                  {PEAO_AVAILABLE ? (
+                    <>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">{PEAO_PRICE_LABEL}</span>
+                      </div>
+                      <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
+                    </>
+                  ) : (
+                    <span className="font-mono text-[10px] tracking-widest uppercase text-primary/60">Lançamento em breve</span>
+                  )}
+                </div>
+                <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
+                  Ideal para 1–2 pessoas<br />Tempo médio: 30 - 50 min.
+                </p>
+                {PEAO_AVAILABLE ? (
+                  <a
+                    href={PEAO_CHECKOUT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => handlePurchaseClick("peao_envenenado", PEAO_CHECKOUT_URL)}
                     className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none"
                   >Começar Investigação</a>
                 ) : (
