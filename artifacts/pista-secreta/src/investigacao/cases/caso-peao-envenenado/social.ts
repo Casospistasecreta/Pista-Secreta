@@ -25,7 +25,7 @@ const posts: SocialPost[] = [
     ],
   },
   {
-    id: "post-pk12", author: "@torrebranca", at: "10 MAI · 21:02", place: "Arena ROQUE (Casa g1)", likes: 987, media: [pk("sp-pk12", "pk-12", "Show lotado, com uma torre e um rei brancos em primeiro plano")],
+    id: "post-pk12", author: "@torrebranca", at: "10 MAI · 21:02", place: "Arena ROQUE (Casa g1)", likes: 987, media: [pk("sp-pk12", "pk-12", "Fantasia de Rei Branco segurando um drinque em meio à plateia do show de ROQUE")],
     caption: "Noite de ROQUE com o Rei Branco! O som tá insano 🤘♖♔ #FestivalRoque",
     comments: [
       c("c1", "@reibranco", "Rei e Torre fazendo roque ao vivo, a gente só ensaia 😂🤘", "10 MAI · 21:03"),
