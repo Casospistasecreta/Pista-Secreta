@@ -557,7 +557,7 @@ export const social: SocialData = {
           src: asset("piklike/foto-0205.webp"),
         },
       ],
-      caption: "Khioniya Guseva, autora do ataque de 1914 contra Rasputin, segue internada em hospital psiquiátrico.",
+      caption: "Khioniya Guseva, autora do ataque de 29 de Junho de 1914 contra Rasputin, segue internada em hospital psiquiátrico.",
       at: "22 NOV · 13:10",
       place: "Tomsk",
       likes: 63,
