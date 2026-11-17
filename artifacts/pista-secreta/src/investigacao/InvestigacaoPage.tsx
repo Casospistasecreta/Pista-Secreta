@@ -6,6 +6,8 @@ import { LockScreen } from "./components/LockScreen";
 import { HomeScreen } from "./components/HomeScreen";
 import { getApp } from "./apps/registry";
 import { getCase } from "./cases/registry";
+import { useLanguage, useT } from "@/i18n/LanguageProvider";
+import { updatePageMetadata } from "@/i18n/metadata";
 import "./investigacao.css";
 
 function DeviceContent() {
@@ -16,10 +18,20 @@ function DeviceContent() {
   useEffect(() => { const onKey = (event: KeyboardEvent) => { if (event.key === "Escape" && stackRef.current.length > 0) back(); }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, [back]);
   if (!deviceUnlocked) return <LockScreen />; if (!current) return <HomeScreen />; const app = getApp(current.app); if (!app) return <HomeScreen />; const AppComponent = app.component; return <AppComponent />;
 }
-function CaseNotFound({ slug }: { slug: string }) { return <div className="inv-root inv-stage flex min-h-[100dvh] flex-col items-center justify-center gap-3 px-8 text-center"><p className="inv-mono text-[10px] uppercase tracking-[.3em] text-[var(--inv-dim-2)]">Investigação Digital</p><h1 className="inv-display text-[26px]">Caso não encontrado</h1><p className="max-w-[420px] text-[14px] text-[var(--inv-dim)]">Nenhum dispositivo registrado para “{slug}”.</p><a href="/investigacao" className="inv-press inv-mono mt-2 rounded-full border px-4 py-2 text-[10px] uppercase tracking-[.18em] text-[var(--inv-chiffon)]">Abrir caso padrão</a></div>; }
+function CaseNotFound({ slug }: { slug: string }) {
+  const t = useT();
+  return <div className="inv-root inv-stage flex min-h-[100dvh] flex-col items-center justify-center gap-3 px-8 text-center"><p className="inv-mono text-[10px] uppercase tracking-[.3em] text-[var(--inv-dim-2)]">{t("investigation.digital")}</p><h1 className="inv-display text-[26px]">{t("investigation.caseNotFound")}</h1><p className="max-w-[420px] text-[14px] text-[var(--inv-dim)]">{t("investigation.deviceNotRegistered", { slug })}</p><a href="/investigacao" className="inv-press inv-mono mt-2 rounded-full border px-4 py-2 text-[10px] uppercase tracking-[.18em] text-[var(--inv-chiffon)]">{t("investigation.openDefault")}</a></div>;
+}
 export default function InvestigacaoPage() {
   const [, params] = useRoute<{ slug: string }>("/investigacao/:slug"); const slug = params?.slug; const caseData = getCase(slug);
-  useEffect(() => { const previous = document.title; document.title = caseData ? `Investigação Digital — ${caseData.title} | Pista Secreta` : "Investigação Digital | Pista Secreta"; return () => { document.title = previous; }; }, [caseData]);
+  const { lang } = useLanguage();
+  const t = useT();
+  useEffect(() => {
+    const title = caseData
+      ? `${t("investigation.digital")} — ${caseData.title} | Pista Secreta`
+      : `${t("investigation.digital")} | Pista Secreta`;
+    updatePageMetadata(title, t("investigation.metaDescription"), lang);
+  }, [caseData, lang, t]);
   useEffect(() => { const previous = document.body.style.overflow; document.body.style.overflow = "hidden"; return () => { document.body.style.overflow = previous; }; }, []);
   if (!caseData) return <CaseNotFound slug={slug ?? ""} />;
   return <DeviceProvider caseData={caseData}><DeviceFrame><DeviceContent /></DeviceFrame></DeviceProvider>;

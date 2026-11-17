@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Wifi } from "lucide-react";
 import { useDevice } from "../state/DeviceProvider";
+import { useT } from "@/i18n/LanguageProvider";
 
 function realClock() {
   const now = new Date();
@@ -20,7 +21,8 @@ export function useDeviceClock() {
 }
 function SignalBars() { return <span className="flex items-end gap-[2px]" aria-hidden="true">{[4, 6, 8, 10].map((h, i) => <span key={h} className="w-[2px] rounded-full bg-current" style={{ height: h, opacity: i < 3 ? 0.9 : 0.3 }} />)}</span>; }
 function Battery({ percent }: { percent: number }) {
-  return <span className="flex items-center gap-1" aria-label={`Bateria ${percent}%`}><span className="inv-mono text-[10px] opacity-70">{percent}%</span><span className="relative flex h-[11px] w-[22px] items-center rounded-[3px] border border-current/50 p-[1.5px]"><span className="h-full rounded-[1px]" style={{ width: `${Math.max(6, Math.min(100, percent))}%`, background: percent <= 20 ? "var(--inv-danger)" : "currentColor" }} /><span className="absolute -right-[3px] h-[4px] w-[2px] rounded-r-sm bg-current/50" /></span></span>;
+  const t = useT();
+  return <span className="flex items-center gap-1" aria-label={t("status.battery", { percent })}><span className="inv-mono text-[10px] opacity-70">{percent}%</span><span className="relative flex h-[11px] w-[22px] items-center rounded-[3px] border border-current/50 p-[1.5px]"><span className="h-full rounded-[1px]" style={{ width: `${Math.max(6, Math.min(100, percent))}%`, background: percent <= 20 ? "var(--inv-danger)" : "currentColor" }} /><span className="absolute -right-[3px] h-[4px] w-[2px] rounded-r-sm bg-current/50" /></span></span>;
 }
 export function StatusBar({ tone = "default" }: { tone?: "default" | "muted" }) {
   const { caseData } = useDevice(); const time = useDeviceClock();

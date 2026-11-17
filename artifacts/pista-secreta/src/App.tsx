@@ -13,6 +13,9 @@ import case3Image from "@assets/caso-dona-odete.jpg";
 import { ProductSlider } from "@/components/ProductSlider";
 import { TestimonialsSlider } from "@/components/TestimonialsSlider";
 import { trackClickBuy, trackViewCase, type CaseName } from "@/lib/analytics";
+import { LanguageProvider, useLanguage, useT } from "@/i18n/LanguageProvider";
+import { LanguageSwitcher } from "@/i18n/LanguageSwitcher";
+import { updatePageMetadata } from "@/i18n/metadata";
 import {
   Search, Users, Heart, Compass,
   Folder, Image as ImageIcon, ClipboardList, MessageSquare, Mic, Video, Music,
@@ -50,6 +53,8 @@ function getApiPath(path: string) {
 }
 
 function LandingPage() {
+  const t = useT();
+  const { lang } = useLanguage();
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -62,6 +67,10 @@ function LandingPage() {
   const case4CardRef = useRef<HTMLDivElement>(null);
   const case5CardRef = useRef<HTMLDivElement>(null);
   const viewedCasesRef = useRef<Set<CaseName>>(new Set());
+
+  useEffect(() => {
+    updatePageMetadata(t("site.title"), t("site.description"), lang);
+  }, [lang, t]);
 
   useEffect(() => {
     if (!showStats) {
@@ -152,7 +161,7 @@ function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background z-20" />
         <img 
           src="/hero-bg.png" 
-          alt="Mesa de investigação com arquivos confidenciais, fotos e uma lupa" 
+          alt={t("site.heroImageAlt")}
           className="w-full h-full object-cover opacity-30 mix-blend-luminosity"
         />
         {/* Atmosfera investigativa sutil — acima do escurecimento para não ficar invisível, mas ainda inteiramente atrás do texto (protegido pelo z-10 do container de conteúdo, fora deste bloco) */}
@@ -181,19 +190,19 @@ function LandingPage() {
       </div>
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-12 md:py-24">
         <header className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 fill-mode-both">
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center justify-between gap-4 mb-8">
             <span className="font-mono text-xs tracking-[0.2em] uppercase text-muted">
-              Pista Secreta &mdash; Experiências Investigativas
+              {t("site.tagline")}
             </span>
-            <div className="h-px flex-1 bg-primary/10" />
+            <LanguageSwitcher className="shrink-0" />
           </div>
 
           <h1 className="font-serif text-4xl md:text-5xl font-bold leading-tight mb-4 tracking-tight">
-            Casos nunca resolvidos.
+            {t("site.heroTitle")}
             <br />
-            Até Agora...
+            {t("site.heroSubtitle")}
           </h1>
-          <p className="text-lg leading-[1.75] max-w-lg font-bold text-primary">Você terá acesso às mesmas provas que um investigador teria: interrogatórios, arquivos ocultos e pistas do crime. Uma experiência investigativa imersiva para grupos de 2 a 6 pessoas. Provas reais, interrogatórios gravados, pistas lacradas e um assassinato que precisa ser resolvido.</p>
+          <p className="text-lg leading-[1.75] max-w-lg font-bold text-primary">{t("site.heroDescription")}</p>
         </header>
 
         <ProductSlider />
@@ -204,26 +213,29 @@ function LandingPage() {
             onClick={() => setCaseModalOpen(true)}
             className="bg-primary/90 hover:bg-primary text-background rounded px-8 py-4 font-serif text-lg font-bold transition-all duration-300 ease-out shadow-[0_0_24px_rgba(255,250,205,0.2)] hover:shadow-[0_0_42px_rgba(255,250,205,0.38)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            Comece a Investigação
+            {t("site.startInvestigation")}
           </button>
         </div>
 
         <Dialog open={caseModalOpen} onOpenChange={setCaseModalOpen}>
           <DialogContent className="bg-background border-primary/20 text-foreground max-w-2xl">
-            <DialogTitle className="font-serif text-2xl font-bold mb-0">Escolha seu caso</DialogTitle>
+            <DialogTitle className="font-serif text-2xl font-bold mb-0">{t("site.chooseCase")}</DialogTitle>
             <DialogDescription className="font-mono text-[10px] tracking-widest uppercase text-muted mb-2">
-              Duas investigações disponíveis
+              {t("site.availableTwoInvestigations")}
             </DialogDescription>
+            {lang !== "pt-BR" && (
+              <p className="font-mono text-[10px] text-muted mb-2">{t("site.currencyNote")}</p>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
               <div className="relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col">
                 <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
                 <div className="p-4">
-                  <div className="font-mono text-[9px] tracking-widest text-muted mb-2">CASO 001</div>
-                  <h4 className="font-serif text-lg font-bold mb-1">O Caso Wendel Jr</h4>
+                  <div className="font-mono text-[9px] tracking-widest text-muted mb-2">{t("site.caseShortLabel", { number: "001" })}</div>
+                  <h4 className="font-serif text-lg font-bold mb-1">{t("site.modalWendelName")}</h4>
                   <p className="text-xs text-muted mb-3 leading-snug">
-                    Futebol e intrigas. Um jogador famoso teve seu fim acidentalmente ou foi orquestrado?
+                    {t("site.modalWendelDescription")}
                   </p>
-                  <img src={case1Image} alt="Caso 001" className="w-full h-20 object-cover rounded border border-primary/10 opacity-90 mb-3" />
+                  <img src={case1Image} alt={t("site.modalCase001ImageAlt")} className="w-full h-20 object-cover rounded border border-primary/10 opacity-90 mb-3" />
                   <div className="flex items-center gap-2 mb-3">
                     <span className="font-serif text-xl font-bold text-red-400">R$ 27</span>
                     <span className="font-serif text-sm text-muted/60 line-through">R$ 47</span>
@@ -235,7 +247,7 @@ function LandingPage() {
                     onClick={() => handlePurchaseClick("wendel_jr")}
                     className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-2.5 font-serif text-sm font-bold text-center transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
-                    Escolher este caso
+                    {t("site.chooseThisCase")}
                   </a>
                 </div>
               </div>
@@ -243,12 +255,12 @@ function LandingPage() {
               <div className="relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col">
                 <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
                 <div className="p-4">
-                  <div className="font-mono text-[9px] tracking-widest text-muted mb-2">CASO 002</div>
-                  <h4 className="font-serif text-lg font-bold mb-1">O Caso Universitário</h4>
+                  <div className="font-mono text-[9px] tracking-widest text-muted mb-2">{t("site.caseShortLabel", { number: "002" })}</div>
+                  <h4 className="font-serif text-lg font-bold mb-1">{t("site.modalUniversityName")}</h4>
                   <p className="text-xs text-muted mb-3 leading-snug">
-                    Dentro do campus, ninguém é inocente. Cada pista leva a outro suspeito.
+                    {t("site.modalUniversityDescription")}
                   </p>
-                  <img src={case2Image} alt="Caso 002" className="w-full h-20 object-cover rounded border border-primary/10 opacity-90 mb-3" />
+                  <img src={case2Image} alt={t("site.modalCase002ImageAlt")} className="w-full h-20 object-cover rounded border border-primary/10 opacity-90 mb-3" />
                   <div className="flex items-center gap-2 mb-3">
                     <span className="font-serif text-xl font-bold text-red-400">R$ 27</span>
                     <span className="font-serif text-sm text-muted/60 line-through">R$ 47</span>
@@ -260,7 +272,7 @@ function LandingPage() {
                     onClick={() => handlePurchaseClick("universitario")}
                     className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-2.5 font-serif text-sm font-bold text-center transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
-                    Escolher este caso
+                    {t("site.chooseThisCase")}
                   </a>
                 </div>
               </div>
@@ -272,8 +284,11 @@ function LandingPage() {
 
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300 fill-mode-both">
           <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
-            Casos disponíveis
+            {t("site.availableCases")}
           </h2>
+          {lang !== "pt-BR" && (
+            <p className="font-mono text-[10px] text-muted -mt-4 mb-6">{t("site.currencyNote")}</p>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Card 1 */}
@@ -283,13 +298,13 @@ function LandingPage() {
 
               <div className="p-6 pb-4">
                 <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                  <span>Caso 001 - ARQUIVO CONFIDENCIAL</span>
+                  <span>{t("site.caseConfidential", { number: "001" })}</span>
                   <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
-                    Em aberto
+                    {t("site.open")}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">{t("site.difficulty")}</span>
                   <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map((n) => (
                       <span
@@ -302,11 +317,11 @@ function LandingPage() {
                   </div>
                   <span className="font-mono text-[9px] text-muted/70">4/5</span>
                 </div>
-                <h3 className="font-serif text-xl font-bold mb-2">O Caso Wendel Jr</h3>
+                <h3 className="font-serif text-xl font-bold mb-2">{t("site.caseWendelName")}</h3>
                 <p className="text-sm text-muted mb-4">
-                   Futebol e intrigas. Um jogador famoso teve seu fim acidentalmente ou foi orquestrado?
+                  {t("site.caseWendelDescription")}
                 </p>
-                <img src={case1Image} alt="Caso 001 envelope" className="w-full h-32 object-cover rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+                <img src={case1Image} alt={t("site.case001ImageAlt")} className="w-full h-32 object-cover rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
               <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
@@ -316,11 +331,11 @@ function LandingPage() {
                     <span className="font-serif text-xl text-muted/60 line-through whitespace-nowrap">R$ 47</span>
                     <span className="inline-block bg-red-400/15 text-red-400 text-[10px] font-mono font-bold tracking-wide rounded px-1.5 py-0.5 whitespace-nowrap">-43%</span>
                   </div>
-                  <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">Promoção de Lançamento</span>
-                  <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
+                  <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">{t("site.launchPromotion")}</span>
+                  <span className="text-sm text-muted mt-1">{t("site.perCase")}</span>
                 </div>
                 <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
-                  Ideal para 2–6 pessoas · date, amigos ou família<br />Tempo médio: 1h - 2h
+                  {t("site.idealFor", { count: "2–6", audience: t("site.audienceDateFriendsFamily") })}<br />{t("site.averageTime", { duration: t("duration.group") })}
                 </p>
                 <a
                   href="https://pay.kiwify.com.br/LfosEmV"
@@ -328,7 +343,7 @@ function LandingPage() {
                   rel="noopener noreferrer"
                   onClick={() => handlePurchaseClick("wendel_jr")}
                   className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                >Começar Investigação</a>
+                >{t("site.startCase")}</a>
               </div>
             </div>
 
@@ -339,13 +354,13 @@ function LandingPage() {
 
               <div className="p-6 pb-4">
                 <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                  <span>Caso 002 - ARQUIVO CONFIDENCIAL</span>
+                  <span>{t("site.caseConfidential", { number: "002" })}</span>
                   <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
-                    Em aberto
+                    {t("site.open")}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">{t("site.difficulty")}</span>
                   <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map((n) => (
                       <span
@@ -358,11 +373,11 @@ function LandingPage() {
                   </div>
                   <span className="font-mono text-[9px] text-muted/70">3/5</span>
                 </div>
-                <h3 className="font-serif text-xl font-bold mb-2">O Caso Universitário</h3>
+                <h3 className="font-serif text-xl font-bold mb-2">{t("site.caseUniversityName")}</h3>
                 <p className="text-sm text-muted mb-4">
-                  Dentro do campus, ninguém é inocente. Cada pista leva a outro suspeito.
+                  {t("site.caseUniversityDescription")}
                 </p>
-                <img src={case2Image} alt="Caso 002 archive" className="w-full h-32 object-cover rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+                <img src={case2Image} alt={t("site.case002ImageAlt")} className="w-full h-32 object-cover rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
               <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
@@ -372,11 +387,11 @@ function LandingPage() {
                     <span className="font-serif text-xl text-muted/60 line-through whitespace-nowrap">R$ 47</span>
                     <span className="inline-block bg-red-400/15 text-red-400 text-[10px] font-mono font-bold tracking-wide rounded px-1.5 py-0.5 whitespace-nowrap">-43%</span>
                   </div>
-                  <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">Promoção de Lançamento</span>
-                  <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
+                  <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">{t("site.launchPromotion")}</span>
+                  <span className="text-sm text-muted mt-1">{t("site.perCase")}</span>
                 </div>
                 <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
-                  Ideal para 2–6 pessoas · date, amigos ou família<br />Tempo médio: 1h - 2h
+                  {t("site.idealFor", { count: "2–6", audience: t("site.audienceDateFriendsFamily") })}<br />{t("site.averageTime", { duration: t("duration.group") })}
                 </p>
                 <a
                   href="https://pay.kiwify.com.br/ZG3gabG"
@@ -384,7 +399,7 @@ function LandingPage() {
                   rel="noopener noreferrer"
                   onClick={() => handlePurchaseClick("universitario")}
                   className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                >Começar Investigação</a>
+                >{t("site.startCase")}</a>
               </div>
             </div>
 
@@ -395,13 +410,13 @@ function LandingPage() {
 
               <div className="p-6 pb-4">
                 <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                  <span>Caso 003 - ARQUIVO CONFIDENCIAL</span>
+                  <span>{t("site.caseConfidential", { number: "003" })}</span>
                   <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
-                    Em aberto
+                    {t("site.open")}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">{t("site.difficulty")}</span>
                   <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map((n) => (
                       <span
@@ -414,11 +429,11 @@ function LandingPage() {
                   </div>
                   <span className="font-mono text-[9px] text-muted/70">2/5</span>
                 </div>
-                <h3 className="font-serif text-xl font-bold mb-2">Caso Dona Odete</h3>
+                <h3 className="font-serif text-xl font-bold mb-2">{t("site.caseOdeteName")}</h3>
                 <p className="text-sm text-muted mb-4">
-                  Varginha, Minas Gerais. Dona Odete desapareceu, e seu celular pode guardar as pistas que faltam para reconstruir essa história. Explore conversas, investigue perfis, conecte informações e descubra o que está por trás do desaparecimento.
+                  {t("site.caseOdeteDescription")}
                 </p>
-                <img src={case3Image} alt="Caso Dona Odete — Investigação Digital" className="w-full h-32 object-cover object-[30%_30%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+                <img src={case3Image} alt={t("site.case003ImageAlt")} className="w-full h-32 object-cover object-[30%_30%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
               <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
@@ -426,11 +441,11 @@ function LandingPage() {
                   <div className="flex items-center gap-3 flex-wrap">
                     <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">R$ 7,90</span>
                   </div>
-                  <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">Promoção de Lançamento</span>
-                  <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
+                  <span className="font-mono text-[10px] tracking-widest uppercase text-red-400/80 mt-1">{t("site.launchPromotion")}</span>
+                  <span className="text-sm text-muted mt-1">{t("site.perCase")}</span>
                 </div>
                 <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
-                  Ideal para 1–2 pessoas · date, amigos ou família<br />Tempo médio: 30 - 50 min.
+                  {t("site.idealFor", { count: "1–2", audience: t("site.audienceDateFriendsFamily") })}<br />{t("site.averageTime", { duration: t("duration.odete") })}
                 </p>
                 <a
                   href={DONA_ODETE_CHECKOUT_URL}
@@ -438,7 +453,7 @@ function LandingPage() {
                   rel="noopener noreferrer"
                   onClick={() => handlePurchaseClick("dona_odete", DONA_ODETE_CHECKOUT_URL)}
                   className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                >Começar Investigação</a>
+                >{t("site.startCase003")}</a>
               </div>
             </div>
 
@@ -449,13 +464,13 @@ function LandingPage() {
 
               <div className="p-6 pb-4">
                 <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                  <span>Caso 004 - ARQUIVO HISTÓRICO</span>
+                  <span>{t("site.caseHistorical", { number: "004" })}</span>
                   <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
-                    Em aberto
+                    {t("site.open")}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">{t("site.difficulty")}</span>
                   <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map((n) => (
                       <span
@@ -468,11 +483,11 @@ function LandingPage() {
                   </div>
                   <span className="font-mono text-[9px] text-muted/70">4/5</span>
                 </div>
-                <h3 className="font-serif text-xl font-bold mb-2">Caso Rasputin</h3>
+                <h3 className="font-serif text-xl font-bold mb-2">{t("site.caseRasputinName")}</h3>
                 <p className="text-sm text-muted mb-4">
-                  Petrogrado, 1916. O homem mais odiado da Rússia desapareceu. O celular dele ainda guarda tudo. Explore mensagens, fotos, perfis e registros de localização, cruze horários e descubra como ele morreu e quem é o culpado.
+                  {t("site.caseRasputinDescription")}
                 </p>
-                <div className="relative"><img src={RASPUTIN_CARD_IMAGE} alt="Caso Rasputin — Investigação Digital" className="w-full h-32 object-cover object-[50%_28%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" /><span className="pointer-events-none absolute bottom-2 right-2 -rotate-6 rounded-sm border-2 border-red-500/80 bg-black/35 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-red-400/90 backdrop-blur-[1px]">Evidência Nº 0417</span></div>
+                <div className="relative"><img src={RASPUTIN_CARD_IMAGE} alt={t("site.case004ImageAlt")} className="w-full h-32 object-cover object-[50%_28%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" /><span className="pointer-events-none absolute bottom-2 right-2 -rotate-6 rounded-sm border-2 border-red-500/80 bg-black/35 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-red-400/90 backdrop-blur-[1px]">{t("site.evidenceBadge")}</span></div>
               </div>
 
               <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
@@ -482,14 +497,14 @@ function LandingPage() {
                       <div className="flex items-center gap-3 flex-wrap">
                         <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">{RASPUTIN_PRICE_LABEL}</span>
                       </div>
-                      <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
+                      <span className="text-sm text-muted mt-1">{t("site.perCase")}</span>
                     </>
                   ) : (
-                    <span className="font-mono text-[10px] tracking-widest uppercase text-primary/60">Lançamento em breve</span>
+                    <span className="font-mono text-[10px] tracking-widest uppercase text-primary/60">{t("site.comingSoon")}</span>
                   )}
                 </div>
                 <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
-                  Ideal para 1–3 pessoas<br />Tempo médio: 60 - 90 min.
+                  {t("site.idealFor", { count: "1–3", audience: t("site.audienceDateFriendsFamily") })}<br />{t("site.averageTime", { duration: t("duration.rasputin") })}
                 </p>
                 {RASPUTIN_AVAILABLE ? (
                   <a
@@ -498,9 +513,9 @@ function LandingPage() {
                     rel="noopener noreferrer"
                     onClick={() => handlePurchaseClick("rasputin", RASPUTIN_CHECKOUT_URL)}
                     className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none"
-                  >Começar Investigação</a>
+                  >{t("site.startCase")}</a>
                 ) : (
-                  <div className="block w-full border border-primary/20 text-primary/50 rounded p-4 font-serif text-lg font-bold text-center cursor-not-allowed select-none" aria-disabled="true">Em breve</div>
+                  <div className="block w-full border border-primary/20 text-primary/50 rounded p-4 font-serif text-lg font-bold text-center cursor-not-allowed select-none" aria-disabled="true">{t("site.comingSoonShort")}</div>
                 )}
               </div>
             </div>
@@ -512,13 +527,13 @@ function LandingPage() {
 
               <div className="p-6 pb-4">
                 <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
-                  <span>Caso 005 - ARQUIVO CONFIDENCIAL</span>
+                  <span>{t("site.caseConfidential", { number: "005" })}</span>
                   <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">
-                    Em aberto
+                    {t("site.open")}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">Dificuldade</span>
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">{t("site.difficulty")}</span>
                   <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map((n) => (
                       <span
@@ -531,11 +546,11 @@ function LandingPage() {
                   </div>
                   <span className="font-mono text-[9px] text-muted/70">2/5</span>
                 </div>
-                <h3 className="font-serif text-xl font-bold mb-2">Peão Envenenado</h3>
+                <h3 className="font-serif text-xl font-bold mb-2">{t("site.casePeaoName")}</h3>
                 <p className="text-sm text-muted mb-4">
-                  Entre rivalidades, segredos e movimentos suspeitos, investigue as peças desse tabuleiro, examine as evidências e descubra quem teve o último movimento. Neste jogo, qualquer peça pode esconder um assassino.
+                  {t("site.casePeaoDescription")}
                 </p>
-                <img src={PEAO_CARD_IMAGE} alt="Caso Peão Envenenado — Investigação Digital" className="w-full h-40 object-cover object-[50%_40%] rounded border border-primary/10" />
+                <img src={PEAO_CARD_IMAGE} alt={t("site.case005ImageAlt")} className="w-full h-40 object-cover object-[50%_40%] rounded border border-primary/10" />
               </div>
 
               <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
@@ -545,14 +560,14 @@ function LandingPage() {
                       <div className="flex items-center gap-3 flex-wrap">
                         <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">{PEAO_PRICE_LABEL}</span>
                       </div>
-                      <span className="text-sm text-muted mt-1">por caso · acesso completo e imediato</span>
+                      <span className="text-sm text-muted mt-1">{t("site.perCase")}</span>
                     </>
                   ) : (
-                    <span className="font-mono text-[10px] tracking-widest uppercase text-primary/60">Lançamento em breve</span>
+                    <span className="font-mono text-[10px] tracking-widest uppercase text-primary/60">{t("site.comingSoon")}</span>
                   )}
                 </div>
                 <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
-                  Ideal para 1–2 pessoas<br />Tempo médio: 30 - 50 min.
+                  {t("site.idealFor", { count: "1–2", audience: t("site.audienceDateFriendsFamily") })}<br />{t("site.averageTime", { duration: t("duration.peao") })}
                 </p>
                 {PEAO_AVAILABLE ? (
                   <a
@@ -561,9 +576,9 @@ function LandingPage() {
                     rel="noopener noreferrer"
                     onClick={() => handlePurchaseClick("peao_envenenado", PEAO_CHECKOUT_URL)}
                     className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none"
-                  >Começar Investigação</a>
+                  >{t("site.startCase")}</a>
                 ) : (
-                  <div className="block w-full border border-primary/20 text-primary/50 rounded p-4 font-serif text-lg font-bold text-center cursor-not-allowed select-none" aria-disabled="true">Em breve</div>
+                  <div className="block w-full border border-primary/20 text-primary/50 rounded p-4 font-serif text-lg font-bold text-center cursor-not-allowed select-none" aria-disabled="true">{t("site.comingSoonShort")}</div>
                 )}
               </div>
             </div>
@@ -572,15 +587,15 @@ function LandingPage() {
 
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-600 fill-mode-both">
           <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
-            Para quem é isso?
+            {t("site.forWhom")}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {[
-              { text: "Pessoas que amam mistério e investigação", Icon: Search },
-              { text: "Amigos em busca de desafios", Icon: Users },
-              { text: "Casais que querem algo diferente", Icon: Heart },
-              { text: "Dates fora da caixinha", Icon: Compass },
+              {[
+                { text: t("site.audienceMystery"), Icon: Search },
+                { text: t("site.audienceChallenge"), Icon: Users },
+                { text: t("site.audienceCouples"), Icon: Heart },
+                { text: t("site.audienceDates"), Icon: Compass },
             ].map((item, i) => (
               <div key={i} className="flex gap-3 items-center text-muted text-base md:text-lg font-medium">
                 <span className="shrink-0 w-7 h-7 flex items-center justify-center rounded border border-primary/20 bg-white/5 text-primary/70 -rotate-2">
@@ -597,14 +612,14 @@ function LandingPage() {
 
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-700 fill-mode-both">
           <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
-            Como funciona
+            {t("site.howItWorks")}
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4">
             {[
-              { n: "01", title: "Compre", desc: "Receba seu caso investigativo." },
-              { n: "02", title: "Investigue", desc: "Analise documentos, evidências, depoimentos, áudios e vídeos." },
-              { n: "03", title: "Descubra", desc: "Monte sua teoria e descubra se você conseguiu solucionar o caso." },
+              { n: "01", title: t("site.buy"), desc: t("site.step1Description") },
+              { n: "02", title: t("site.investigate"), desc: t("site.step2Description") },
+              { n: "03", title: t("site.discover"), desc: t("site.step3Description") },
             ].map((step, i) => (
               <div
                 key={i}
@@ -622,18 +637,18 @@ function LandingPage() {
 
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-800 fill-mode-both">
           <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
-            O kit de evidências
+            {t("site.evidenceKit")}
           </h2>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: "Dossiê", Icon: Folder },
-              { label: "Fotografias", Icon: ImageIcon },
-              { label: "Laudos", Icon: ClipboardList },
-              { label: "Conversas", Icon: MessageSquare },
-              { label: "Áudios", Icon: Mic },
-              { label: "Vídeos", Icon: Video },
-              { label: "Trilha sonora", Icon: Music },
+              { label: t("site.kitDossier"), Icon: Folder },
+              { label: t("site.kitPhotos"), Icon: ImageIcon },
+              { label: t("site.kitReports"), Icon: ClipboardList },
+              { label: t("site.kitConversations"), Icon: MessageSquare },
+              { label: t("site.kitAudio"), Icon: Mic },
+              { label: t("site.kitVideos"), Icon: Video },
+              { label: t("site.kitSoundtrack"), Icon: Music },
             ].map((item, i) => (
               <div
                 key={i}
@@ -650,11 +665,11 @@ function LandingPage() {
 
         <footer className="mt-12 animate-in fade-in duration-1000 delay-1000">
           <p className="text-[10px] md:text-xs text-primary/45 text-center font-mono tracking-widest uppercase">
-            Entrega digital imediata &nbsp;&middot;&nbsp; Sem assinatura &nbsp;&middot;&nbsp; Compatível com qualquer dispositivo
+            {t("site.immediateDelivery")} &nbsp;&middot;&nbsp; {t("site.noSubscription")} &nbsp;&middot;&nbsp; {t("site.anyDevice")}
           </p>
           {showStats && (
             <p className="mt-4 text-[10px] md:text-xs text-primary/40 text-center font-mono tracking-widest uppercase">
-              Cliques no botão: {purchaseClicks ?? "carregando"}
+              {t("site.clicks")}: {purchaseClicks ?? t("site.loading")}
             </p>
           )}
         </footer>
@@ -686,10 +701,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
+        <LanguageProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <Router />
+          </WouterRouter>
+          <Toaster />
+        </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

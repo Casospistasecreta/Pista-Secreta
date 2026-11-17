@@ -1,27 +1,34 @@
 import { useState } from "react";
-import type { ReactNode } from "react";
 import { MessageSquare, Users, Play, Laptop, Smartphone, Fingerprint, Search, HelpCircle } from "lucide-react";
+import { useT, type TranslationKey } from "@/i18n/LanguageProvider";
 
 type Slide =
-  | { type: "photo"; src: string; caption: string }
-  | { type: "graphic"; caption: string; content: ReactNode };
+  | { type: "photo"; src: string; captionKey: TranslationKey }
+  | {
+      type: "graphic";
+      kind: "conversations" | "suspects" | "confession" | "anywhere" | "theory";
+      captionKey: TranslationKey;
+    };
 
 const slides: Slide[] = [
-  { type: "photo", src: "/product-1.jpg", caption: "Envelopes Digitais com Pistas" },
-  { type: "photo", src: "/product-2.jpg", caption: "Documentos e fotos do caso" },
-  { type: "photo", src: "/product-3.jpg", caption: "Arquivos multimídia extraídos da investigação" },
-  { type: "photo", src: "/product-4.jpg", caption: "Experiência para grupos" },
-  {
-    type: "graphic",
-    caption: "Conversas e mensagens dos suspeitos",
-    content: (
+  { type: "photo", src: "/product-1.jpg", captionKey: "slider.photo1Caption" },
+  { type: "photo", src: "/product-2.jpg", captionKey: "slider.photo2Caption" },
+  { type: "photo", src: "/product-3.jpg", captionKey: "slider.photo3Caption" },
+  { type: "photo", src: "/product-4.jpg", captionKey: "slider.photo4Caption" },
+  { type: "graphic", kind: "conversations", captionKey: "slider.conversationsCaption" },
+  { type: "graphic", kind: "suspects", captionKey: "slider.suspectsCaption" },
+  { type: "graphic", kind: "confession", captionKey: "slider.confessionCaption" },
+  { type: "graphic", kind: "anywhere", captionKey: "slider.anywhereCaption" },
+  { type: "graphic", kind: "theory", captionKey: "slider.theoryCaption" },
+];
+
+type Translator = ReturnType<typeof useT>;
+
+function GraphicSlide({ kind, t }: { kind: Extract<Slide, { type: "graphic" }>["kind"]; t: Translator }) {
+  if (kind === "conversations") {
+    return (
       <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
-        <img
-          src="/slide-conversations.png"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <img src="/slide-conversations.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/55" />
         <div className="absolute top-1/4 left-1/4 w-56 h-56 bg-secondary/10 blur-[90px] rounded-full mix-blend-screen" />
         <div className="relative z-10 flex flex-col gap-3 px-8 w-full max-w-xs">
@@ -35,73 +42,50 @@ const slides: Slide[] = [
           <div className="self-start bg-white/10 border border-primary/15 rounded-lg rounded-bl-sm px-4 py-2.5 max-w-[70%]">
             <div className="h-1.5 w-14 bg-primary/30 rounded-full" />
           </div>
-        <MessageSquare className="absolute top-6 right-6 z-10 w-6 h-6 text-primary/70" strokeWidth={1.5} />
-        <p className="text-center font-serif text-base md:text-lg font-bold px-8">
-          Você vai precisar investigar o que eles disseram.
-        </p>
+          <MessageSquare className="absolute top-6 right-6 z-10 w-6 h-6 text-primary/70" strokeWidth={1.5} />
+          <p className="text-center font-serif text-base md:text-lg font-bold px-8">{t("slider.investigateWhatTheySaid")}</p>
         </div>
       </div>
-    ),
-  },
-  {
-    type: "graphic",
-    caption: "Múltiplos suspeitos, teorias e álibis",
-    content: (
+    );
+  }
+
+  if (kind === "suspects") {
+    return (
       <div className="w-full h-full relative flex flex-col items-center justify-center gap-5 overflow-hidden">
-        <img
-          src="/slide-suspects.png"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <img src="/slide-suspects.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/55" />
         <div className="absolute -top-10 -left-10 w-56 h-56 bg-secondary/10 blur-[90px] rounded-full mix-blend-screen" />
         <div className="relative z-10 flex gap-3">
           {[0, 1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="w-12 h-16 md:w-14 md:h-20 bg-white/10 border border-primary/20 rounded-sm flex items-center justify-center"
-            >
+            <div key={i} className="w-12 h-16 md:w-14 md:h-20 bg-white/10 border border-primary/20 rounded-sm flex items-center justify-center">
               <Users className="w-5 h-5 text-primary/40" strokeWidth={1.5} />
             </div>
           ))}
         </div>
         <p className="relative z-10 font-serif text-lg md:text-xl font-bold text-center px-6 leading-tight">
-          Vários suspeitos.<br />Várias teorias.<br />Uma verdade.
+          {t("slider.manySuspects")}<br />{t("slider.manyTheories")}<br />{t("slider.oneTruth")}
         </p>
       </div>
-    ),
-  },
-  {
-    type: "graphic",
-    caption: "Confissão em vídeo no final do Caso",
-    content: (
+    );
+  }
+
+  if (kind === "confession") {
+    return (
       <div className="w-full h-full relative flex flex-col items-center justify-center gap-4 overflow-hidden bg-black/10">
-        <img
-          src="/slide-confession.png"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <img src="/slide-confession.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/55" />
         <div className="relative z-10 w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-primary/70 flex items-center justify-center bg-background/45">
           <Play className="w-7 h-7 md:w-8 md:h-8 text-primary/80 ml-1" fill="currentColor" strokeWidth={0} />
         </div>
-        <p className="relative z-10 font-serif text-lg md:text-xl font-bold text-center px-6">A verdade está no final.</p>
+        <p className="relative z-10 font-serif text-lg md:text-xl font-bold text-center px-6">{t("slider.truthAtEnd")}</p>
       </div>
-    ),
-  },
-  {
-    type: "graphic",
-    caption: "Uma investigação  onde quiser (Em casa, no Date ou com Amigos)",
-    content: (
+    );
+  }
+
+  if (kind === "anywhere") {
+    return (
       <div className="w-full h-full relative flex flex-col items-center justify-center gap-5 overflow-hidden">
-        <img
-          src="/slide-anywhere.png"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <img src="/slide-anywhere.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/55" />
         <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-secondary/10 blur-[90px] rounded-full mix-blend-screen" />
         <div className="relative z-10 flex items-center gap-4">
@@ -114,43 +98,36 @@ const slides: Slide[] = [
           </div>
         </div>
         <p className="relative z-10 font-serif text-lg md:text-xl font-bold text-center px-6 leading-tight">
-          Uma investigação.<br />Onde você quiser.
+          {t("slider.investigationAnywhere")}<br />{t("slider.whereverYouWant")}
         </p>
       </div>
-    ),
-  },
-  {
-    type: "graphic",
-    caption: "Monte sua teoria com quem, como e por quê",
-    content: (
-      <div className="w-full h-full relative flex flex-col items-center justify-center gap-4 overflow-hidden">
-        <img
-          src="/slide-theory.png"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-background/55" />
-        <div className="relative z-10 grid grid-cols-3 gap-4 md:gap-8 px-6">
-          {[
-            { q: "QUEM?", Icon: Fingerprint },
-            { q: "COMO?", Icon: Search },
-            { q: "POR QUÊ?", Icon: HelpCircle },
-          ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-2">
-              <span className="w-10 h-10 rounded-full border border-primary/25 bg-white/5 flex items-center justify-center">
-                <item.Icon className="w-4 h-4 text-primary/60" strokeWidth={1.5} />
-              </span>
-              <span className="font-serif text-sm md:text-base font-bold">{item.q}</span>
-            </div>
-          ))}
-        </div>
+    );
+  }
+
+  return (
+    <div className="w-full h-full relative flex flex-col items-center justify-center gap-4 overflow-hidden">
+      <img src="/slide-theory.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" />
+      <div className="absolute inset-0 bg-background/55" />
+      <div className="relative z-10 grid grid-cols-3 gap-4 md:gap-8 px-6">
+        {[
+          { key: "slider.who", Icon: Fingerprint },
+          { key: "slider.how", Icon: Search },
+          { key: "slider.why", Icon: HelpCircle },
+        ].map((item) => (
+          <div key={item.key} className="flex flex-col items-center gap-2">
+            <span className="w-10 h-10 rounded-full border border-primary/25 bg-white/5 flex items-center justify-center">
+              <item.Icon className="w-4 h-4 text-primary/60" strokeWidth={1.5} />
+            </span>
+            <span className="font-serif text-sm md:text-base font-bold">{t(item.key as TranslationKey)}</span>
+          </div>
+        ))}
       </div>
-    ),
-  },
-];
+    </div>
+  );
+}
 
 export function ProductSlider() {
+  const t = useT();
   const [current, setCurrent] = useState(0);
 
   const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length);
@@ -159,7 +136,7 @@ export function ProductSlider() {
   return (
     <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500 fill-mode-both">
       <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
-        O QUE VEM NO CASO
+        {t("site.whatIsIncluded")}
       </h2>
 
       <div className="relative overflow-hidden rounded-md border border-primary/15 bg-white/5">
@@ -172,9 +149,9 @@ export function ProductSlider() {
               }`}
             >
               {slide.type === "photo" ? (
-                <img src={slide.src} alt={slide.caption} className="w-full h-full object-cover" />
+                <img src={slide.src} alt={t(slide.captionKey)} className="w-full h-full object-cover" />
               ) : (
-                slide.content
+                <GraphicSlide kind={slide.kind} t={t} />
               )}
             </div>
           ))}
@@ -185,21 +162,21 @@ export function ProductSlider() {
           {/* Caption */}
           <div className="absolute bottom-4 left-6 right-6 z-20 pointer-events-none">
             <p className="font-mono text-[10px] tracking-widest uppercase text-muted">
-              {slides[current].caption}
+              {t(slides[current].captionKey)}
             </p>
           </div>
 
           {/* Arrows */}
           <button
             onClick={prev}
-            aria-label="Imagem anterior"
+            aria-label={t("slider.previousImage")}
             className="absolute left-3 top-1/2 z-30 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/90 border border-primary/50 rounded-md text-primary hover:bg-background hover:border-primary/70 hover:scale-105 active:scale-95 transition-all duration-200 font-serif text-3xl shadow-lg touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
           >
             ‹
           </button>
           <button
             onClick={next}
-            aria-label="Próxima imagem"
+            aria-label={t("slider.nextImage")}
             className="absolute right-3 top-1/2 z-30 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/90 border border-primary/50 rounded-md text-primary hover:bg-background hover:border-primary/70 hover:scale-105 active:scale-95 transition-all duration-200 font-serif text-3xl shadow-lg touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
           >
             ›
@@ -212,7 +189,7 @@ export function ProductSlider() {
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              aria-label={`Ver slide ${i + 1}`}
+              aria-label={`${t("slider.viewSlide")} ${i + 1}`}
               className="p-2 -m-2 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
             >
               <span

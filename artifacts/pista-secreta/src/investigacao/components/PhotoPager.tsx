@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, ChevronsRight } from "lucide-react";
 import type { MediaRef } from "../types";
 import { Photo } from "./Media";
+import { useT } from "@/i18n/LanguageProvider";
 
 /**
  * Carrossel de fotos de perfil.
@@ -11,6 +12,7 @@ import { Photo } from "./Media";
  * A foto aparece inteira (sem corte) sobre um fundo desfocado da própria imagem.
  */
 export function PhotoPager({ photos, accent }: { photos: MediaRef[]; accent: string }) {
+  const t = useT();
   const scroller = useRef<HTMLDivElement>(null);
   const drag = useRef({ active: false, startX: 0, startLeft: 0 });
   const [index, setIndex] = useState(0);
@@ -102,15 +104,15 @@ export function PhotoPager({ photos, accent }: { photos: MediaRef[]; accent: str
           onKeyDown={onKeyDown}
           tabIndex={total > 1 ? 0 : -1}
           role="group"
-          aria-roledescription="carrossel"
-          aria-label={`Fotos do perfil, ${index + 1} de ${total}`}
+          aria-roledescription={t("photos.carousel")}
+          aria-label={t("photos.profileCount", { number: index + 1, total })}
           className={`flex h-full w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden outline-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${total > 1 ? "cursor-grab active:cursor-grabbing" : ""}`}
         >
           {photos.map((media, i) => (
             <div
               key={media.id}
               role="group"
-              aria-label={`Foto ${i + 1} de ${total}`}
+              aria-label={t("photos.numbered", { number: i + 1, total })}
               className="relative h-full w-full shrink-0 snap-center snap-always select-none overflow-hidden"
             >
               {media.src ? (
@@ -124,7 +126,7 @@ export function PhotoPager({ photos, accent }: { photos: MediaRef[]; accent: str
                   />
                   <img
                     src={media.src}
-                    alt={media.caption ?? `Foto ${i + 1} do perfil`}
+                    alt={media.caption ?? t("photos.numbered", { number: i + 1, total })}
                     draggable={false}
                     className="relative h-full w-full object-contain"
                   />
@@ -152,7 +154,7 @@ export function PhotoPager({ photos, accent }: { photos: MediaRef[]; accent: str
             </span>
             <button
               type="button"
-              aria-label="Foto anterior"
+              aria-label={t("photos.previous")}
               onClick={() => {
                 setTouched(true);
                 goTo(target.current - 1);
@@ -163,7 +165,7 @@ export function PhotoPager({ photos, accent }: { photos: MediaRef[]; accent: str
             </button>
             <button
               type="button"
-              aria-label="Próxima foto"
+              aria-label={t("photos.next")}
               onClick={() => {
                 setTouched(true);
                 goTo(target.current + 1);
@@ -175,7 +177,7 @@ export function PhotoPager({ photos, accent }: { photos: MediaRef[]; accent: str
             {!touched && index === 0 && (
               <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center">
                 <span className="inv-anim-fade inv-mono flex items-center gap-1.5 rounded-full bg-black/60 px-3.5 py-1.5 text-[11px] text-white backdrop-blur-sm">
-                  Deslize para ver mais fotos <ChevronsRight size={14} />
+                  {t("photos.swipe")} <ChevronsRight size={14} />
                 </span>
               </div>
             )}
@@ -187,7 +189,7 @@ export function PhotoPager({ photos, accent }: { photos: MediaRef[]; accent: str
         <div
           className="flex gap-2 overflow-x-auto px-4 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           role="tablist"
-          aria-label="Miniaturas das fotos"
+          aria-label={t("photos.thumbnails")}
         >
           {photos.map((media, i) => (
             <button
@@ -195,7 +197,7 @@ export function PhotoPager({ photos, accent }: { photos: MediaRef[]; accent: str
               type="button"
               role="tab"
               aria-selected={i === index}
-              aria-label={`Ver foto ${i + 1}`}
+              aria-label={t("photos.view", { number: i + 1 })}
               onClick={() => {
                 setTouched(true);
                 goTo(i);

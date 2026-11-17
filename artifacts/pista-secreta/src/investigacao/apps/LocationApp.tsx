@@ -4,6 +4,7 @@ import { useDevice } from "../state/DeviceProvider";
 import { AppShell } from "../components/AppShell";
 import { EvidenceToggle } from "../components/EvidenceToggle";
 import type { LocationDay, LocationStop } from "../types";
+import { useT } from "@/i18n/LanguageProvider";
 
 const ACCENT = "#8fb8ff";
 
@@ -52,16 +53,17 @@ function ChessMap({ stops, activeId }: { stops: LocationStop[]; activeId?: strin
 
 function StopDetail({ stop, dayLabel }: { stop: LocationStop; dayLabel: string }) {
   const { caseData } = useDevice();
+  const t = useT();
   const chess = caseData.locationStyle === "chess";
   return (
     <AppShell accent={ACCENT} title={stop.title} subtitle={dayLabel}>
       {chess ? <ChessMap stops={[stop]} activeId={stop.id} /> : <MiniMap stops={[stop]} activeId={stop.id} />}
       <div className="mt-5 rounded-2xl border bg-[var(--inv-surface)]">
         {[
-          ["Entrada", stop.time],
-          ["Saída", stop.exitTime ?? "—"],
-          ["Tempo no local", stop.durationLabel ?? "—"],
-          [chess ? "Casa" : "Endereço", stop.address ?? (stop.square ? `Casa ${stop.square}` : "Não registrado")],
+          [t("location.entrance"), stop.time],
+          [t("location.exit"), stop.exitTime ?? "—"],
+          [t("location.timeAtPlace"), stop.durationLabel ?? "—"],
+          [chess ? t("location.square") : t("location.address"), stop.address ?? (stop.square ? `${t("location.square")} ${stop.square}` : t("location.notRecorded"))],
         ].map(([label, value], index) => (
           <div key={label} className={`flex justify-between px-4 py-3.5 text-[13px] ${index ? "border-t" : ""}`}>
             <span className="inv-mono text-[10px] uppercase text-[var(--inv-dim-2)]">{label}</span>
@@ -77,6 +79,7 @@ function StopDetail({ stop, dayLabel }: { stop: LocationStop; dayLabel: string }
 }
 
 export function LocationApp() {
+  const t = useT();
   const { caseData, current, open } = useDevice();
   const [dayIndex, setDayIndex] = useState(0);
   if (current?.view === "stop") {
@@ -89,15 +92,15 @@ export function LocationApp() {
   return (
     <AppShell
       accent={ACCENT}
-      title="Localização"
-      subtitle="Histórico do dispositivo"
+      title={t("location.title")}
+      subtitle={t("location.historySubtitle")}
       right={<Navigation size={16} />}
-      below={<div className="inv-hide-scroll -mx-3 flex gap-2 overflow-x-auto px-3 pt-3" role="tablist" aria-label="Dias do histórico">{caseData.locations.map((item, index) => <button key={item.id} type="button" role="tab" aria-selected={index === dayIndex} onClick={(e) => { setDayIndex(index); const chip = e.currentTarget; const row = chip.parentElement; row?.scrollTo({ left: chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2, behavior: "smooth" }); }} className="inv-press inv-mono shrink-0 whitespace-nowrap rounded-full border px-3 py-2 text-[10px] uppercase" style={{ borderColor: index === dayIndex ? ACCENT : "var(--inv-line-strong)", color: index === dayIndex ? ACCENT : "var(--inv-dim)" }}>{item.label}</button>)}</div>}
+      below={<div className="inv-hide-scroll -mx-3 flex gap-2 overflow-x-auto px-3 pt-3" role="tablist" aria-label={t("location.historyDays")}>{caseData.locations.map((item, index) => <button key={item.id} type="button" role="tab" aria-selected={index === dayIndex} onClick={(e) => { setDayIndex(index); const chip = e.currentTarget; const row = chip.parentElement; row?.scrollTo({ left: chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2, behavior: "smooth" }); }} className="inv-press inv-mono shrink-0 whitespace-nowrap rounded-full border px-3 py-2 text-[10px] uppercase" style={{ borderColor: index === dayIndex ? ACCENT : "var(--inv-line-strong)", color: index === dayIndex ? ACCENT : "var(--inv-dim)" }}>{item.label}</button>)}</div>}
     >
       {day ? (
         <>
           {caseData.locationStyle === "chess" ? <ChessMap stops={day.stops} /> : <MiniMap stops={day.stops} />}
-          <p className="inv-mono flex items-center gap-1.5 pt-4 text-[10px] uppercase text-[var(--inv-dim-2)]"><MapPin size={11} /> {day.stops.length} paradas registradas</p>
+          <p className="inv-mono flex items-center gap-1.5 pt-4 text-[10px] uppercase text-[var(--inv-dim-2)]"><MapPin size={11} /> {t("location.stopCount", { count: day.stops.length })}</p>
           <div className="pt-5">
             {day.stops.map((stop, index) => (
               <button key={stop.id} type="button" onClick={() => open({ app: "location", view: "stop", id: stop.id })} className="inv-press flex w-full gap-4 text-left">
@@ -108,7 +111,7 @@ export function LocationApp() {
             ))}
           </div>
         </>
-      ) : <p>Nenhum histórico disponível.</p>}
+      ) : <p>{t("location.noHistory")}</p>}
     </AppShell>
   );
 }

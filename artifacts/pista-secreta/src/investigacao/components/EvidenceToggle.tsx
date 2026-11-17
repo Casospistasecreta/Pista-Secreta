@@ -1,6 +1,7 @@
 import { BookmarkCheck, BookmarkPlus } from "lucide-react";
 import { useDevice } from "../state/DeviceProvider";
 import type { EvidenceItem } from "../types";
+import { useT } from "@/i18n/LanguageProvider";
 
 export function EvidenceToggle({
   item, accent, compact = false, className = "",
@@ -8,6 +9,7 @@ export function EvidenceToggle({
   item: EvidenceItem; accent: string; compact?: boolean; className?: string;
 }) {
   const { isEvidence, toggleEvidence } = useDevice();
+  const t = useT();
   const marked = isEvidence(item.id);
   return (
     <button
@@ -18,7 +20,7 @@ export function EvidenceToggle({
       aria-pressed={marked}
     >
       {marked ? <BookmarkCheck size={13} /> : <BookmarkPlus size={13} />}
-      {compact ? (marked ? "Marcada" : "Evidência") : marked ? "Evidência marcada" : "Marcar como evidência"}
+      {compact ? (marked ? t("evidence.compactMarked") : t("evidence.compactUnmarked")) : marked ? t("evidence.marked") : t("evidence.mark")}
     </button>
   );
 }

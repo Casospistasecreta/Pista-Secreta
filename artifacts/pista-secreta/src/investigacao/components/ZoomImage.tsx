@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { Minus, Plus, RotateCcw } from "lucide-react";
+import { useT } from "@/i18n/LanguageProvider";
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 6;
@@ -12,6 +13,7 @@ interface View { s: number; x: number; y: number }
  * Em escala 1 a aparência é idêntica à de uma imagem comum (`cover` ou `contain`).
  */
 export function ZoomImage({ src, alt, fit = "cover" }: { src: string; alt: string; fit?: "cover" | "contain" }) {
+  const t = useT();
   const box = useRef<HTMLDivElement>(null);
   const [view, setView] = useState<View>({ s: 1, x: 0, y: 0 });
   const pointers = useRef(new Map<number, { x: number; y: number }>());
@@ -82,9 +84,9 @@ export function ZoomImage({ src, alt, fit = "cover" }: { src: string; alt: strin
         style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.s})`, transformOrigin: "center" }}
       />
       <div className="absolute bottom-2 right-2 flex gap-1.5" onPointerDown={(e) => e.stopPropagation()} onDoubleClick={(e) => e.stopPropagation()}>
-        {view.s > 1 && <button type="button" className={btn} aria-label="Restaurar zoom" onClick={() => setView({ s: 1, x: 0, y: 0 })}><RotateCcw size={15} /></button>}
-        <button type="button" className={btn} aria-label="Diminuir zoom" onClick={() => zoomBy(1 / 1.5)}><Minus size={16} /></button>
-        <button type="button" className={btn} aria-label="Aumentar zoom" onClick={() => zoomBy(1.5)}><Plus size={16} /></button>
+        {view.s > 1 && <button type="button" className={btn} aria-label={t("zoom.reset")} onClick={() => setView({ s: 1, x: 0, y: 0 })}><RotateCcw size={15} /></button>}
+        <button type="button" className={btn} aria-label={t("zoom.out")} onClick={() => zoomBy(1 / 1.5)}><Minus size={16} /></button>
+        <button type="button" className={btn} aria-label={t("zoom.in")} onClick={() => zoomBy(1.5)}><Plus size={16} /></button>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
+import { useT } from "@/i18n/LanguageProvider";
 
 const fmt = (seconds: number) => {
   const safe = Number.isFinite(seconds) && seconds > 0 ? seconds : 0;
@@ -7,7 +8,8 @@ const fmt = (seconds: number) => {
 };
 
 /** Player de gravação de voz (arquivo real). Play/pausa, barra de posição e tempo. */
-export function AudioNote({ src, label = "Gravação de voz", accent }: { src: string; label?: string; accent: string }) {
+export function AudioNote({ src, label, accent }: { src: string; label?: string; accent: string }) {
+  const t = useT();
   const audio = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
@@ -36,15 +38,15 @@ export function AudioNote({ src, label = "Gravação de voz", accent }: { src: s
         onEnded={() => { setPlaying(false); setTime(0); }}
         onError={() => setFailed(true)}
       />
-      <p className="inv-mono pb-3 text-[10px] uppercase tracking-[.2em] text-[var(--inv-dim-2)]">{label}</p>
+      <p className="inv-mono pb-3 text-[10px] uppercase tracking-[.2em] text-[var(--inv-dim-2)]">{label ?? t("audio.voiceRecording")}</p>
       {failed ? (
-        <p className="text-[13px] text-[var(--inv-danger)]">Não foi possível carregar o áudio desta gravação.</p>
+        <p className="text-[13px] text-[var(--inv-danger)]">{t("audio.loadError")}</p>
       ) : (
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={toggle}
-            aria-label={playing ? "Pausar gravação" : "Ouvir gravação"}
+            aria-label={playing ? t("audio.pause") : t("audio.play")}
             className="inv-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
             style={{ background: accent, color: "#120b1d" }}
           >
@@ -58,7 +60,7 @@ export function AudioNote({ src, label = "Gravação de voz", accent }: { src: s
               step={1}
               value={Math.min(time, duration || 1)}
               onChange={(e) => { const next = Number(e.target.value); if (audio.current) audio.current.currentTime = next; setTime(next); }}
-              aria-label="Posição da gravação"
+              aria-label={t("audio.position")}
               className="block h-6 w-full cursor-pointer"
               style={{ accentColor: accent }}
             />

@@ -4,12 +4,14 @@ import { useDevice } from "../state/DeviceProvider";
 import { evaluate, parseAnswer } from "../state/evaluateAnswers";
 import { useFinalAnswer } from "../state/useFinalAnswer";
 import { AppShell } from "./AppShell";
+import { useT } from "@/i18n/LanguageProvider";
 
 const ACCENT = "#c7a2ff";
 
 /** Resposta final do caso. Só é renderizada quando `caseData.finalAnswer` existe. */
 export function FinalAnswerScreen() {
   const { caseData } = useDevice();
+  const t = useT();
   const { answers, solved, setAnswer, toggleAnswer, submit, retry } = useFinalAnswer(caseData.slug);
   const [wrong, setWrong] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
@@ -25,7 +27,7 @@ export function FinalAnswerScreen() {
       <AppShell accent={ACCENT} title={<span className="inv-display text-[19px]">{report.title}</span>} subtitle={caseData.title}>
         <div ref={topRef} className="inv-anim-fade pb-8">
           <div className="mt-2 rounded-xl border px-4 py-3" style={{ borderColor: ACCENT, background: `${ACCENT}14` }}>
-            <p className="inv-mono text-[10px] uppercase tracking-[.2em]" style={{ color: ACCENT }}>Pontuação</p>
+            <p className="inv-mono text-[10px] uppercase tracking-[.2em]" style={{ color: ACCENT }}>{t("answer.score")}</p>
             <p className="inv-display pt-1 text-[26px] leading-none">{evaluation.total}<span className="text-[15px] text-[var(--inv-dim)]"> / {evaluation.max}</span></p>
             {evaluation.tier && <p className="pt-2 text-[13px]">{evaluation.tier.label}</p>}
           </div>
@@ -38,7 +40,7 @@ export function FinalAnswerScreen() {
                   <Icon size={16} className="mt-[2px] shrink-0" style={{ color: result.correct ? ACCENT : skipped ? "var(--inv-dim-2)" : "var(--inv-danger)" }} />
                   <span>
                     <span className="inv-mono text-[10px] uppercase tracking-[.14em] text-[var(--inv-dim-2)]">
-                      {result.question.bonus ? "Bônus" : `Pergunta ${index + 1}`}{result.answered ? "" : " · sem resposta"}
+                       {result.question.bonus ? t("answer.bonus") : t("answer.question", { number: index + 1 })}{result.answered ? "" : t("answer.noAnswer")}
                     </span>
                     {result.feedback && <span className="block pt-1 text-[var(--inv-dim)]">{result.feedback}</span>}
                   </span>
@@ -52,7 +54,7 @@ export function FinalAnswerScreen() {
           ))}
           {report.closing && <p className="pt-6 text-[14px] italic leading-relaxed text-[var(--inv-dim)]">{report.closing}</p>}
           <button type="button" onClick={retry} className="inv-press mt-8 w-full rounded-xl border px-4 py-3 text-sm font-medium" style={{ borderColor: ACCENT, color: ACCENT }}>
-            Rever minhas respostas
+            {t("answer.review")}
           </button>
         </div>
       </AppShell>
@@ -66,7 +68,7 @@ export function FinalAnswerScreen() {
         <div ref={topRef} className="inv-anim-fade pb-8">
           <div className="mt-2 flex items-center gap-2" style={{ color: ACCENT }}>
             <CheckCircle2 size={18} />
-            <p className="inv-mono text-[10px] uppercase tracking-[.2em]">Caso resolvido</p>
+            <p className="inv-mono text-[10px] uppercase tracking-[.2em]">{t("answer.solved")}</p>
           </div>
           {report.subtitle && <p className="inv-mono pt-3 text-[10px] uppercase tracking-[.16em] text-[var(--inv-dim-2)]">{report.subtitle}</p>}
           {report.paragraphs.map((paragraph, index) => (
@@ -83,15 +85,15 @@ export function FinalAnswerScreen() {
   const answeredAll = config.questions.every((q) => (config.scoring && q.bonus ? true : hasAnswer(q)));
 
   return (
-    <AppShell accent={ACCENT} title={<span className="inv-display text-[19px]">Resposta final</span>} subtitle={caseData.title}>
+    <AppShell accent={ACCENT} title={<span className="inv-display text-[19px]">{t("answer.title")}</span>} subtitle={caseData.title}>
       <div ref={topRef} className="pb-8">
         {config.intro && <p className="pt-2 text-[13px] leading-relaxed text-[var(--inv-dim)]">{config.intro}</p>}
         {config.questions.map((question, index) => (
           <fieldset key={question.id} className="pt-6">
             <legend className="inv-mono pb-3 text-[10px] uppercase tracking-[.18em] text-[var(--inv-dim-2)]">
-              {question.bonus ? "Bônus · opcional" : `Pergunta ${index + 1} de ${config.questions.filter((q) => !q.bonus || !config.scoring).length}`}
-              {config.scoring && question.points ? ` · ${question.points} pts` : ""}
-              {isMultiple(question) ? " · marque todas as que se aplicam" : ""}
+              {question.bonus ? t("answer.optional") : t("answer.questionOf", { number: index + 1, total: config.questions.filter((q) => !q.bonus || !config.scoring).length })}
+              {config.scoring && question.points ? t("answer.points", { points: question.points }) : ""}
+              {isMultiple(question) ? t("answer.multipleChoice") : ""}
             </legend>
             <p className="pb-3 text-[15px] leading-snug">{question.prompt}</p>
             <div className="flex flex-col gap-2">
@@ -117,7 +119,7 @@ export function FinalAnswerScreen() {
             </div>
           </fieldset>
         ))}
-        {wrong && <p role="alert" className="inv-anim-shake pt-5 text-[13px]" style={{ color: "var(--inv-danger)" }}>Nem todas as respostas estão corretas. Revise suas evidências e tente novamente.</p>}
+        {wrong && <p role="alert" className="inv-anim-shake pt-5 text-[13px]" style={{ color: "var(--inv-danger)" }}>{t("answer.wrong")}</p>}
         <button
           type="button"
           disabled={!answeredAll}
@@ -125,7 +127,7 @@ export function FinalAnswerScreen() {
           className="inv-press mt-6 w-full rounded-xl px-4 py-3 text-sm font-medium text-[#120b1d] disabled:opacity-40"
           style={{ background: ACCENT }}
         >
-          {config.scoring ? "Enviar e ver resultado" : "Enviar resposta"}
+          {config.scoring ? t("answer.sendResult") : t("answer.send")}
         </button>
       </div>
     </AppShell>
