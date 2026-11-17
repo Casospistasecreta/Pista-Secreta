@@ -535,7 +535,7 @@ function LandingPage() {
                 <p className="text-sm text-muted mb-4">
                   Entre rivalidades, segredos e movimentos suspeitos, investigue as peças desse tabuleiro, examine as evidências e descubra quem teve o último movimento. Neste jogo, qualquer peça pode esconder um assassino.
                 </p>
-                <div className="relative"><img src={PEAO_CARD_IMAGE} alt="Caso Peão Envenenado — Investigação Digital" className="w-full h-32 object-cover object-[50%_40%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" /><span className="pointer-events-none absolute bottom-2 right-2 -rotate-6 rounded-sm border-2 border-red-500/80 bg-black/35 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-red-400/90 backdrop-blur-[1px]">Evidência Nº 0510</span></div>
+                <img src={PEAO_CARD_IMAGE} alt="Caso Peão Envenenado — Investigação Digital" className="w-full h-40 object-cover object-[50%_40%] rounded border border-primary/10" />
               </div>
 
               <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
