@@ -74,7 +74,7 @@ export const finalAnswer: FinalAnswerConfig = {
       },
     },
     {
-      id: "q3", prompt: "Quem planejou e enviou o doce?", points: 20, correctOptionId: "d",
+      id: "q3", prompt: "Quem planejou o crime?", points: 20, correctOptionId: "d",
       options: [
         { id: "a", text: "Rei Branco" },
         { id: "b", text: "Cavalo Preto" },
@@ -92,7 +92,7 @@ export const finalAnswer: FinalAnswerConfig = {
       },
     },
     {
-      id: "q4", prompt: "Quem retirou a caneta da gaveta?", points: 20, correctOptionId: "b",
+      id: "q4", prompt: "Quem mexeu na gaveta?", points: 20, correctOptionId: "b",
       options: [
         { id: "a", text: "Tor (Torre Preta)" },
         { id: "b", text: "Rainha Preta (Dama)" },
