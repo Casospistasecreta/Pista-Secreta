@@ -20,6 +20,136 @@ export function CaseFileApp() {
   const t = useT();
   if (current?.view === "answer" && caseData.finalAnswer) return <FinalAnswerScreen />;
   const displayedEvidence = evidence.map((item) => {
+    if (caseData.slug === "caso-rasputin") {
+      const [, firstId, secondId] = item.id.split(":");
+      if (item.appId === "messages") {
+        const conversation = caseData.messages.find((entry) => entry.id === firstId);
+        const message = conversation?.messages.find((entry) => entry.id === secondId);
+        if (!message) return item;
+        const callTitle = message.call
+          ? message.call.kind === "missed" ? t("messages.missedCallOne")
+            : message.call.kind === "outgoing" ? t("messages.outgoingCallOne")
+              : t("messages.incomingCallOne")
+          : undefined;
+        return {
+          ...item,
+          title: message.text ?? callTitle ?? (message.audio ? t("shared.audio") : t("shared.media")),
+          subtitle: `${t("app.messages")} · ${message.at}`,
+        };
+      }
+      if (item.appId === "social") {
+        const post = caseData.social.posts.find((entry) => entry.id === firstId);
+        return post ? {
+          ...item,
+          title: post.caption || t("social.post"),
+          subtitle: `${labelFor("social", t("app.social"))} · ${post.at}`,
+        } : item;
+      }
+      if (item.appId === "matches") {
+        const profile = caseData.matches.matches.find((entry) => entry.id === firstId);
+        return profile ? { ...item, title: `${t("matches.profileData")} — ${profile.name}`, subtitle: t("app.matches") } : item;
+      }
+      if (item.appId === "gallery") {
+        const media = caseData.gallery.flatMap((group) => group.items).find((entry) => entry.id === firstId);
+        return media ? {
+          ...item,
+          title: media.caption ?? `${t("gallery.photo")} ${media.takenAt ?? ""}`,
+          subtitle: media.place ? `${t("gallery.photosLabel")} · ${media.place}` : t("gallery.photosLabel"),
+        } : item;
+      }
+      if (item.appId === "location") {
+        for (const day of caseData.locations) {
+          const stop = day.stops.find((entry) => entry.id === firstId);
+          if (stop) return { ...item, title: `${stop.title} — ${stop.time}`, subtitle: `${t("app.location")} · ${day.label}` };
+        }
+        return item;
+      }
+      if (item.appId === "bank") {
+        for (const day of caseData.bank.days) {
+          const transaction = day.transactions.find((entry) => entry.id === firstId);
+          if (transaction) {
+            const separator = item.title.lastIndexOf(" — ");
+            const amount = separator >= 0 ? item.title.slice(separator) : "";
+            return { ...item, title: `${transaction.merchant}${amount}`, subtitle: `${caseData.bank.brand} · ${day.label} ${transaction.time}` };
+          }
+        }
+        return item;
+      }
+      if (item.appId === "notes") {
+        const note = caseData.notes.find((entry) => entry.id === firstId);
+        return note ? { ...item, title: note.title, subtitle: `${t("app.notes")} · ${note.at}` } : item;
+      }
+      return item;
+    }
+    if (caseData.slug === "caso-peao-envenenado") {
+      const [, firstId, secondId] = item.id.split(":");
+      if (item.appId === "messages") {
+        const conversation = caseData.messages.find((entry) => entry.id === firstId);
+        const message = conversation?.messages.find((entry) => entry.id === secondId);
+        if (!conversation || !message) return item;
+        const callTitle = message.call
+          ? message.call.kind === "missed" ? t("messages.missedCallOne")
+            : message.call.kind === "outgoing" ? t("messages.outgoingCallOne")
+              : t("messages.incomingCallOne")
+          : undefined;
+        return {
+          ...item,
+          title: message.text ?? callTitle ?? (message.audio ? t("shared.audio") : t("shared.media")),
+          subtitle: `${t("app.messages")} · ${message.at}`,
+        };
+      }
+      if (item.appId === "social") {
+        const post = caseData.social.posts.find((entry) => entry.id === firstId);
+        return post ? {
+          ...item,
+          title: post.caption || t("social.post"),
+          subtitle: `${labelFor("social", t("app.social"))} · ${post.at}`,
+        } : item;
+      }
+      if (item.appId === "matches") {
+        const profile = caseData.matches.matches.find((entry) => entry.id === firstId);
+        return profile ? { ...item, title: `${t("matches.profileData")} — ${profile.name}`, subtitle: t("app.matches") } : item;
+      }
+      if (item.appId === "gallery") {
+        const media = caseData.gallery.flatMap((group) => group.items).find((entry) => entry.id === firstId);
+        return media ? {
+          ...item,
+          title: media.caption ?? `${t("gallery.photo")} ${media.takenAt ?? ""}`,
+          subtitle: t("gallery.photosLabel"),
+        } : item;
+      }
+      if (item.appId === "location") {
+        for (const day of caseData.locations) {
+          const stop = day.stops.find((entry) => entry.id === firstId);
+          if (stop) return { ...item, title: `${stop.title} — ${stop.time}`, subtitle: `${t("app.location")} · ${day.label}` };
+        }
+        return item;
+      }
+      if (item.appId === "bank") {
+        for (const day of caseData.bank.days) {
+          const transaction = day.transactions.find((entry) => entry.id === firstId);
+          if (transaction) {
+            const separator = item.title.lastIndexOf(" — ");
+            const amount = separator >= 0 ? item.title.slice(separator) : "";
+            return { ...item, title: `${transaction.merchant}${amount}`, subtitle: `${caseData.bank.brand} · ${day.label} ${transaction.time}` };
+          }
+        }
+        return item;
+      }
+      if (item.appId === "notes") {
+        const note = caseData.notes.find((entry) => entry.id === firstId);
+        return note ? { ...item, title: note.title, subtitle: `${t("app.notes")} · ${note.at}` } : item;
+      }
+      if (item.appId === "tabulive") {
+        const friend = caseData.tabulive?.friends.find((entry) => entry.id === secondId);
+        return friend ? {
+          ...item,
+          title: `${t("tabulive.friends")} — ${friend.name}`,
+          subtitle: labelFor("tabulive", t("app.tabulive")),
+        } : item;
+      }
+      return item;
+    }
     if (caseData.slug !== "caso-odete") return item;
     const [, firstId, secondId] = item.id.split(":");
     if (item.appId === "messages") {
@@ -84,7 +214,7 @@ export function CaseFileApp() {
     {caseData.briefing && caseData.briefing.length > 0 && <Briefing paragraphs={caseData.briefing} stamp={caseData.stamp} defaultOpen={evidence.length === 0} />}
     <div className="flex items-baseline justify-between pt-2"><p className="inv-mono text-[10px] uppercase tracking-[.22em] text-[var(--inv-dim-2)]">{t("casefile.found")}</p><p className="inv-display text-[26px]" style={{ color: ACCENT }}>{evidence.length}</p></div>
     {evidence.length === 0 ? <div className="flex flex-1 flex-col items-center justify-center gap-3 px-8 text-center"><FolderSearch size={26} className="text-[var(--inv-dim-2)]" /><p className="text-[14px] text-[var(--inv-dim)]">{t("casefile.empty")}</p><button type="button" onClick={goHome} className="inv-press inv-mono mt-2 rounded-full border px-4 py-2 text-[10px] uppercase tracking-[.18em]" style={{ borderColor: ACCENT, color: ACCENT }}>{t("casefile.backToDevice")}</button></div> :
-      <ul className="flex flex-col pt-4">{displayedEvidence.map((item) => { const app = getApp(item.appId); const Icon = app?.icon ?? FolderSearch; return <li key={item.id} className="flex items-center gap-3 border-b border-[var(--inv-line)] py-3.5"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border" style={{ borderColor: "var(--inv-line-strong)", color: app?.accent ?? ACCENT }}><Icon size={15} /></span><button type="button" onClick={() => item.target && open(item.target)} className="min-w-0 flex-1 text-left"><p className="truncate text-[14px]">{item.title}</p><p className="inv-mono truncate text-[10px] uppercase tracking-[.12em] text-[var(--inv-dim-2)]">{item.subtitle}</p></button>{item.target && <ChevronRight size={15} className="text-[var(--inv-dim-2)]" />}<button type="button" onClick={() => removeEvidence(item.id)} className="inv-press p-1 text-[var(--inv-dim-2)]" aria-label={t("casefile.removeEvidence", { title: item.title })}><Trash2 size={14} /></button></li>; })}</ul>}
+       <ul className="flex flex-col pt-4">{displayedEvidence.map((item) => { const app = getApp(item.appId); const Icon = app?.icon ?? FolderSearch; const evidenceTextClass = caseData.slug === "caso-rasputin" ? "whitespace-normal break-words" : "truncate"; return <li key={item.id} className="flex items-center gap-3 border-b border-[var(--inv-line)] py-3.5"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border" style={{ borderColor: "var(--inv-line-strong)", color: app?.accent ?? ACCENT }}><Icon size={15} /></span><button type="button" onClick={() => item.target && open(item.target)} className="min-w-0 flex-1 text-left"><p className={`${evidenceTextClass} text-[14px]`}>{item.title}</p><p className={`inv-mono ${evidenceTextClass} text-[10px] uppercase tracking-[.12em] text-[var(--inv-dim-2)]`}>{item.subtitle}</p></button>{item.target && <ChevronRight size={15} className="text-[var(--inv-dim-2)]" />}<button type="button" onClick={() => removeEvidence(item.id)} className="inv-press p-1 text-[var(--inv-dim-2)]" aria-label={t("casefile.removeEvidence", { title: item.title })}><Trash2 size={14} /></button></li>; })}</ul>}
     {caseData.finalAnswer && <div className="mt-auto pt-6"><button type="button" onClick={() => open({ app: "casefile", view: "answer" })} className="inv-press w-full rounded-xl px-4 py-3 text-sm font-medium text-[#120b1d]" style={{ background: ACCENT }}>{t("casefile.submitAnswer")}</button></div>}
   </AppShell>;
 }

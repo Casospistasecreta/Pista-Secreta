@@ -29,7 +29,7 @@ export interface Lock {
   /** Senha exigida. Nesta fase é texto simples — é conteúdo de jogo, não segurança. */
   passcode: string;
   /** Dica opcional exibida na tela de senha. */
-  hint?: string;
+  hint?: LocalizedText;
 }
 
 /**
@@ -121,7 +121,7 @@ export interface SocialPost {
   media: MediaRef[];
   caption: LocalizedText;
   at: LocalizedText;
-  place?: string;
+  place?: LocalizedText;
   likes: number;
   tagged?: string[];
   comments: SocialComment[];
@@ -129,7 +129,7 @@ export interface SocialPost {
 
 export interface SocialProfile {
   handle: string;
-  displayName: string;
+  displayName: LocalizedText;
   bio: LocalizedText;
   avatarSeed: string;
   avatarSrc?: string;
@@ -151,10 +151,10 @@ export interface SocialData {
 
 export interface MatchProfile {
   id: string;
-  name: string;
+  name: LocalizedText;
   age: number;
   distanceKm: number;
-  city?: string;
+  city?: LocalizedText;
   bio?: LocalizedText;
   photos: MediaRef[];
   interests?: LocalizedText[];
@@ -170,8 +170,8 @@ export interface MatchProfile {
 }
 
 export interface MatchesData {
-  appName: string;
-  profile: { name: string; age: number; avatarSeed: string };
+  appName: LocalizedText;
+  profile: { name: LocalizedText; age: number; avatarSeed: string };
   matches: MatchProfile[];
 }
 
@@ -238,7 +238,7 @@ export interface BankDay {
 
 export interface BankData {
   brand: string;
-  holder: string;
+  holder: LocalizedText;
   /** Moeda exibida. Padrão: "BRL" (R$). */
   currency?: "BRL" | "RUB";
   balance: number;
@@ -267,7 +267,7 @@ export interface Note {
 
 export interface NoteAudio {
   src?: string;
-  label?: string;
+  label?: LocalizedText;
 }
 
 /* ------------------------------------------------------------------ */
@@ -334,47 +334,47 @@ export interface CaseData {
 export interface TabuLiveUnlock {
   key: string;
   /** Texto exibido ao resolver ("Conversa arquivada: Pastor D."). */
-  label: string;
+  label: LocalizedText;
 }
 
 export interface TabuLivePuzzle {
   id: string;
-  title: string;
-  subtitle: string;
+  title: LocalizedText;
+  subtitle: LocalizedText;
   /** Posição inicial em FEN. */
   fen: string;
   /** Objetivo exibido ao jogador. */
-  goal: string;
+  goal: LocalizedText;
   /** Dica deixada pelo dono do aparelho. */
-  hint?: string;
+  hint?: LocalizedText;
   /** Lance vencedor em notação brasileira, exibido quando o jogador pede a solução. */
-  solution: string;
+  solution: LocalizedText;
   unlocks: TabuLiveUnlock;
 }
 
 export interface TabuLiveDuel {
   id: string;
-  title: string;
-  subtitle: string;
+  title: LocalizedText;
+  subtitle: LocalizedText;
   /** Posição inicial em FEN. O bot joga com a cor oposta à do jogador. */
   fen: string;
   playerColor: "w" | "b";
   /** Quanto o bot erra de propósito (0 a 1). */
   blunderRate?: number;
-  goal: string;
-  hint?: string;
+  goal: LocalizedText;
+  hint?: LocalizedText;
   unlocks: TabuLiveUnlock;
 }
 
 export interface TabuLiveFriendChat {
   id: string;
-  name: string;
-  status?: string;
-  messages: { from: "victim" | "them"; at: string; text: string }[];
+  name: LocalizedText;
+  status?: LocalizedText;
+  messages: { from: "victim" | "them"; at: LocalizedText; text: LocalizedText }[];
 }
 
 export interface TabuLiveData {
-  profile: { name: string; title: string; rating: number; avatarSeed: string; avatarSrc?: string };
+  profile: { name: LocalizedText; title: LocalizedText; rating: number; avatarSeed: string; avatarSrc?: string };
   friends: TabuLiveFriendChat[];
   puzzles: TabuLivePuzzle[];
   duel?: TabuLiveDuel;
@@ -415,7 +415,7 @@ export interface FinalReport {
 
 /** Modo com pontuação: o envio sempre gera um resultado (faixa conforme os pontos) e permite refazer. */
 export interface FinalScoring {
-  tiers: { id: string; label: string; minPoints: number; report: FinalReport }[];
+  tiers: { id: string; label: LocalizedText; minPoints: number; report: FinalReport }[];
 }
 
 export interface FinalAnswerConfig {

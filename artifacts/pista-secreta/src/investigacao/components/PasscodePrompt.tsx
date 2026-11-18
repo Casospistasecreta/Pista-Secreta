@@ -2,13 +2,14 @@ import { useState, type FormEvent } from "react";
 import { Lock } from "lucide-react";
 import { useDevice } from "../state/DeviceProvider";
 import type { Lock as LockConfig } from "../types";
+import type { ResolvedLocalized } from "@/i18n/types";
 import { useT } from "@/i18n/LanguageProvider";
 
 export function PasscodePrompt({
   unlockKey, lock, accent, title,
   description,
 }: {
-  unlockKey: string; lock: LockConfig; accent: string; title?: string; description?: string;
+  unlockKey: string; lock: ResolvedLocalized<LockConfig>; accent: string; title?: string; description?: string;
 }) {
   const { tryUnlock } = useDevice();
   const t = useT();

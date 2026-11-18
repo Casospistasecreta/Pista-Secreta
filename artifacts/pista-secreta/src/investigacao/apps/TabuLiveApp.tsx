@@ -8,6 +8,7 @@ import { ChessBoard } from "../tabulive/ChessBoard";
 import { applyMove, botMove, findKing, getStatus, inCheck, parseFen, toSan, type GameState, type Move } from "../tabulive/engine";
 import type { TabuLiveDuel, TabuLivePuzzle } from "../types";
 import { useT } from "@/i18n/LanguageProvider";
+import type { ResolvedLocalized } from "@/i18n/types";
 
 const ACCENT = "#a8e6a1";
 const solvedKey = (id: string) => `tabulive:solved:${id}`;
@@ -22,7 +23,7 @@ function UnlockBanner({ label }: { label: string }) {
   );
 }
 
-function PuzzleScreen({ puzzle }: { puzzle: TabuLivePuzzle }) {
+function PuzzleScreen({ puzzle }: { puzzle: ResolvedLocalized<TabuLivePuzzle> }) {
   const t = useT();
   const { isUnlocked, grantUnlock } = useDevice();
   const initial = useMemo(() => parseFen(puzzle.fen), [puzzle.fen]);
@@ -75,7 +76,7 @@ function PuzzleScreen({ puzzle }: { puzzle: TabuLivePuzzle }) {
   );
 }
 
-function DuelScreen({ duel }: { duel: TabuLiveDuel }) {
+function DuelScreen({ duel }: { duel: ResolvedLocalized<TabuLiveDuel> }) {
   const t = useT();
   const { isUnlocked, grantUnlock } = useDevice();
   const start = useMemo(() => parseFen(duel.fen), [duel.fen]);
