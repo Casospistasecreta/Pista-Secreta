@@ -1,4 +1,11 @@
+import type { LocalizedText } from "@/i18n/types";
 import type { MediaRef, Message } from "../../types";
+
+export const L = (ptBR: string, en: string, es: string): LocalizedText => ({
+  "pt-BR": ptBR,
+  en,
+  es,
+});
 
 /**
  * Caminho de um recurso deste caso. As imagens ficam em
@@ -7,7 +14,7 @@ import type { MediaRef, Message } from "../../types";
  */
 export const asset = (path: string) => `${import.meta.env.BASE_URL}investigacao/caso-odete/${path}`;
 
-export const photo = (id: string, path: string, takenAt?: string): MediaRef => ({
+export const photo = (id: string, path: string, takenAt?: LocalizedText): MediaRef => ({
   id,
   kind: "photo",
   seed: id,
@@ -16,10 +23,10 @@ export const photo = (id: string, path: string, takenAt?: string): MediaRef => (
 });
 
 /** Mensagem enviada por Odete (dona do aparelho). */
-export const me = (id: string, at: string, text?: string, media?: MediaRef): Message => ({ id, from: "victim", at, text, media });
+export const me = (id: string, at: LocalizedText, text?: LocalizedText, media?: MediaRef): Message => ({ id, from: "victim", at, text, media });
 
 /** Registro de chamada (sem texto). */
-export const callLog = (id: string, from: "victim" | "them", at: string, call: NonNullable<Message["call"]>): Message => ({ id, from, at, call });
+export const callLog = (id: string, from: "victim" | "them", at: LocalizedText, call: NonNullable<Message["call"]>): Message => ({ id, from, at, call });
 
 /** Mensagem recebida por Odete. */
-export const them = (id: string, at: string, text?: string, media?: MediaRef): Message => ({ id, from: "them", at, text, media });
+export const them = (id: string, at: LocalizedText, text?: LocalizedText, media?: MediaRef): Message => ({ id, from: "them", at, text, media });

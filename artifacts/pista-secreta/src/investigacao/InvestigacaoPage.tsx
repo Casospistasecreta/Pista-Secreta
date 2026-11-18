@@ -7,6 +7,7 @@ import { HomeScreen } from "./components/HomeScreen";
 import { getApp } from "./apps/registry";
 import { getCase } from "./cases/registry";
 import { useLanguage, useT } from "@/i18n/LanguageProvider";
+import { pick } from "@/i18n/types";
 import { updatePageMetadata } from "@/i18n/metadata";
 import "./investigacao.css";
 
@@ -28,7 +29,7 @@ export default function InvestigacaoPage() {
   const t = useT();
   useEffect(() => {
     const title = caseData
-      ? `${t("investigation.digital")} — ${caseData.title} | Pista Secreta`
+      ? `${t("investigation.digital")} — ${pick(typeof caseData.title === "string" ? { "pt-BR": caseData.title } : caseData.title, lang)} | Pista Secreta`
       : `${t("investigation.digital")} | Pista Secreta`;
     updatePageMetadata(title, t("investigation.metaDescription"), lang);
   }, [caseData, lang, t]);

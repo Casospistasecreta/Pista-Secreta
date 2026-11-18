@@ -7,6 +7,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useLanguage } from "@/i18n/LanguageProvider";
+import { resolveLocalized, type ResolvedLocalized } from "@/i18n/types";
 import type { AppId, CaseData, EvidenceItem, Screen } from "../types";
 
 interface PersistedState {
@@ -15,7 +17,7 @@ interface PersistedState {
 }
 
 interface DeviceContextValue {
-  caseData: CaseData;
+  caseData: ResolvedLocalized<CaseData>;
   deviceUnlocked: boolean;
   unlockDevice: (code: string) => boolean;
   lockDevice: () => void;
@@ -66,27 +68,29 @@ export function DeviceProvider({
   caseData: CaseData;
   children: ReactNode;
 }) {
+  const { lang } = useLanguage();
+  const localizedCaseData = useMemo(() => resolveLocalized(caseData, lang), [caseData, lang]);
   const [deviceUnlocked, setDeviceUnlocked] = useState(false);
   const [stack, setStack] = useState<Screen[]>([]);
   const [evidence, setEvidence] = useState<EvidenceItem[]>([]);
   const [unlocked, setUnlocked] = useState<string[]>([]);
 
   useEffect(() => {
-    const persisted = readPersisted(caseData.slug);
+    const persisted = readPersisted(localizedCaseData.slug);
     setEvidence(persisted.evidence);
     setUnlocked(persisted.unlocked);
-  }, [caseData.slug]);
+  }, [localizedCaseData.slug]);
 
   useEffect(() => {
     try {
       window.localStorage.setItem(
-        storageKey(caseData.slug),
+        storageKey(localizedCaseData.slug),
         JSON.stringify({ evidence, unlocked } satisfies PersistedState),
       );
     } catch {
       /* modo privado / storage indisponível — o app continua funcionando */
     }
-  }, [caseData.slug, evidence, unlocked]);
+  }, [localizedCaseData.slug, evidence, unlocked]);
 
   const open = useCallback((screen: Screen) => setStack((prev) => [...prev, screen]), []);
   const back = useCallback(() => setStack((prev) => prev.slice(0, -1)), []);
@@ -97,13 +101,13 @@ export function DeviceProvider({
   );
   const unlockDevice = useCallback(
     (code: string) => {
-      if (code === caseData.device.passcode) {
+      if (code === localizedCaseData.device.passcode) {
         setDeviceUnlocked(true);
         return true;
       }
       return false;
     },
-    [caseData.device.passcode],
+    [localizedCaseData.device.passcode],
   );
   const lockDevice = useCallback(() => {
     setDeviceUnlocked(false);
@@ -118,7 +122,7 @@ export function DeviceProvider({
   const grantUnlock = useCallback((key: string) => {
     setUnlocked((prev) => (prev.includes(key) ? prev : [...prev, key]));
   }, []);
-  const labelFor = useCallback((id: AppId, fallback: string) => caseData.appLabels?.[id] ?? fallback, [caseData.appLabels]);
+  const labelFor = useCallback((id: AppId, fallback: string) => localizedCaseData.appLabels?.[id] ?? fallback, [localizedCaseData.appLabels]);
   const isEvidence = useCallback((id: string) => evidence.some((item) => item.id === id), [evidence]);
   const toggleEvidence = useCallback((item: EvidenceItem) => {
     setEvidence((prev) =>
@@ -132,7 +136,7 @@ export function DeviceProvider({
 
   const value = useMemo<DeviceContextValue>(
     () => ({
-      caseData,
+      caseData: localizedCaseData,
       deviceUnlocked,
       unlockDevice,
       lockDevice,
@@ -153,7 +157,7 @@ export function DeviceProvider({
       clearEvidence,
     }),
     [
-      caseData, deviceUnlocked, unlockDevice, lockDevice, stack, open, back, goHome, replace,
+      localizedCaseData, deviceUnlocked, unlockDevice, lockDevice, stack, open, back, goHome, replace,
       isUnlocked, grantUnlock, labelFor, tryUnlock, evidence, isEvidence, toggleEvidence, removeEvidence, clearEvidence,
     ],
   );

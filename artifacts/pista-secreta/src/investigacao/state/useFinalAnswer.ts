@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { FinalAnswerConfig } from "../types";
+import type { ResolvedLocalized } from "@/i18n/types";
 import { encodeAnswer, isCorrect, parseAnswer } from "./evaluateAnswers";
 
 interface Persisted {
@@ -62,7 +63,7 @@ export function useFinalAnswer(slug: string) {
   }, []);
 
   const submit = useCallback(
-    (config: FinalAnswerConfig) => {
+    (config: ResolvedLocalized<FinalAnswerConfig>) => {
       if (config.scoring) {
         setState((prev) => ({ ...prev, solved: true }));
         return true;

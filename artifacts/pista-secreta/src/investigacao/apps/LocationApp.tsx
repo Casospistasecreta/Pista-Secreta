@@ -5,10 +5,11 @@ import { AppShell } from "../components/AppShell";
 import { EvidenceToggle } from "../components/EvidenceToggle";
 import type { LocationDay, LocationStop } from "../types";
 import { useT } from "@/i18n/LanguageProvider";
+import type { ResolvedLocalized } from "@/i18n/types";
 
 const ACCENT = "#8fb8ff";
 
-function MiniMap({ stops, activeId }: { stops: LocationStop[]; activeId?: string }) {
+function MiniMap({ stops, activeId }: { stops: ResolvedLocalized<LocationStop>[]; activeId?: string }) {
   const points = stops.filter((stop) => stop.point);
   const path = points.map((stop, index) => `${index === 0 ? "M" : "L"} ${stop.point!.x} ${stop.point!.y}`).join(" ");
   return (
@@ -31,7 +32,7 @@ const LIGHT = "#d9cdf2";
 const DARK = "#7a58b8";
 
 /** Mapa em forma de tabuleiro (casos com `locationStyle: "chess"`). Cada parada usa `square` (ex.: "e8"). */
-function ChessMap({ stops, activeId }: { stops: LocationStop[]; activeId?: string }) {
+function ChessMap({ stops, activeId }: { stops: ResolvedLocalized<LocationStop>[]; activeId?: string }) {
   const points = stops.filter((stop) => stop.square && /^[a-h][1-8]$/.test(stop.square));
   const center = (square: string) => ({ x: (square.charCodeAt(0) - 97) * 12.5 + 6.25, y: (8 - Number(square[1])) * 12.5 + 6.25 });
   const path = points.map((stop, index) => { const c = center(stop.square!); return `${index === 0 ? "M" : "L"} ${c.x} ${c.y}`; }).join(" ");
@@ -51,7 +52,7 @@ function ChessMap({ stops, activeId }: { stops: LocationStop[]; activeId?: strin
   );
 }
 
-function StopDetail({ stop, dayLabel }: { stop: LocationStop; dayLabel: string }) {
+function StopDetail({ stop, dayLabel }: { stop: ResolvedLocalized<LocationStop>; dayLabel: string }) {
   const { caseData } = useDevice();
   const t = useT();
   const chess = caseData.locationStyle === "chess";
@@ -72,7 +73,7 @@ function StopDetail({ stop, dayLabel }: { stop: LocationStop; dayLabel: string }
         ))}
       </div>
       <div className="pt-5">
-        <EvidenceToggle accent={ACCENT} item={{ id: `location:${stop.id}`, appId: "location", title: `${stop.title} — ${stop.time}`, subtitle: `Localização · ${dayLabel}`, target: { app: "location", view: "stop", id: stop.id } }} />
+        <EvidenceToggle accent={ACCENT} item={{ id: `location:${stop.id}`, appId: "location", title: `${stop.title} — ${stop.time}`, subtitle: `${t("app.location")} · ${dayLabel}`, target: { app: "location", view: "stop", id: stop.id } }} />
       </div>
     </AppShell>
   );
@@ -88,7 +89,7 @@ export function LocationApp() {
       if (stop) return <StopDetail stop={stop} dayLabel={day.label} />;
     }
   }
-  const day: LocationDay | undefined = caseData.locations[dayIndex];
+  const day: ResolvedLocalized<LocationDay> | undefined = caseData.locations[dayIndex];
   return (
     <AppShell
       accent={ACCENT}

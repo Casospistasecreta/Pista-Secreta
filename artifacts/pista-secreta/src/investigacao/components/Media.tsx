@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { ImageIcon, Pause, Play, Video } from "lucide-react";
 import type { AudioRef, MediaRef } from "../types";
+import type { ResolvedLocalized } from "@/i18n/types";
 import { useT } from "@/i18n/LanguageProvider";
 
 function hash(seed: string) { let h = 2166136261; for (let i = 0; i < seed.length; i += 1) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); } return Math.abs(h); }
 function palette(seed: string) { const h = hash(seed); const hue = 250 + (h % 50) - 20; const hue2 = 38 + (h % 18); return { a: `hsl(${hue} 42% ${14 + (h % 7)}%)`, b: `hsl(${hue + 18} 34% ${26 + (h % 9)}%)`, c: `hsl(${hue2} 28% ${52 + (h % 10)}% / 0.28)`, angle: h % 180, x: 20 + (h % 60), y: 20 + ((h >> 3) % 60) }; }
 export function initials(name: string) { const clean = name.replace(/[^\p{L}\s]/gu, "").trim(); if (!clean) return "?"; const parts = clean.split(/\s+/); return ((parts[0]?.[0] ?? "") + (parts.length > 1 ? parts[parts.length - 1]?.[0] ?? "" : "")).toUpperCase(); }
-export function Photo({ media, className = "", rounded = "rounded-xl", showKindBadge = true }: { media: MediaRef; className?: string; rounded?: string; showKindBadge?: boolean }) {
+export function Photo({ media, className = "", rounded = "rounded-xl", showKindBadge = true }: { media: ResolvedLocalized<MediaRef>; className?: string; rounded?: string; showKindBadge?: boolean }) {
   const t = useT();
   const p = palette(media.seed);
   if (media.src) return <img src={media.src} alt={media.caption ?? (media.takenAt ? `Foto de ${media.takenAt}` : t("gallery.photoFromDevice"))} loading="lazy" decoding="async" className={`h-full w-full object-cover ${rounded} ${className}`} />;
@@ -16,7 +17,7 @@ export function Avatar({ name, seed, src, size = 44, ring = false }: { name: str
   const p = palette(seed);
   return <div className={`relative shrink-0 overflow-hidden rounded-full ${ring ? "ring-1 ring-[var(--inv-line-strong)]" : ""}`} style={{ width: size, height: size, background: `linear-gradient(140deg, ${p.a}, ${p.b})` }}>{src ? <img src={src} alt={name} loading="lazy" decoding="async" className="h-full w-full object-cover" /> : <span className="inv-mono absolute inset-0 flex items-center justify-center tracking-wide text-[var(--inv-text)]/70" style={{ fontSize: Math.max(10, size * 0.32) }}>{initials(name)}</span>}</div>;
 }
-export function AudioPlayer({ audio, accent }: { audio: AudioRef; accent: string }) {
+export function AudioPlayer({ audio, accent }: { audio: ResolvedLocalized<AudioRef>; accent: string }) {
   const t = useT();
   const [playing, setPlaying] = useState(false); const [progress, setProgress] = useState(0); const timer = useRef<number | null>(null);
   useEffect(() => { if (!playing) { if (timer.current !== null) window.clearInterval(timer.current); return; } timer.current = window.setInterval(() => setProgress((prev) => { const next = prev + 100 / (audio.durationSec * 10); if (next >= 100) { setPlaying(false); return 0; } return next; }), 100); return () => { if (timer.current !== null) window.clearInterval(timer.current); }; }, [playing, audio.durationSec]);

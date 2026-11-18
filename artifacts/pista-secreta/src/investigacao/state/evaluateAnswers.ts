@@ -1,4 +1,5 @@
 import type { FinalAnswerConfig, FinalQuestion, FinalReport } from "../types";
+import type { ResolvedLocalized } from "@/i18n/types";
 
 /** Respostas de seleção múltipla são guardadas como ids ordenados e separados por vírgula. */
 export const parseAnswer = (value?: string): string[] => (value ? value.split(",").filter(Boolean) : []);
@@ -14,7 +15,7 @@ export function isCorrect(question: FinalQuestion, value?: string): boolean {
 }
 
 export interface QuestionResult {
-  question: FinalQuestion;
+  question: ResolvedLocalized<FinalQuestion>;
   answered: boolean;
   correct: boolean;
   points: number;
@@ -25,11 +26,11 @@ export interface Evaluation {
   total: number;
   max: number;
   results: QuestionResult[];
-  tier?: { id: string; label: string; minPoints: number; report: FinalReport };
+  tier?: { id: string; label: string; minPoints: number; report: ResolvedLocalized<FinalReport> };
 }
 
 /** Avaliação do modo com pontuação (`config.scoring`). Função pura, sem efeitos colaterais. */
-export function evaluate(config: FinalAnswerConfig, answers: Record<string, string>): Evaluation {
+export function evaluate(config: ResolvedLocalized<FinalAnswerConfig>, answers: Record<string, string>): Evaluation {
   const results: QuestionResult[] = config.questions.map((question) => {
     const value = answers[question.id];
     const answered = question.type === "multiple" ? parseAnswer(value).length > 0 : Boolean(value);

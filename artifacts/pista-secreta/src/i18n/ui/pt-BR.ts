@@ -94,6 +94,7 @@ const ptBR = {
   "matches.conversation": "Conversa",
   "matches.conversations": "Conversas",
   "gallery.photo": "Foto",
+  "gallery.position": "{current} de {total}",
   "gallery.photoFromDevice": "Foto do dispositivo",
   "gallery.previous": "Anterior",
   "gallery.next": "Próxima",

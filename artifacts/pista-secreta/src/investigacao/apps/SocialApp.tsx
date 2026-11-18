@@ -6,10 +6,11 @@ import { Avatar, Photo } from "../components/Media";
 import { EvidenceToggle } from "../components/EvidenceToggle";
 import type { SocialPost, SocialProfile } from "../types";
 import { useT } from "@/i18n/LanguageProvider";
+import type { ResolvedLocalized } from "@/i18n/types";
 
 const ACCENT = "#e2a0ff";
 
-function Carousel({ post }: { post: SocialPost }) {
+function Carousel({ post }: { post: ResolvedLocalized<SocialPost> }) {
   const t = useT();
   const [index, setIndex] = useState(0);
   const media = post.media[index] ?? post.media[0];
@@ -24,13 +25,13 @@ function Carousel({ post }: { post: SocialPost }) {
   </div>;
 }
 
-function PostCard({ post, compact = false }: { post: SocialPost; compact?: boolean }) {
+function PostCard({ post, compact = false }: { post: ResolvedLocalized<SocialPost>; compact?: boolean }) {
   const { open, labelFor } = useDevice();
   const t = useT();
   return <article className="border-b border-[var(--inv-line)] pb-4"><div className="flex items-center gap-2.5 px-4 py-3"><Avatar name={post.author} seed={post.author} size={32} ring /><div className="min-w-0 flex-1"><p className="truncate text-[13px]">{post.author}</p>{post.place && <p className="flex items-center gap-1 text-[11px] text-[var(--inv-dim)]"><MapPin size={10} />{post.place}</p>}</div><span className="inv-mono text-[10px] text-[var(--inv-dim-2)]">{post.at}</span></div><button type="button" className="block w-full" aria-label={t("social.openPost", { author: post.author })} onClick={() => open({ app: "social", view: "post", id: post.id })}><Carousel post={post} /></button><div className="flex items-center gap-4 px-4 pt-3 text-[var(--inv-dim)]"><Heart size={19} /><MessageSquare size={19} /><Send size={18} /></div><p className="inv-mono px-4 pt-2 text-[11px] text-[var(--inv-dim)]">{t("social.likes", { count: post.likes.toLocaleString() })}</p><p className="px-4 pt-1 text-[13px]"><span className="text-[var(--inv-chiffon)]">{post.author}</span> {post.caption}</p>{!compact && post.comments.length > 0 && <button type="button" onClick={() => open({ app: "social", view: "post", id: post.id })} className="px-4 py-2 text-[12px] text-[var(--inv-dim)]">{t("social.viewComments", { count: post.comments.length })}</button>}<div className="px-4 pt-3"><EvidenceToggle compact accent={ACCENT} item={{ id: `social:${post.id}`, appId: "social", title: post.caption.slice(0, 60) || t("social.post"), subtitle: `${labelFor("social", "PicLike")} · ${post.at}`, target: { app: "social", view: "post", id: post.id } }} /></div></article>;
 }
 
-function ProfileView({ profile, own = false }: { profile: SocialProfile; own?: boolean }) {
+function ProfileView({ profile, own = false }: { profile: ResolvedLocalized<SocialProfile>; own?: boolean }) {
   const t = useT();
   const { caseData, open } = useDevice();
   const ownPosts = caseData.social.posts.filter((post) => post.author === profile.handle);

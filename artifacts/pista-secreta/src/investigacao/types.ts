@@ -4,6 +4,7 @@
  * Este arquivo define APENAS a forma dos dados. Nenhum conteúdo de caso
  * deve viver aqui. Cada caso é um objeto `CaseData` em `./cases/`.
  */
+import type { LocalizedText } from "@/i18n/types";
 
 export type AppId =
   | "messages"
@@ -43,8 +44,8 @@ export interface MediaRef {
   seed: string;
   /** Caminho/URL da imagem real, quando existir. */
   src?: string;
-  caption?: string;
-  takenAt?: string;
+  caption?: LocalizedText;
+  takenAt?: LocalizedText;
   place?: string;
   /** Duração em segundos (somente vídeo). */
   durationSec?: number;
@@ -56,18 +57,18 @@ export interface AudioRef {
   id: string;
   durationSec: number;
   /** Rótulo opcional ("Áudio", "Mensagem de voz"). */
-  label?: string;
+  label?: LocalizedText;
 }
 
 export interface Person {
   id: string;
-  name: string;
+  name: LocalizedText;
   /** Semente do avatar procedural. */
   avatarSeed: string;
   /** Caminho/URL do avatar real, quando existir. */
   avatarSrc?: string;
   handle?: string;
-  subtitle?: string;
+  subtitle?: LocalizedText;
 }
 
 /* ------------------------------------------------------------------ */
@@ -78,15 +79,15 @@ export interface Message {
   id: string;
   /** "victim" = enviada pela vítima; "them" = recebida. */
   from: "victim" | "them";
-  at: string;
-  text?: string;
+  at: LocalizedText;
+  text?: LocalizedText;
   media?: MediaRef;
   audio?: AudioRef;
   link?: { label: string; url: string };
   /** Renderiza como "mensagem apagada". */
   deleted?: boolean;
   /** Separador de data exibido acima da mensagem. */
-  dayLabel?: string;
+  dayLabel?: LocalizedText;
   /** Registro de chamada (recebida, perdida ou feita), exibido no lugar do texto. */
   call?: { kind: "received" | "missed" | "outgoing"; count?: number; duration?: string };
 }
@@ -94,8 +95,8 @@ export interface Message {
 export interface Conversation {
   id: string;
   person: Person;
-  preview: string;
-  time: string;
+  preview: LocalizedText;
+  time: LocalizedText;
   unread?: number;
   pinned?: boolean;
   archived?: boolean;
@@ -110,16 +111,16 @@ export interface Conversation {
 export interface SocialComment {
   id: string;
   author: string;
-  text: string;
-  at: string;
+  text: LocalizedText;
+  at: LocalizedText;
 }
 
 export interface SocialPost {
   id: string;
   author: string;
   media: MediaRef[];
-  caption: string;
-  at: string;
+  caption: LocalizedText;
+  at: LocalizedText;
   place?: string;
   likes: number;
   tagged?: string[];
@@ -129,7 +130,7 @@ export interface SocialPost {
 export interface SocialProfile {
   handle: string;
   displayName: string;
-  bio: string;
+  bio: LocalizedText;
   avatarSeed: string;
   avatarSrc?: string;
   posts: number;
@@ -154,18 +155,18 @@ export interface MatchProfile {
   age: number;
   distanceKm: number;
   city?: string;
-  bio?: string;
+  bio?: LocalizedText;
   photos: MediaRef[];
-  interests?: string[];
-  matchedAt?: string;
+  interests?: LocalizedText[];
+  matchedAt?: LocalizedText;
   /** Prévia da conversa dentro do app de relacionamento. */
   messages?: Message[];
   /** Nome redigido/censurado na lista ("██████"). */
   redacted?: boolean;
   /** Texto no lugar de "{distanceKm} km" (ex.: "a 40 m de você"). */
-  distanceLabel?: string;
+  distanceLabel?: LocalizedText;
   /** Linhas extras de "Dados do perfil" (ex.: criado em, local do cadastro). */
-  details?: { label: string; value: string }[];
+  details?: { label: LocalizedText; value: LocalizedText }[];
 }
 
 export interface MatchesData {
@@ -180,7 +181,7 @@ export interface MatchesData {
 
 export interface GalleryGroup {
   id: string;
-  label: string;
+  label: LocalizedText;
   items: MediaRef[];
   lock?: Lock;
 }
@@ -192,10 +193,10 @@ export interface GalleryGroup {
 export interface LocationStop {
   id: string;
   time: string;
-  title: string;
-  address?: string;
+  title: LocalizedText;
+  address?: LocalizedText;
   exitTime?: string;
-  durationLabel?: string;
+  durationLabel?: LocalizedText;
   /** Local desconhecido/redigido. */
   redacted?: boolean;
   /** Posição relativa (0–100) no mapa estilizado. */
@@ -206,7 +207,7 @@ export interface LocationStop {
 
 export interface LocationDay {
   id: string;
-  label: string;
+  label: LocalizedText;
   stops: LocationStop[];
 }
 
@@ -217,21 +218,21 @@ export interface LocationDay {
 export interface Transaction {
   id: string;
   time: string;
-  merchant: string;
+  merchant: LocalizedText;
   /** Negativo = saída, positivo = entrada. Em reais. */
   amount: number;
-  method?: string;
-  category?: string;
+  method?: LocalizedText;
+  category?: LocalizedText;
   redacted?: boolean;
   /** Transação trancada: detalhes só aparecem após informar o PIN. */
   lock?: Lock;
   /** Linhas extras exibidas na tela de detalhes (ex.: quem pagou). */
-  details?: { label: string; value: string }[];
+  details?: { label: LocalizedText; value: LocalizedText }[];
 }
 
 export interface BankDay {
   id: string;
-  label: string;
+  label: LocalizedText;
   transactions: Transaction[];
 }
 
@@ -250,12 +251,12 @@ export interface BankData {
 
 export interface Note {
   id: string;
-  title: string;
-  at: string;
-  preview?: string;
+  title: LocalizedText;
+  at: LocalizedText;
+  preview?: LocalizedText;
   /** Corpo em parágrafos. */
-  body?: string[];
-  checklist?: { text: string; done: boolean }[];
+  body?: LocalizedText[];
+  checklist?: { text: LocalizedText; done: boolean }[];
   media?: MediaRef[];
   link?: { label: string; url: string };
   pinned?: boolean;
@@ -274,9 +275,9 @@ export interface NoteAudio {
 /* ------------------------------------------------------------------ */
 
 export interface Victim {
-  name: string;
+  name: LocalizedText;
   age?: number;
-  city?: string;
+  city?: LocalizedText;
   avatarSeed: string;
   avatarSrc?: string;
 }
@@ -284,10 +285,10 @@ export interface Victim {
 export interface DeviceConfig {
   /** Senha da tela de bloqueio (4 dígitos). */
   passcode: string;
-  carrier: string;
+  carrier: LocalizedText;
   batteryPercent: number;
   /** Data exibida na tela de bloqueio. */
-  dateLabel: string;
+  dateLabel: LocalizedText;
   /** Hora "congelada" do dispositivo. Se ausente, usa o relógio real. */
   frozenTime?: string;
   /** Imagem de fundo da tela de bloqueio (opcional). */
@@ -298,8 +299,8 @@ export interface DeviceConfig {
 
 export interface CaseData {
   slug: string;
-  title: string;
-  subtitle?: string;
+  title: LocalizedText;
+  subtitle?: LocalizedText;
   victim: Victim;
   device: DeviceConfig;
   messages: Conversation[];
@@ -310,15 +311,15 @@ export interface CaseData {
   bank: BankData;
   notes: Note[];
   /** Texto de abertura exibido no topo de "Meu caso" (opcional). */
-  briefing?: string[];
+  briefing?: LocalizedText[];
   /** Carimbo exibido em "Meu caso" (ambientação), ex.: { agency: "Departamento de Polícia", code: "Evidência Nº 0417" }. */
-  stamp?: { agency: string; code: string };
+  stamp?: { agency: LocalizedText; code: LocalizedText };
   /** Resposta final do caso (opcional). Sem isto, "Meu caso" só lista evidências. */
   finalAnswer?: FinalAnswerConfig;
   /** Aplicativos exibidos na tela inicial. Padrão: todos, exceto "tabulive" (que só aparece nos casos que o declaram). */
   apps?: AppId[];
   /** Nomes alternativos dos aplicativos neste caso (ex.: { social: "PIKLIKE" }). */
-  appLabels?: Partial<Record<AppId, string>>;
+  appLabels?: Partial<Record<AppId, LocalizedText>>;
   /** Estilo do mapa do app Localização. Padrão: "map". "chess" desenha um tabuleiro e usa `LocationStop.square`. */
   locationStyle?: "map" | "chess";
   /** Dados do app TabuLive (xadrez). Só é usado se "tabulive" estiver em `apps`. */
@@ -385,8 +386,8 @@ export interface TabuLiveData {
 
 export interface FinalQuestion {
   id: string;
-  prompt: string;
-  options: { id: string; text: string }[];
+  prompt: LocalizedText;
+  options: { id: string; text: LocalizedText }[];
   /** Resposta correta (escolha única). */
   correctOptionId?: string;
   /** "multiple" = o jogador marca várias opções; acerta só se marcar exatamente `correctOptionIds`. */
@@ -398,18 +399,18 @@ export interface FinalQuestion {
   bonus?: boolean;
   /** Somente com `scoring`: textos exibidos no resultado. */
   feedback?: {
-    correct?: string;
-    wrong?: string;
+    correct?: LocalizedText;
+    wrong?: LocalizedText;
     /** Texto específico para uma alternativa errada (escolha única). */
-    wrongByOption?: Record<string, string>;
+    wrongByOption?: Record<string, LocalizedText>;
   };
 }
 
 export interface FinalReport {
-  title: string;
-  subtitle?: string;
-  paragraphs: string[];
-  closing?: string;
+  title: LocalizedText;
+  subtitle?: LocalizedText;
+  paragraphs: LocalizedText[];
+  closing?: LocalizedText;
 }
 
 /** Modo com pontuação: o envio sempre gera um resultado (faixa conforme os pontos) e permite refazer. */
@@ -419,7 +420,7 @@ export interface FinalScoring {
 
 export interface FinalAnswerConfig {
   /** Texto introdutório da tela de resposta. */
-  intro?: string;
+  intro?: LocalizedText;
   questions: FinalQuestion[];
   /** Relatório exibido somente depois que todas as respostas estão corretas (modo sem `scoring`). */
   report: FinalReport;

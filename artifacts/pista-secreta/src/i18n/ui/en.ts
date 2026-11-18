@@ -94,6 +94,7 @@ const en = {
   "matches.conversation": "Conversation",
   "matches.conversations": "Conversations",
   "gallery.photo": "Photo",
+  "gallery.position": "{current} of {total}",
   "gallery.photoFromDevice": "Photo from device",
   "gallery.previous": "Previous",
   "gallery.next": "Next",

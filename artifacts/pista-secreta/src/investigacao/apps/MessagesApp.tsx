@@ -7,6 +7,7 @@ import { EvidenceToggle } from "../components/EvidenceToggle";
 import { PasscodePrompt } from "../components/PasscodePrompt";
 import type { Conversation, Message } from "../types";
 import { useT } from "@/i18n/LanguageProvider";
+import type { ResolvedLocalized } from "@/i18n/types";
 const ACCENT = "#7fd1a8";
 function callLabel(call: NonNullable<Message["call"]>, t: ReturnType<typeof useT>) {
   const count = call.count ?? 1;
@@ -32,7 +33,7 @@ function CallRow({ call }: { call: NonNullable<Message["call"]> }) {
   );
 }
 
-function Bubble({ message, conversationId }: { message: Message; conversationId: string }) {
+function Bubble({ message, conversationId }: { message: ResolvedLocalized<Message>; conversationId: string }) {
   const t = useT();
   const mine = message.from === "victim";
   if (message.deleted) {
@@ -59,10 +60,10 @@ function Bubble({ message, conversationId }: { message: Message; conversationId:
         <div className="inv-mono mt-1 text-right text-[9px] text-[var(--inv-dim-2)]">{message.at}</div>
       </div>
       <div className="mt-1 opacity-70">
-        <EvidenceToggle compact accent={ACCENT} item={{ id: `messages:${conversationId}:${message.id}`, appId: "messages", title: evidenceTitle, subtitle: `Mensagens · ${message.at}`, target: { app: "messages", view: "thread", id: conversationId } }} />
+        <EvidenceToggle compact accent={ACCENT} item={{ id: `messages:${conversationId}:${message.id}`, appId: "messages", title: evidenceTitle, subtitle: `${t("app.messages")} · ${message.at}`, target: { app: "messages", view: "thread", id: conversationId } }} />
       </div>
     </div>
   );
 }
-function Thread({ conversation }: { conversation: Conversation }) { const { isUnlocked } = useDevice(); const t = useT(); const end = useRef<HTMLDivElement>(null); const locked = Boolean(conversation.lock) && !isUnlocked(`messages:${conversation.id}`); useEffect(() => { if (!locked) end.current?.scrollIntoView({ block: "end" }); }, [locked]); return <AppShell accent={ACCENT} title={conversation.person.name} subtitle={conversation.archived ? t("messages.conversationArchived") : t("messages.onlineDays")} right={<Avatar name={conversation.person.name} seed={conversation.person.avatarSeed} src={conversation.person.avatarSrc} size={32} />}>{locked && conversation.lock ? <PasscodePrompt unlockKey={`messages:${conversation.id}`} lock={conversation.lock} accent={ACCENT} title={t("messages.conversationArchived")} description={t("messages.protectedDescription")} /> : <div className="flex flex-col gap-3 pb-2">{conversation.messages.map((m) => <div key={m.id}><Bubble message={m} conversationId={conversation.id} /></div>)}<div ref={end} /></div>}</AppShell>; }
+function Thread({ conversation }: { conversation: ResolvedLocalized<Conversation> }) { const { isUnlocked } = useDevice(); const t = useT(); const end = useRef<HTMLDivElement>(null); const locked = Boolean(conversation.lock) && !isUnlocked(`messages:${conversation.id}`); useEffect(() => { if (!locked) end.current?.scrollIntoView({ block: "end" }); }, [locked]); return <AppShell accent={ACCENT} title={conversation.person.name} subtitle={conversation.archived ? t("messages.conversationArchived") : t("messages.onlineDays")} right={<Avatar name={conversation.person.name} seed={conversation.person.avatarSeed} src={conversation.person.avatarSrc} size={32} />}>{locked && conversation.lock ? <PasscodePrompt unlockKey={`messages:${conversation.id}`} lock={conversation.lock} accent={ACCENT} title={t("messages.conversationArchived")} description={t("messages.protectedDescription")} /> : <div className="flex flex-col gap-3 pb-2">{conversation.messages.map((m) => <div key={m.id}><Bubble message={m} conversationId={conversation.id} /></div>)}<div ref={end} /></div>}</AppShell>; }
 export function MessagesApp() { const { caseData, current, open } = useDevice(); const t = useT(); if (current?.view === "thread") { const c = caseData.messages.find((x) => x.id === current.id); if (c) return <Thread conversation={c} />; } const active = caseData.messages.filter((c) => !c.archived); const archived = caseData.messages.filter((c) => c.archived); return <AppShell accent={ACCENT} title={t("app.messages")} titleClassName="font-medium" right={<Search size={18} aria-label={t("messages.search")} />} headerBackground="linear-gradient(180deg,rgba(31,107,74,.18),transparent)">{archived.length > 0 && <button type="button" onClick={() => open({ app: "messages", view: "thread", id: archived[0].id })} className="inv-press mb-1 flex w-full items-center gap-3 rounded-2xl px-2 py-3 text-left"><span className="flex h-[46px] w-[46px] items-center justify-center rounded-full border"><Archive size={18} /></span><span><p>{t("messages.archived")}</p><p className="text-[13px] text-[var(--inv-dim)]">{t("messages.conversationCount", { count: archived.length })}</p></span></button>}<div>{active.map((c) => <button key={c.id} type="button" onClick={() => open({ app: "messages", view: "thread", id: c.id })} className="inv-press flex w-full items-center gap-3 rounded-2xl px-2 py-3 text-left"><Avatar name={c.person.name} seed={c.person.avatarSeed} src={c.person.avatarSrc} size={46} /><div className="min-w-0 flex-1"><div className="flex justify-between"><span className="truncate">{c.person.name}</span><span className="inv-mono text-[10px] text-[var(--inv-dim-2)]">{c.time}</span></div><span className="block truncate text-[13px] text-[var(--inv-dim)]">{c.preview}</span></div>{c.unread ? <span className="shrink-0 rounded-full px-2 text-[10px]" style={{ background: ACCENT, color: "#0b1a13" }}>{c.unread}</span> : null}</button>)}</div></AppShell>; }

@@ -94,6 +94,7 @@ const es = {
   "matches.conversation": "Conversación",
   "matches.conversations": "Conversaciones",
   "gallery.photo": "Foto",
+  "gallery.position": "{current} de {total}",
   "gallery.photoFromDevice": "Foto del dispositivo",
   "gallery.previous": "Anterior",
   "gallery.next": "Siguiente",

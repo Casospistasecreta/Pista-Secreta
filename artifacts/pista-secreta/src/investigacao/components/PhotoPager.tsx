@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, ChevronsRight } from "lucide-react";
 import type { MediaRef } from "../types";
+import type { ResolvedLocalized } from "@/i18n/types";
 import { Photo } from "./Media";
 import { useT } from "@/i18n/LanguageProvider";
 
@@ -11,7 +12,7 @@ import { useT } from "@/i18n/LanguageProvider";
  * - Miniaturas clicáveis, contador "2/4" e dica "Deslize" na primeira foto.
  * A foto aparece inteira (sem corte) sobre um fundo desfocado da própria imagem.
  */
-export function PhotoPager({ photos, accent }: { photos: MediaRef[]; accent: string }) {
+export function PhotoPager({ photos, accent }: { photos: ResolvedLocalized<MediaRef>[]; accent: string }) {
   const t = useT();
   const scroller = useRef<HTMLDivElement>(null);
   const drag = useRef({ active: false, startX: 0, startLeft: 0 });
