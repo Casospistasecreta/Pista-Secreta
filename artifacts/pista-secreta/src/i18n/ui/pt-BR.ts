@@ -178,6 +178,7 @@ const ptBR = {
   "photos.next": "Próxima foto",
   "photos.thumbnails": "Miniaturas das fotos",
   "photos.view": "Ver foto {number}",
+  "chessboard.label": "Tabuleiro de xadrez",
 } as const;
 
 export default ptBR;

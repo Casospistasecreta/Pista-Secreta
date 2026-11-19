@@ -190,7 +190,7 @@ export function ProductSlider() {
               key={i}
               onClick={() => setCurrent(i)}
               aria-label={`${t("slider.viewSlide")} ${i + 1}`}
-              className="p-2 -m-2 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
+              className="p-2 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
             >
               <span
                 className={`block h-1.5 rounded-full transition-all duration-300 ${

@@ -46,7 +46,7 @@ export interface MediaRef {
   src?: string;
   caption?: LocalizedText;
   takenAt?: LocalizedText;
-  place?: string;
+  place?: LocalizedText;
   /** Duração em segundos (somente vídeo). */
   durationSec?: number;
   /** Ajuste da imagem no visualizador da galeria. Padrão: "cover" (preenche e corta). "contain" mostra a foto inteira. */
@@ -83,7 +83,7 @@ export interface Message {
   text?: LocalizedText;
   media?: MediaRef;
   audio?: AudioRef;
-  link?: { label: string; url: string };
+  link?: { label: LocalizedText; url: string };
   /** Renderiza como "mensagem apagada". */
   deleted?: boolean;
   /** Separador de data exibido acima da mensagem. */
@@ -258,7 +258,7 @@ export interface Note {
   body?: LocalizedText[];
   checklist?: { text: LocalizedText; done: boolean }[];
   media?: MediaRef[];
-  link?: { label: string; url: string };
+  link?: { label: LocalizedText; url: string };
   pinned?: boolean;
   lock?: Lock;
   /** Gravação associada à nota. O player só aparece quando `src` existir. */

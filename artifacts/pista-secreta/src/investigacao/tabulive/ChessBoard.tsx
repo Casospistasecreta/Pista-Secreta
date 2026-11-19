@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { applyMove, colorOf, file, legalMoves, rank, type Color, type GameState, type Move, type PieceChar } from "./engine";
+import { useT } from "@/i18n/LanguageProvider";
 
 const GLYPH: Record<string, string> = { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" };
 const FONT = '"Noto Sans Symbols 2","Segoe UI Symbol","Apple Symbols","DejaVu Sans","Arial Unicode MS",serif';
@@ -41,6 +42,7 @@ export interface ChessBoardProps {
 
 /** Tabuleiro com toque: toque na peça, depois na casa de destino. Promoção automática para Dama. */
 export function ChessBoard({ state, orientation, playable, onMove, lastMove, checkSquare }: ChessBoardProps) {
+  const t = useT();
   const [selected, setSelected] = useState<number | null>(null);
   const moves = useMemo(() => (playable && state.turn === playable ? legalMoves(state) : []), [state, playable]);
   const targets = useMemo(() => moves.filter((m) => m.from === selected), [moves, selected]);
@@ -60,7 +62,7 @@ export function ChessBoard({ state, orientation, playable, onMove, lastMove, che
   }
 
   return (
-    <div className="mx-auto w-full max-w-[360px] select-none" role="grid" aria-label="Tabuleiro de xadrez">
+    <div className="mx-auto w-full max-w-[360px] select-none" role="grid" aria-label={t("chessboard.label")}>
       <div className="grid grid-cols-8 overflow-hidden rounded-lg border border-white/15" style={{ aspectRatio: "1 / 1" }}>
         {order.map((index) => {
           const f = file(index); const r = rank(index);

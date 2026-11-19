@@ -244,7 +244,7 @@ function LandingPage() {
                     href="https://pay.kiwify.com.br/LfosEmV"
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => handlePurchaseClick("wendel_jr")}
+                    onClick={() => handlePurchaseClick("wendel_jr", "https://pay.kiwify.com.br/LfosEmV")}
                     className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-2.5 font-serif text-sm font-bold text-center transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
                     {t("site.chooseThisCase")}
@@ -269,7 +269,7 @@ function LandingPage() {
                     href="https://pay.kiwify.com.br/ZG3gabG"
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => handlePurchaseClick("universitario")}
+                    onClick={() => handlePurchaseClick("universitario", "https://pay.kiwify.com.br/ZG3gabG")}
                     className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-2.5 font-serif text-sm font-bold text-center transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
                     {t("site.chooseThisCase")}
@@ -341,7 +341,7 @@ function LandingPage() {
                   href="https://pay.kiwify.com.br/LfosEmV"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => handlePurchaseClick("wendel_jr")}
+                  onClick={() => handlePurchaseClick("wendel_jr", "https://pay.kiwify.com.br/LfosEmV")}
                   className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >{t("site.startCase")}</a>
               </div>
@@ -397,7 +397,7 @@ function LandingPage() {
                   href="https://pay.kiwify.com.br/ZG3gabG"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => handlePurchaseClick("universitario")}
+                  onClick={() => handlePurchaseClick("universitario", "https://pay.kiwify.com.br/ZG3gabG")}
                   className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >{t("site.startCase")}</a>
               </div>

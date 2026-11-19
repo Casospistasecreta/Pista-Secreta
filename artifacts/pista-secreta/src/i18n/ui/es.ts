@@ -178,6 +178,7 @@ const es = {
   "photos.next": "Foto siguiente",
   "photos.thumbnails": "Miniaturas de fotos",
   "photos.view": "Ver foto {number}",
+  "chessboard.label": "Tablero de ajedrez",
 } as const;
 
 export default es;
