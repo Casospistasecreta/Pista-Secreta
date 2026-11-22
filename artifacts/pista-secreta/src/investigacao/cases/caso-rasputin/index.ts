@@ -19,6 +19,7 @@ import { finalAnswer } from "./final-answer";
  */
 export const casoRasputin: CaseData = {
   slug: "caso-rasputin",
+  messagesWallpaperSrc: asset("messages-wallpaper.webp"),
   title: L("Dispositivo de Grigori Rasputin", "Grigori Rasputin's Device", "Dispositivo de Grigori Rasputin"),
   subtitle: L("Petrogrado, dezembro de 1916", "Petrograd, December 1916", "Petrogrado, diciembre de 1916"),
   victim: { name: "Grigori Rasputin", age: 47, city: L("Petrogrado", "Petrograd", "Petrogrado"), avatarSeed: "rasputin", avatarSrc: asset("avatar-rasputin.webp") },

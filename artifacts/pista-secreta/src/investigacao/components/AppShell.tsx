@@ -7,11 +7,11 @@ import { useT } from "@/i18n/LanguageProvider";
 
 export function AppShell({
   title, subtitle, accent, right, children, below, titleClassName = "",
-  headerBackground, scroll = true, padded = true, backLabel,
+  headerBackground, scroll = true, padded = true, backLabel, scrollBackgroundImage,
 }: {
   title: ReactNode; subtitle?: ReactNode; accent: string; right?: ReactNode; children: ReactNode;
   below?: ReactNode; titleClassName?: string; headerBackground?: string; scroll?: boolean;
-  padded?: boolean; backLabel?: string;
+  padded?: boolean; backLabel?: string; scrollBackgroundImage?: string;
 }) {
   const { back } = useDevice();
   const t = useT();
@@ -33,7 +33,17 @@ export function AppShell({
         </div>
         {below}
       </header>
-      <div className={`${scroll ? "inv-scroll" : "overflow-hidden"} flex flex-1 flex-col ${padded ? "px-4 py-3" : ""}`}>{children}</div>
+      <div
+        className={`${scroll ? "inv-scroll" : "overflow-hidden"} flex flex-1 flex-col ${padded ? "px-4 py-3" : ""}`}
+        style={scrollBackgroundImage ? {
+          backgroundImage: `linear-gradient(rgba(10,7,17,.42), rgba(10,7,17,.42)), url("${scrollBackgroundImage}")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+        } : undefined}
+      >
+        {children}
+      </div>
     </div>
   );
 }

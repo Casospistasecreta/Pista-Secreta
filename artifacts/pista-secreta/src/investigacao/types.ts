@@ -299,6 +299,8 @@ export interface DeviceConfig {
 
 export interface CaseData {
   slug: string;
+  /** Fundo opcional compartilhado por todas as conversas do app Mensagens. */
+  messagesWallpaperSrc?: string;
   title: LocalizedText;
   subtitle?: LocalizedText;
   victim: Victim;

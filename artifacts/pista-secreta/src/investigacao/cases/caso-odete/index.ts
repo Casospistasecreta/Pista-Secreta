@@ -16,6 +16,7 @@ import { finalAnswer } from "./final-answer";
  */
 export const casoOdete: CaseData = {
   slug: "caso-odete",
+  messagesWallpaperSrc: asset("messages-wallpaper.webp"),
   title: L("Dispositivo de Odete de Jesus", "Odete de Jesus's Phone", "Teléfono de Odete de Jesus"),
   subtitle: L("Desaparecimento em Varginha, MG", "Disappearance in Varginha, MG", "Desaparición en Varginha, MG"),
   victim: { name: "Odete de Jesus", age: 68, city: "Varginha", avatarSeed: "odete", avatarSrc: asset("fotos/img-160720232.webp") },
@@ -25,7 +26,8 @@ export const casoOdete: CaseData = {
     batteryPercent: 9,
     dateLabel: L("segunda-feira, 2 de fevereiro", "Monday, February 2", "lunes, 2 de febrero"),
     frozenTime: "10:20",
-    wallpaperSrc: asset("wallpaper.webp"),
+    wallpaperSrc: asset("wallpaper-floral.webp"),
+    homeWallpaperSrc: asset("wallpaper-floral.webp"),
   },
   briefing: [
     L(
