@@ -7,6 +7,7 @@ import { QUIZ_CASE_IMAGES } from "./quizImages";
 import { computeResult, type QuizAnswers, type QuizResult } from "./scoring";
 import { quizTrack, type QuizSource } from "./quizAnalytics";
 import "./quiz.css";
+import "./quiz-polish.css";
 
 type Step = "intro" | "result" | number;
 
@@ -85,6 +86,7 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
   const [result, setResult] = useState<QuizResult | null>(null);
   const lockRef = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const advanceTimer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
@@ -98,8 +100,10 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
   }, [open]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: 0 });
-  }, [step]);
+    if (!open) return;
+    scrollRef.current?.scrollTo({ top: 0, behavior: "auto" });
+    headingRef.current?.focus({ preventScroll: true });
+  }, [open, step]);
 
   const total = QUESTIONS.length;
   const answeredCount = answers.filter(Boolean).length;
@@ -167,24 +171,38 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="quiz-dialog max-w-lg gap-0 overflow-hidden border-primary/25 p-0 sm:rounded-xl"
+        className="quiz-dialog quiz-polish max-w-lg gap-0 overflow-hidden border-primary/25 p-0 sm:rounded-xl"
         data-testid="dialog-case-quiz"
       >
         <div
           ref={scrollRef}
-          className="quiz-scan max-h-[calc(100dvh-2rem)] overflow-y-auto px-5 pb-6 pt-16 sm:px-7 sm:pt-7"
+          className="quiz-scan quiz-polish__scan max-h-[calc(100dvh-2rem)] overflow-y-auto px-5 pb-6 pt-16 sm:px-7 sm:pt-7"
           data-testid="quiz-content"
         >
           <DialogTitle className="sr-only">{t("quiz.dialog.title")}</DialogTitle>
           <DialogDescription className="sr-only">{t("quiz.dialog.description")}</DialogDescription>
 
-          <div className="mb-5 pr-12 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+          <div className="quiz-polish__brand mb-5 pr-12 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
             {t("quiz.brand")}
           </div>
 
           {step !== "intro" && (
-            <div className="mb-6" aria-hidden="true">
-              <div className="h-1.5 overflow-hidden rounded-full bg-primary/10">
+            <div className="quiz-polish__progress mb-6">
+              <div
+                role="progressbar"
+                aria-label={t("quiz.progress.answered", {
+                  answered: answeredCount,
+                  total,
+                })}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round(progress)}
+                aria-valuetext={t("quiz.progress.question", {
+                  current: step === "result" ? total : (step as number) + 1,
+                  total,
+                })}
+                className="h-1.5 overflow-hidden rounded-full bg-primary/10"
+              >
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-secondary to-primary shadow-[0_0_12px_hsl(var(--secondary)/0.8)] transition-[width] duration-500 ease-out"
                   style={{ width: `${progress}%` }}
@@ -194,11 +212,11 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
           )}
 
           {step === "intro" && (
-            <div key="intro" className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <span className="mb-4 inline-block -rotate-2 rounded border border-primary/30 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-primary/60">
+            <div key="intro" className="quiz-polish__intro animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <span className="quiz-polish__badge mb-4 inline-block -rotate-2 rounded border border-primary/30 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-primary/60">
                 {t("quiz.intro.badge")}
               </span>
-              <h2 className="mb-3 font-serif text-3xl font-bold leading-tight sm:text-4xl">
+              <h2 ref={headingRef} tabIndex={-1} className="quiz-polish__title mb-3 font-serif text-3xl font-bold leading-tight sm:text-4xl">
                 {t("quiz.intro.title")}
               </h2>
               <p className="mb-5 text-base leading-relaxed text-primary/80">{t("quiz.intro.description")}</p>
@@ -217,16 +235,16 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
           )}
 
           {question && (
-            <div key={`question-${step}`} className="animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-primary/60" aria-live="polite">
+            <div key={`question-${step}`} className="quiz-polish__question animate-in fade-in slide-in-from-right-4 duration-300">
+              <div className="quiz-polish__step mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-primary/60" aria-live="polite">
                 {t("quiz.progress.question", { current: (step as number) + 1, total })}
               </div>
-              <h2 className="mb-1.5 font-serif text-2xl font-bold leading-snug sm:text-[1.7rem]">
+              <h2 ref={headingRef} tabIndex={-1} className="quiz-polish__title mb-1.5 font-serif text-2xl font-bold leading-snug sm:text-[1.7rem]">
                 {t(question.titleKey)}
               </h2>
               <p className="mb-5 text-sm text-muted">{t(question.helperKey)}</p>
 
-              <div role="group" aria-label={t(question.titleKey)} className="flex flex-col gap-2.5">
+              <div role="group" aria-label={t(question.titleKey)} className="quiz-polish__options flex flex-col gap-2.5">
                 {question.options.map((option) => {
                   const selected = answers[step as number] === option.id;
                   return (
@@ -236,14 +254,14 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
                       data-testid={`quiz-option-${question.key}-${option.id}`}
                       aria-pressed={selected}
                       onClick={() => choose(step as number, option.id)}
-                      className={`group flex min-h-14 w-full items-center gap-3 rounded-lg border px-3.5 py-3 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 active:scale-[0.985] ${
+                      className={`quiz-polish__option group flex min-h-14 w-full items-center gap-3 rounded-lg border px-3.5 py-3 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 active:scale-[0.985] ${
                         selected
                           ? "border-primary/80 bg-secondary/30 shadow-[0_0_20px_hsl(var(--secondary)/0.55)]"
                           : "border-primary/15 bg-white/5 hover:border-primary/40 hover:bg-white/[0.09]"
                       }`}
                     >
                       <span
-                        className={`flex h-7 w-7 shrink-0 -rotate-2 items-center justify-center rounded border font-mono text-xs font-bold transition-colors ${
+                        className={`quiz-polish__option-key flex h-7 w-7 shrink-0 -rotate-2 items-center justify-center rounded border font-mono text-xs font-bold transition-colors ${
                           selected ? "border-primary bg-primary text-background" : "border-primary/30 text-primary/70"
                         }`}
                         aria-hidden="true"
@@ -256,7 +274,7 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
                 })}
               </div>
 
-              <div className="mt-4 flex items-center justify-between">
+              <div className="quiz-polish__question-footer mt-4 flex items-center justify-between">
                 <button
                   type="button"
                   data-testid="button-quiz-back"
@@ -274,20 +292,20 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
           )}
 
           {step === "result" && result && primary && secondary && (
-            <div key="result" className="animate-in fade-in zoom-in-95 duration-500" data-testid="quiz-result">
-              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-primary/60">
+            <div key="result" className="quiz-polish__result animate-in fade-in zoom-in-95 duration-500" data-testid="quiz-result">
+              <div className="quiz-polish__step mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-primary/60">
                 {t("quiz.result.eyebrow")}
               </div>
-              <h2 className="mb-1 font-serif text-3xl font-bold leading-tight">{t("quiz.result.title")}</h2>
+              <h2 ref={headingRef} tabIndex={-1} className="quiz-polish__title mb-1 font-serif text-3xl font-bold leading-tight">{t("quiz.result.title")}</h2>
               <p className="mb-5 text-sm text-muted">{t("quiz.result.description")}</p>
 
-              <article className="relative mb-5 overflow-hidden rounded-xl border border-primary/30 bg-white/[0.06] shadow-[0_0_34px_hsl(var(--secondary)/0.35)]">
+              <article className="quiz-polish__primary-card relative mb-5 overflow-hidden rounded-xl border border-primary/30 bg-white/[0.06] shadow-[0_0_34px_hsl(var(--secondary)/0.35)]">
                 <div className="absolute left-0 right-0 top-0 z-10 h-[2px] card-gradient-top" />
                 <div className="relative">
                   <Cover
                     quizCase={primary}
                     alt={t("quiz.coverAlt", { name: t(primary.nameKey) })}
-                    className="h-44 w-full sm:h-52"
+                    className="quiz-polish__primary-image h-44 w-full sm:h-52"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
                   <span className="absolute left-3 top-3 -rotate-2 rounded border border-primary/50 bg-background/80 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-widest text-primary">
@@ -331,10 +349,10 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
                 </div>
               </article>
 
-              <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+              <div className="quiz-polish__secondary-label mb-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
                 {t("quiz.result.secondary")}
               </div>
-              <article className="mb-5 mt-2 flex min-w-0 gap-3 rounded-lg border border-primary/15 bg-white/5 p-3">
+              <article className="quiz-polish__secondary-card mb-5 mt-2 flex min-w-0 gap-3 rounded-lg border border-primary/15 bg-white/5 p-3">
                 <Cover
                   quizCase={secondary}
                   alt={t("quiz.coverAlt", { name: t(secondary.nameKey) })}

@@ -1,0 +1,29 @@
+.quiz-scan {
+  background-image:
+    radial-gradient(ellipse at 50% 0%, hsl(var(--secondary) / 0.12), transparent 55%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      hsl(var(--primary) / 0.018) 3px,
+      hsl(var(--primary) / 0.018) 4px
+    );
+}
+
+.quiz-highlight {
+  animation: quiz-card-highlight 1s ease-in-out 3;
+  border-color: hsl(var(--primary) / 0.7) !important;
+}
+
+@keyframes quiz-card-highlight {
+  50% {
+    box-shadow: 0 0 0 4px hsl(var(--primary) / 0.25), 0 0 36px hsl(var(--secondary) / 0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quiz-highlight {
+    animation: none;
+    box-shadow: 0 0 0 4px hsl(var(--primary) / 0.25), 0 0 36px hsl(var(--secondary) / 0.45);
+  }
+}

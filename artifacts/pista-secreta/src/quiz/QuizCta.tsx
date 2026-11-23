@@ -8,7 +8,7 @@ export function QuizCta({ onOpen }: { onOpen: () => void }) {
     <section
       aria-labelledby="quiz-cta-title"
       data-testid="quiz-cta"
-      className="relative mb-12 overflow-hidden rounded-xl border border-primary/20 bg-gradient-to-br from-secondary/25 via-white/5 to-transparent p-6 text-center shadow-[0_16px_40px_-14px_rgba(0,0,0,0.6)] md:p-8"
+      className="quiz-polish-cta relative mb-12 overflow-hidden rounded-xl border border-primary/20 bg-gradient-to-br from-secondary/25 via-white/5 to-transparent p-6 text-center shadow-[0_16px_40px_-14px_rgba(0,0,0,0.6)] md:p-8"
     >
       <div
         className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-secondary/20 blur-[80px]"

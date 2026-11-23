@@ -1,0 +1,59 @@
+:root,
+.dark {
+  --background: 263 55% 12%;
+  --foreground: 54 100% 90%;
+  --border: 263 30% 25%;
+  --input: 263 30% 25%;
+  --ring: 271 62% 47%;
+  --card: 265 60% 16%;
+  --card-foreground: 54 100% 90%;
+  --popover: 265 60% 16%;
+  --popover-foreground: 54 100% 90%;
+  --primary: 54 100% 90%;
+  --primary-foreground: 263 55% 12%;
+  --secondary: 271 62% 47%;
+  --secondary-foreground: 54 100% 90%;
+  --muted: 47 43% 63%;
+  --muted-foreground: 54 100% 90%;
+  --accent: 271 62% 47%;
+  --accent-foreground: 54 100% 90%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 54 100% 90%;
+  --sidebar: 263 55% 12%;
+  --sidebar-foreground: 54 100% 90%;
+  --sidebar-primary: 54 100% 90%;
+  --sidebar-primary-foreground: 263 55% 12%;
+  --sidebar-accent: 271 62% 47%;
+  --sidebar-accent-foreground: 54 100% 90%;
+  --sidebar-border: 263 30% 25%;
+  --sidebar-ring: 271 62% 47%;
+  --font-sans: "IM Fell English", serif;
+  --font-serif: "Playfair Display", serif;
+  --font-mono: "Special Elite", monospace;
+  --radius: 0.5rem;
+}
+
+.quiz-preview {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% 0%, hsl(var(--secondary) / 0.18), transparent 48%),
+    linear-gradient(160deg, hsl(var(--background)), hsl(263 52% 8%));
+  color: hsl(var(--foreground));
+}
+
+.quiz-preview__backdrop {
+  margin: 0 auto;
+  max-width: 70rem;
+  padding: 2rem 1.5rem;
+  opacity: 0.6;
+}
+
+.quiz-preview__title {
+  margin: 0 0 0.5rem;
+  font: 700 2rem/1.15 "Playfair Display", serif;
+}
+
+.quiz-preview__copy {
+  color: hsl(var(--muted));
+  font: 0.95rem/1.6 "IM Fell English", serif;
+}
