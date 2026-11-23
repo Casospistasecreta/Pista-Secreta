@@ -1,4 +1,7 @@
+import { personalizedCopy } from "@workspace/personalizados-core";
+
 const siteEn = {
+  ...personalizedCopy.en,
   "site.title": "Pista Secreta — Immersive Mystery Cases",
   "site.description": "Solve mysteries with friends using evidence, witness statements, and digital clues.",
   "site.tagline": "PISTA SECRETA — IMMERSIVE INVESTIGATIONS",

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="72" viewBox="0 0 360 72" fill="none">
+  <g stroke="#E6D39E" stroke-width="3">
+    <circle cx="35" cy="33" r="19"/>
+    <path d="m49 47 13 13"/>
+    <path d="M27 33h16M35 25v16" opacity=".72"/>
+  </g>
+  <text x="78" y="39" fill="#FFF8E8" font-family="Georgia, serif" font-size="25" letter-spacing="2">PISTA SECRETA</text>
+  <path d="M79 50h242" stroke="#E6D39E" stroke-opacity=".52"/>
+</svg>

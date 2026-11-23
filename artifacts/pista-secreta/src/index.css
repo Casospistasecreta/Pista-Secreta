@@ -1,5 +1,7 @@
+@layer theme, base, clerk, components, utilities;
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "@clerk/themes/shadcn.css";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
@@ -277,6 +279,11 @@
     animation-duration: 0.01ms;
     width: 100%;
   }
+}
+
+.cl-formFieldInput::placeholder {
+  color: #c9bea9;
+  opacity: 1;
 }
 
 @keyframes atmosphere-drift-1 {

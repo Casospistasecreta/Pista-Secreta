@@ -8,6 +8,31 @@ const languages = ["pt-BR", "en", "es"];
 const groups = ["site", "ui"];
 const errors = [];
 const dictionaries = new Map();
+const sharedTranslationsPath = path.resolve(
+  packageRoot,
+  "../../lib/personalizados-core/src/translations.ts",
+);
+
+function readSharedKeys(language) {
+  const source = fs.readFileSync(sharedTranslationsPath, "utf8");
+  const marker = language === "pt-BR" ? `"pt-BR": {` : `${language}: {`;
+  const start = source.indexOf(marker);
+  if (start === -1) {
+    errors.push(`shared personalized translations: missing language "${language}"`);
+    return new Set();
+  }
+  const bodyStart = start + marker.length;
+  const blockEnd = source.indexOf("\n  },", bodyStart);
+  if (blockEnd === -1) {
+    errors.push(`shared personalized translations: malformed "${language}" dictionary`);
+    return new Set();
+  }
+  const block = source.slice(bodyStart, blockEnd);
+  const keys = [...block.matchAll(/^\s*["']([^"']+)["']\s*:/gm)].map((match) => match[1]);
+  return new Set(keys);
+}
+
+const sharedKeys = Object.fromEntries(languages.map((language) => [language, readSharedKeys(language)]));
 
 function readKeys(group, language) {
   const file = path.join(sourceRoot, "i18n", group, `${language}.ts`);
@@ -19,7 +44,16 @@ function readKeys(group, language) {
 }
 
 for (const group of groups) {
-  const byLanguage = Object.fromEntries(languages.map((language) => [language, readKeys(group, language)]));
+  const byLanguage = Object.fromEntries(languages.map((language) => {
+    const keys = readKeys(group, language);
+    if (group === "site") {
+      for (const key of sharedKeys[language]) {
+        if (keys.has(key)) errors.push(`site/${language}: duplicate shared key "${key}"`);
+        keys.add(key);
+      }
+    }
+    return [language, keys];
+  }));
   dictionaries.set(group, byLanguage);
   const base = byLanguage["pt-BR"];
   for (const language of ["en", "es"]) {

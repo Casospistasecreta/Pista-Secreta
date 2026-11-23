@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Heart, MapPin, MessageSquare, Send, UserRound } from "lucide-react";
+import { useRef, useState } from "react";
+import type { TouchEvent as ReactTouchEvent } from "react";
+import { ChevronLeft, ChevronRight, Heart, MapPin, MessageSquare, Send, UserRound } from "lucide-react";
 import { useDevice } from "../state/DeviceProvider";
 import { AppShell } from "../components/AppShell";
 import { Avatar, Photo } from "../components/Media";
@@ -10,25 +11,107 @@ import type { ResolvedLocalized } from "@/i18n/types";
 
 const ACCENT = "#e2a0ff";
 
-function Carousel({ post }: { post: ResolvedLocalized<SocialPost> }) {
+function Carousel({ post, onOpenPost }: { post: ResolvedLocalized<SocialPost>; onOpenPost: () => void }) {
   const t = useT();
   const [index, setIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const suppressOpen = useRef(false);
+  const suppressOpenTimer = useRef<number | null>(null);
   const media = post.media[index] ?? post.media[0];
-  return <div className="relative flex w-full justify-center bg-black/40">
-    {media.src
-      ? <img src={media.src} alt={media.caption ?? t("gallery.photoFromDevice")} className="block h-auto max-h-[560px] w-full object-contain" />
-      : <div className="aspect-[4/5] w-full"><Photo media={media} rounded="rounded-none" /></div>}
-    {post.media.length > 1 && <>
-      <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">{post.media.map((item, i) => <button key={item.id} type="button" onClick={() => setIndex(i)} className="h-1.5 w-1.5 rounded-full" style={{ background: "#fff", opacity: i === index ? .95 : .35 }} aria-label={t("social.photo", { number: i + 1 })} />)}</div>
-      <span className="inv-mono absolute right-3 top-3 rounded-full bg-black/45 px-2 py-0.5 text-[10px]">{index + 1}/{post.media.length}</span>
-    </>}
-  </div>;
+  const showPhoto = (nextIndex: number) => {
+    setIndex((nextIndex + post.media.length) % post.media.length);
+  };
+  const handleTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
+    if (event.target instanceof Element && event.target.closest("[data-carousel-control]")) return;
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+  };
+  const handleTouchEnd = (event: ReactTouchEvent<HTMLDivElement>) => {
+    const startX = touchStartX.current;
+    const endX = event.changedTouches[0]?.clientX;
+    touchStartX.current = null;
+    if (startX === null || endX === undefined || post.media.length < 2) return;
+    const distance = endX - startX;
+    if (Math.abs(distance) < 40) return;
+    showPhoto(index + (distance < 0 ? 1 : -1));
+    suppressOpen.current = true;
+    if (suppressOpenTimer.current !== null) window.clearTimeout(suppressOpenTimer.current);
+    suppressOpenTimer.current = window.setTimeout(() => {
+      suppressOpen.current = false;
+      suppressOpenTimer.current = null;
+    }, 450);
+  };
+  return (
+    <div
+      className="relative flex w-full justify-center bg-black/40"
+      role="group"
+      aria-roledescription="carousel"
+      aria-label={t("social.photoCarousel", { author: post.author })}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      style={{ touchAction: "pan-y" }}
+    >
+      <button
+        type="button"
+        className="block w-full"
+        aria-label={t("social.openPost", { author: post.author })}
+        onClick={() => {
+          if (suppressOpen.current) {
+            suppressOpen.current = false;
+            if (suppressOpenTimer.current !== null) window.clearTimeout(suppressOpenTimer.current);
+            suppressOpenTimer.current = null;
+            return;
+          }
+          onOpenPost();
+        }}
+      >
+        {media.src
+          ? <img src={media.src} alt={media.caption ?? t("gallery.photoFromDevice")} className="block h-auto max-h-[560px] w-full object-contain" />
+          : <div className="aspect-[4/5] w-full"><Photo media={media} rounded="rounded-none" /></div>}
+      </button>
+      {post.media.length > 1 && <>
+        <button
+          type="button"
+          onClick={() => showPhoto(index - 1)}
+          data-carousel-control
+          className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/70 text-white shadow-lg ring-1 ring-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          aria-label={t("social.previousPhoto")}
+        >
+          <ChevronLeft size={23} aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          onClick={() => showPhoto(index + 1)}
+          data-carousel-control
+          className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/70 text-white shadow-lg ring-1 ring-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          aria-label={t("social.nextPhoto")}
+        >
+          <ChevronRight size={23} aria-hidden="true" />
+        </button>
+        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+          {post.media.map((item, i) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => showPhoto(i)}
+              data-carousel-control
+              className="flex h-6 w-6 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              aria-label={t("social.photo", { number: i + 1 })}
+              aria-current={i === index ? "true" : undefined}
+            >
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: "#fff", opacity: i === index ? .95 : .55 }} />
+            </button>
+          ))}
+        </div>
+        <span className="inv-mono absolute right-3 top-3 rounded-full bg-black/65 px-2 py-0.5 text-[10px]" aria-live="polite">{index + 1}/{post.media.length}</span>
+      </>}
+    </div>
+  );
 }
 
 function PostCard({ post, compact = false }: { post: ResolvedLocalized<SocialPost>; compact?: boolean }) {
   const { open, labelFor } = useDevice();
   const t = useT();
-  return <article className="border-b border-[var(--inv-line)] pb-4"><div className="flex items-center gap-2.5 px-4 py-3"><Avatar name={post.author} seed={post.author} size={32} ring /><div className="min-w-0 flex-1"><p className="truncate text-[13px]">{post.author}</p>{post.place && <p className="flex items-center gap-1 text-[11px] text-[var(--inv-dim)]"><MapPin size={10} />{post.place}</p>}</div><span className="inv-mono text-[10px] text-[var(--inv-dim-2)]">{post.at}</span></div><button type="button" className="block w-full" aria-label={t("social.openPost", { author: post.author })} onClick={() => open({ app: "social", view: "post", id: post.id })}><Carousel post={post} /></button><div className="flex items-center gap-4 px-4 pt-3 text-[var(--inv-dim)]"><Heart size={19} /><MessageSquare size={19} /><Send size={18} /></div><p className="inv-mono px-4 pt-2 text-[11px] text-[var(--inv-dim)]">{t("social.likes", { count: post.likes.toLocaleString() })}</p><p className="px-4 pt-1 text-[13px]"><span className="text-[var(--inv-chiffon)]">{post.author}</span> {post.caption}</p>{!compact && post.comments.length > 0 && <button type="button" onClick={() => open({ app: "social", view: "post", id: post.id })} className="px-4 py-2 text-[12px] text-[var(--inv-dim)]">{t("social.viewComments", { count: post.comments.length })}</button>}<div className="px-4 pt-3"><EvidenceToggle compact accent={ACCENT} item={{ id: `social:${post.id}`, appId: "social", title: post.caption.slice(0, 60) || t("social.post"), subtitle: `${labelFor("social", "PicLike")} · ${post.at}`, target: { app: "social", view: "post", id: post.id } }} /></div></article>;
+  return <article className="border-b border-[var(--inv-line)] pb-4"><div className="flex items-center gap-2.5 px-4 py-3"><Avatar name={post.author} seed={post.author} size={32} ring /><div className="min-w-0 flex-1"><p className="truncate text-[13px]">{post.author}</p>{post.place && <p className="flex items-center gap-1 text-[11px] text-[var(--inv-dim)]"><MapPin size={10} />{post.place}</p>}</div><span className="inv-mono text-[10px] text-[var(--inv-dim-2)]">{post.at}</span></div><Carousel post={post} onOpenPost={() => open({ app: "social", view: "post", id: post.id })} /><div className="flex items-center gap-4 px-4 pt-3 text-[var(--inv-dim)]"><Heart size={19} /><MessageSquare size={19} /><Send size={18} /></div><p className="inv-mono px-4 pt-2 text-[11px] text-[var(--inv-dim)]">{t("social.likes", { count: post.likes.toLocaleString() })}</p><p className="px-4 pt-1 text-[13px]"><span className="text-[var(--inv-chiffon)]">{post.author}</span> {post.caption}</p>{!compact && post.comments.length > 0 && <button type="button" onClick={() => open({ app: "social", view: "post", id: post.id })} className="px-4 py-2 text-[12px] text-[var(--inv-dim)]">{t("social.viewComments", { count: post.comments.length })}</button>}<div className="px-4 pt-3"><EvidenceToggle compact accent={ACCENT} item={{ id: `social:${post.id}`, appId: "social", title: post.caption.slice(0, 60) || t("social.post"), subtitle: `${labelFor("social", "PicLike")} · ${post.at}`, target: { app: "social", view: "post", id: post.id } }} /></div></article>;
 }
 
 function ProfileView({ profile, own = false }: { profile: ResolvedLocalized<SocialProfile>; own?: boolean }) {

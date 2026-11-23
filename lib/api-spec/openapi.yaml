@@ -12,6 +12,8 @@ tags:
     description: Health operations
   - name: analytics
     description: Landing page analytics operations
+  - name: personalized
+    description: Custom investigation briefings and private references
 paths:
   /healthz:
     get:
@@ -58,6 +60,110 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PurchaseClickStats"
+  /personalizados/uploads/request-url:
+    post:
+      operationId: requestPersonalizedUploadUrl
+      tags: [personalized]
+      summary: Request a private upload URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PersonalizedUploadRequest"
+      responses:
+        "201":
+          description: Upload URL created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PersonalizedUploadUrl"
+        "400":
+          description: Invalid metadata or limits exceeded
+        "401":
+          description: Sign-in required
+        "429":
+          description: Upload request rate limit exceeded
+  /personalizados/uploads/{uploadId}/complete:
+    post:
+      operationId: completePersonalizedUpload
+      tags: [personalized]
+      summary: Validate and finalize a private upload
+      parameters:
+        - name: uploadId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompletePersonalizedUploadRequest"
+      responses:
+        "200":
+          description: Upload verified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompletePersonalizedUploadResponse"
+        "400":
+          description: Invalid upload or file content
+        "401":
+          description: Sign-in required
+        "404":
+          description: Upload not found
+  /personalizados/uploads/{uploadId}:
+    delete:
+      operationId: deletePersonalizedUpload
+      tags: [personalized]
+      summary: Remove an unused private upload
+      parameters:
+        - name: uploadId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompletePersonalizedUploadRequest"
+      responses:
+        "204":
+          description: Upload removed
+        "401":
+          description: Sign-in required
+        "404":
+          description: Upload not found
+  /personalizados/briefings:
+    post:
+      operationId: createPersonalizedBriefing
+      tags: [personalized]
+      summary: Save a custom investigation briefing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PersonalizedBriefingRequest"
+      responses:
+        "202":
+          description: Briefing saved; email delivery status included
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PersonalizedBriefingResponse"
+        "400":
+          description: Invalid information or missing consent
+        "401":
+          description: Sign-in required when attaching files
+        "429":
+          description: Submission rate limit exceeded
 components:
   schemas:
     HealthStatus:
@@ -89,4 +195,170 @@ components:
           type: integer
       required:
         - totalClicks
+    PersonalizedUploadRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        draftId:
+          type: string
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+        name:
+          type: string
+          minLength: 1
+          maxLength: 180
+        size:
+          type: integer
+          minimum: 1
+          maximum: 10485760
+        contentType:
+          type: string
+          maxLength: 120
+      required: [draftId, name, size, contentType]
+    PersonalizedUploadUrl:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+        uploadURL:
+          type: string
+          pattern: "^https://"
+        objectPath:
+          type: string
+        name:
+          type: string
+      required: [uploadId, uploadURL, objectPath, name]
+    CompletePersonalizedUploadRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        draftId:
+          type: string
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+      required: [draftId]
+    CompletePersonalizedUploadResponse:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+        name:
+          type: string
+        size:
+          type: integer
+      required: [uploadId, name, size]
+    PersonalizedBriefingRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        draftId:
+          type: string
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+        language:
+          type: string
+          enum: [pt-BR, en, es]
+        product:
+          type: string
+          enum: [digital, physical, exclusive]
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: string
+          pattern: '^[^\s@]+@[^\s@]+\.[^\s@]+$'
+          maxLength: 254
+        whatsapp:
+          type: string
+          minLength: 6
+          maxLength: 32
+        purpose:
+          type: string
+          maxLength: 120
+        storyIdea:
+          type: string
+          maxLength: 6000
+        storyTransform:
+          type: string
+          maxLength: 3000
+        storyReal:
+          type: string
+          maxLength: 3000
+        storyFeeling:
+          type: string
+          maxLength: 2000
+        storyMustInclude:
+          type: string
+          maxLength: 3000
+        charactersCount:
+          type: string
+          maxLength: 80
+        charactersNames:
+          type: string
+          maxLength: 3000
+        charactersTraits:
+          type: string
+          maxLength: 3000
+        charactersProtagonist:
+          type: string
+          maxLength: 1000
+        charactersExclude:
+          type: string
+          maxLength: 1000
+        styles:
+          type: array
+          maxItems: 10
+          items:
+            type: string
+            maxLength: 40
+        deadline:
+          type: string
+          maxLength: 300
+        budgetRange:
+          type: string
+          maxLength: 200
+        digitalAddonInterest:
+          type: boolean
+        additionalInfo:
+          type: string
+          maxLength: 3000
+        uploadIds:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+        consentProject:
+          type: boolean
+        consentPrivacy:
+          type: boolean
+        consentPortfolio:
+          type: boolean
+        honeypot:
+          type: string
+          maxLength: 200
+      required:
+        - draftId
+        - language
+        - product
+        - name
+        - email
+        - whatsapp
+        - uploadIds
+        - consentProject
+        - consentPrivacy
+        - consentPortfolio
+        - honeypot
+    PersonalizedBriefingResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+        emailStatus:
+          type: string
+          enum: [sent, partial, failed, not_configured]
+        customerEmailSent:
+          type: boolean
+      required: [requestId, emailStatus, customerEmailSent]
 

@@ -1,10 +1,14 @@
-import { Redirect, Switch, Route, Router as WouterRouter } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Redirect, Switch, Route, Link, useLocation, Router as WouterRouter } from "wouter";
+import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import NotFound from "@/pages/not-found";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { ClerkProvider, SignIn, SignUp, useClerk } from "@clerk/react";
+import { publishableKeyFromHost } from "@clerk/react/internal";
+import { shadcn } from "@clerk/themes";
+import { enUS, esES, ptBR } from "@clerk/localizations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import case1Image from "@assets/1.png";
@@ -44,6 +48,72 @@ const JUSTIN_AVAILABLE = JUSTIN_CHECKOUT_URL !== "" && JUSTIN_PRICE > 0;
 const JUSTIN_PRICE_LABEL = `R$ ${JUSTIN_PRICE.toFixed(2).replace(".", ",")}`;
 const JUSTIN_CARD_IMAGE = `${import.meta.env.BASE_URL}investigacao/caso-justin-nobaind/card.webp`;
 const InvestigacaoPage = lazy(() => import("@/investigacao/InvestigacaoPage"));
+const PersonalizedPage = lazy(() => import("@/pages/PersonalizedPage"));
+const clerkPubKey = publishableKeyFromHost(
+  window.location.hostname,
+  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+);
+const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+if (!clerkPubKey) {
+  throw new Error("Missing Clerk publishable key.");
+}
+
+function stripBase(path: string): string {
+  return basePath && path.startsWith(basePath)
+    ? path.slice(basePath.length) || "/"
+    : path;
+}
+
+const clerkAppearance = {
+  theme: shadcn,
+  cssLayerName: "clerk",
+  options: {
+    logoPlacement: "inside" as const,
+    logoLinkUrl: basePath || "/",
+    logoImageUrl: `${window.location.origin}${basePath}/logo.svg`,
+  },
+  variables: {
+    colorPrimary: "hsl(45 72% 78%)",
+    colorForeground: "hsl(42 30% 94%)",
+    colorMutedForeground: "hsl(40 15% 72%)",
+    colorDanger: "hsl(0 78% 67%)",
+    colorBackground: "hsl(263 45% 15%)",
+    colorInput: "hsl(263 38% 19%)",
+    colorInputForeground: "hsl(42 30% 94%)",
+    colorNeutral: "hsl(42 30% 94%)",
+    fontFamily: "'Playfair Display', Georgia, serif",
+    borderRadius: "0.75rem",
+  },
+  elements: {
+    rootBox: "w-full flex justify-center",
+    cardBox: "bg-[#211a2b] border border-[#d9c994]/20 rounded-2xl w-[440px] max-w-[calc(100vw-2rem)] overflow-hidden",
+    card: "!shadow-none !border-0 !bg-transparent !rounded-none",
+    footer: "!shadow-none !border-0 !bg-transparent !rounded-none",
+    headerTitle: "text-[#fff8e8] font-serif",
+    headerSubtitle: "text-[#d4c9b6]",
+    socialButtonsBlockButtonText: "text-[#fff8e8]",
+    formFieldLabel: "text-[#fff8e8]",
+    footerActionLink: "text-[#f0d997] hover:text-[#fff3c2]",
+    footerActionText: "text-[#d4c9b6]",
+    dividerText: "text-[#d4c9b6]",
+    identityPreviewEditButton: "text-[#f0d997]",
+    formFieldSuccessText: "text-[#a7e0b3]",
+    alertText: "text-[#ffe2df]",
+    logoBox: "mx-auto",
+    logoImage: "max-h-10",
+    socialButtonsBlockButton: "border-[#d9c994]/30 bg-[#17121d] hover:bg-[#2a2234]",
+    formButtonPrimary: "bg-[#e6d39e] text-[#211a2b] hover:bg-[#f2e2b4]",
+    formFieldInput: "border-[#d9c994]/25 bg-[#17121d] text-[#fff8e8]",
+    footerAction: "text-[#d4c9b6]",
+    dividerLine: "bg-[#d9c994]/20",
+    alert: "border-[#c97070]/40 bg-[#6f2626]/20",
+    otpCodeFieldInput: "border-[#d9c994]/30 bg-[#17121d] text-[#fff8e8]",
+    formFieldRow: "text-[#fff8e8]",
+    main: "text-[#fff8e8]",
+  },
+};
 
 // Case/product metadata used for analytics events (view_case / click_buy).
 const CASES: Record<CaseName, { name: CaseName; productName: string; value: number }> = {
@@ -722,6 +792,24 @@ function LandingPage() {
           </div>
         </section>
 
+        <section className="mb-12 rounded-xl border border-primary/25 bg-white/[0.04] p-6 text-center animate-in fade-in duration-1000 delay-900 fill-mode-both md:p-8">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">
+            {t("personalized.landingEyebrow")}
+          </p>
+          <h2 className="mt-3 font-serif text-2xl font-bold md:text-3xl">
+            {t("personalized.landingTitle")}
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-muted">
+            {t("personalized.landingDescription")}
+          </p>
+          <Link
+            href="/personalizados"
+            className="mt-6 inline-flex min-h-12 items-center justify-center rounded bg-primary px-6 py-3 font-serif text-sm font-bold text-background transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            {t("personalized.landingCta")}
+          </Link>
+        </section>
+
         <footer className="mt-12 animate-in fade-in duration-1000 delay-1000">
           <p className="text-[10px] md:text-xs text-primary/45 text-center font-mono tracking-widest uppercase">
             {t("site.immediateDelivery")} &nbsp;&middot;&nbsp; {t("site.noSubscription")} &nbsp;&middot;&nbsp; {t("site.anyDevice")}
@@ -745,6 +833,13 @@ function Router() {
   );
   return (
     <Switch>
+      <Route path="/sign-in/*?" component={SignInPage} />
+      <Route path="/sign-up/*?" component={SignUpPage} />
+      <Route path="/personalizados">
+        <Suspense fallback={<div className="min-h-screen bg-background" />}>
+          <PersonalizedPage />
+        </Suspense>
+      </Route>
       <Route path="/" component={LandingPage} />
       <Route path="/investigacao">{investigacao}</Route>
       <Route path="/investigacao/:slug">{investigacao}</Route>
@@ -756,15 +851,72 @@ function Router() {
   );
 }
 
+function SignInPage() {
+  return (
+    <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4 py-8">
+      <SignIn routing="path" path={`${basePath}/sign-in`} signUpUrl={`${basePath}/sign-up`} />
+    </div>
+  );
+}
+
+function SignUpPage() {
+  return (
+    <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4 py-8">
+      <SignUp routing="path" path={`${basePath}/sign-up`} signInUrl={`${basePath}/sign-in`} />
+    </div>
+  );
+}
+
+function ClerkQueryClientCacheInvalidator() {
+  const { addListener } = useClerk();
+  const queryClient = useQueryClient();
+  const previousUserId = useRef<string | null | undefined>(undefined);
+
+  useEffect(() => {
+    const unsubscribe = addListener(({ user }) => {
+      const userId = user?.id ?? null;
+      if (previousUserId.current !== undefined && previousUserId.current !== userId) {
+        queryClient.clear();
+      }
+      previousUserId.current = userId;
+    });
+    return unsubscribe;
+  }, [addListener, queryClient]);
+
+  return null;
+}
+
+function ClerkProviderWithRoutes() {
+  const [, setLocation] = useLocation();
+  const { lang } = useLanguage();
+  const localization = lang === "pt-BR" ? ptBR : lang === "en" ? enUS : esES;
+
+  return (
+    <ClerkProvider
+      publishableKey={clerkPubKey}
+      proxyUrl={clerkProxyUrl}
+      appearance={clerkAppearance}
+      localization={localization}
+      signInUrl={`${basePath}/sign-in`}
+      signUpUrl={`${basePath}/sign-up`}
+      routerPush={(to) => setLocation(stripBase(to))}
+      routerReplace={(to) => setLocation(stripBase(to), { replace: true })}
+    >
+      <ClerkQueryClientCacheInvalidator />
+      <Router />
+      <Toaster />
+    </ClerkProvider>
+  );
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <LanguageProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-            <Router />
+            <ClerkProviderWithRoutes />
           </WouterRouter>
-          <Toaster />
         </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>

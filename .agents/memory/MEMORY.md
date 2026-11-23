@@ -1,1 +1,2 @@
 - [Investigação Digital](investigacao-integration.md) — keep the device experience lazy-loaded and CSS-isolated from the landing page.
+- [Briefings personalizados](personalized-briefings.md) — customer login is required to attach files to a custom investigation request.

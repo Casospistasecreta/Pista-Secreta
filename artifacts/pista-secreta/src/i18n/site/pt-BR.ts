@@ -1,4 +1,7 @@
+import { personalizedCopy } from "@workspace/personalizados-core";
+
 const sitePtBR = {
+  ...personalizedCopy["pt-BR"],
   "site.title": "Pista Secreta — Experiências Investigativas",
   "site.description": "Resolva casos investigativos com seus amigos usando evidências, depoimentos e pistas digitais.",
   "site.tagline": "Pista Secreta — Experiências Investigativas",

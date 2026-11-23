@@ -25,9 +25,10 @@ export const locations: LocationDay[] = [
     ],
   },
   {
-    id: "l-07mai-noite",
-    label: "07 MAI (noite)",
+    id: "l-07mai",
+    label: "07 MAI",
     stops: [
+      { id: "ls-07-1", time: "07:00", exitTime: "23:40", durationLabel: "o dia todo", title: "Casa", point: CASA },
       { id: "ls-07n-1", time: "23:44", title: "Em movimento", redacted: true },
       { id: "ls-07n-2", time: "23:58", exitTime: "00:40", durationLabel: "42 min", title: "Clínica Stitch (Van Nuys)", point: CLINICA },
       { id: "ls-07n-3", time: "00:52", title: "Em movimento", redacted: true },
@@ -35,7 +36,6 @@ export const locations: LocationDay[] = [
       { id: "ls-07n-5", time: "01:52", title: "Sinal perdido", redacted: true },
     ],
   },
-  { id: "l-07mai", label: "07 MAI", stops: [{ id: "ls-07-1", time: "07:00", exitTime: "23:40", durationLabel: "o dia todo", title: "Casa", point: CASA }] },
   {
     id: "l-06mai",
     label: "06 MAI",
