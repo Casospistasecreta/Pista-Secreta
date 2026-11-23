@@ -1,2 +1,3 @@
 - [Investigação Digital](investigacao-integration.md) — keep the device experience lazy-loaded and CSS-isolated from the landing page.
 - [Briefings personalizados](personalized-briefings.md) — customer login is required to attach files to a custom investigation request.
+- [Metadados do quiz](quiz-metadata.md) — keep quiz durations, player counts, and difficulty aligned with the landing cards.
