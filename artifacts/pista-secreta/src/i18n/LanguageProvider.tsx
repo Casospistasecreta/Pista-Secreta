@@ -10,8 +10,9 @@ import {
 import { pick, type Lang, type Localized } from "./types";
 import uiPtBR from "./ui/pt-BR";
 import sitePtBR from "./site/pt-BR";
+import quizPtBR from "./quiz/pt-BR";
 
-const ptBR = { ...uiPtBR, ...sitePtBR };
+const ptBR = { ...uiPtBR, ...sitePtBR, ...quizPtBR };
 export type TranslationKey = keyof typeof ptBR;
 type Dictionary = Partial<Record<TranslationKey, string>>;
 type LanguageContextValue = {
@@ -35,11 +36,11 @@ function readSavedLanguage(): Lang {
 async function loadDictionary(lang: Lang): Promise<Dictionary> {
   if (lang === "pt-BR") return ptBR;
   if (lang === "en") {
-    const [ui, site] = await Promise.all([import("./ui/en"), import("./site/en")]);
-    return { ...ui.default, ...site.default };
+    const [ui, site, quiz] = await Promise.all([import("./ui/en"), import("./site/en"), import("./quiz/en")]);
+    return { ...ui.default, ...site.default, ...quiz.default };
   }
-  const [ui, site] = await Promise.all([import("./ui/es"), import("./site/es")]);
-  return { ...ui.default, ...site.default };
+  const [ui, site, quiz] = await Promise.all([import("./ui/es"), import("./site/es"), import("./quiz/es")]);
+  return { ...ui.default, ...site.default, ...quiz.default };
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {

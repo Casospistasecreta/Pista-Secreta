@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = path.join(packageRoot, "src");
 const languages = ["pt-BR", "en", "es"];
-const groups = ["site", "ui"];
+const groups = ["site", "ui", "quiz"];
 const errors = [];
 const dictionaries = new Map();
 const sharedTranslationsPath = path.resolve(
@@ -66,7 +66,11 @@ for (const group of groups) {
   }
 }
 
-const allKeys = new Set([...dictionaries.get("site")["pt-BR"], ...dictionaries.get("ui")["pt-BR"]]);
+const allKeys = new Set([
+  ...dictionaries.get("site")["pt-BR"],
+  ...dictionaries.get("ui")["pt-BR"],
+  ...dictionaries.get("quiz")["pt-BR"],
+]);
 const translationCalls = new Set();
 
 function walk(directory) {

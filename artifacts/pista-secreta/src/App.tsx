@@ -20,6 +20,7 @@ import { trackClickBuy, trackViewCase, type CaseName } from "@/lib/analytics";
 import { LanguageProvider, useLanguage, useT } from "@/i18n/LanguageProvider";
 import { LanguageSwitcher } from "@/i18n/LanguageSwitcher";
 import { updatePageMetadata } from "@/i18n/metadata";
+import { QuizCta, useQuiz } from "@/quiz";
 import {
   Search, Users, Heart, Compass,
   Folder, Image as ImageIcon, ClipboardList, MessageSquare, Mic, Video, Music,
@@ -49,6 +50,7 @@ const JUSTIN_PRICE_LABEL = `R$ ${JUSTIN_PRICE.toFixed(2).replace(".", ",")}`;
 const JUSTIN_CARD_IMAGE = `${import.meta.env.BASE_URL}investigacao/caso-justin-nobaind/card.webp`;
 const InvestigacaoPage = lazy(() => import("@/investigacao/InvestigacaoPage"));
 const PersonalizedPage = lazy(() => import("@/pages/PersonalizedPage"));
+const QuizModal = lazy(() => import("@/quiz/QuizModal").then((module) => ({ default: module.QuizModal })));
 const clerkPubKey = publishableKeyFromHost(
   window.location.hostname,
   import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
@@ -132,6 +134,7 @@ function getApiPath(path: string) {
 function LandingPage() {
   const t = useT();
   const { lang } = useLanguage();
+  const quiz = useQuiz();
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -361,6 +364,11 @@ function LandingPage() {
 
         <div className="h-px ultraviolet-gradient my-12 opacity-50 animate-in fade-in duration-1000 delay-300 fill-mode-both" />
 
+        <QuizCta onOpen={quiz.openFromCta} />
+        <Suspense fallback={null}>
+          <QuizModal open={quiz.open} source={quiz.source} onOpenChange={quiz.setOpen} />
+        </Suspense>
+
         <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300 fill-mode-both">
           <h2 className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted mb-6">
             {t("site.availableCases")}
@@ -371,7 +379,7 @@ function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Card 1 */}
-            <div ref={case1CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
+            <div id="caso-wendel-jr" ref={case1CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
               <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
               <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
 
@@ -427,7 +435,7 @@ function LandingPage() {
             </div>
 
             {/* Card 2 */}
-            <div ref={case2CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
+            <div id="caso-universitario" ref={case2CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
               <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
               <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
 
@@ -483,7 +491,7 @@ function LandingPage() {
             </div>
 
             {/* Card 3 — Caso Dona Odete (Investigação Digital) */}
-            <div ref={case3CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
+            <div id="caso-dona-odete" ref={case3CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
               <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
               <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
 
@@ -537,7 +545,7 @@ function LandingPage() {
             </div>
 
             {/* Card 4 — Caso Rasputin (Investigação Digital) */}
-            <div ref={case4CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
+            <div id="caso-rasputin" ref={case4CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
               <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
               <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
 
@@ -600,7 +608,7 @@ function LandingPage() {
             </div>
 
             {/* Card 5 — Caso Peão Envenenado (Investigação Digital) */}
-            <div ref={case5CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
+            <div id="caso-peao-envenenado" ref={case5CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
               <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
               <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
 
@@ -663,7 +671,7 @@ function LandingPage() {
             </div>
 
             {/* Card 6 — Caso Justin Nobaind (Investigação Digital) */}
-            <div ref={case6CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
+            <div id="caso-justin-nobaind" ref={case6CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
               <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
               <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
               <div className="p-6 pb-4">
