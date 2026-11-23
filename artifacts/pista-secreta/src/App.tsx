@@ -37,6 +37,12 @@ const PEAO_PRICE: number = 7.9; // em reais
 const PEAO_AVAILABLE = PEAO_CHECKOUT_URL !== "" && PEAO_PRICE > 0;
 const PEAO_PRICE_LABEL = `R$ ${PEAO_PRICE.toFixed(2).replace(".", ",")}`;
 const PEAO_CARD_IMAGE = `${import.meta.env.BASE_URL}investigacao/caso-peao-envenenado/card.webp`;
+// Caso 006 — Justin Nobaind. Checkout informado no pacote de implementação.
+const JUSTIN_CHECKOUT_URL: string = "https://pay.kiwify.com.br/hOaX7ly";
+const JUSTIN_PRICE = 7.9;
+const JUSTIN_AVAILABLE = JUSTIN_CHECKOUT_URL !== "" && JUSTIN_PRICE > 0;
+const JUSTIN_PRICE_LABEL = `R$ ${JUSTIN_PRICE.toFixed(2).replace(".", ",")}`;
+const JUSTIN_CARD_IMAGE = `${import.meta.env.BASE_URL}investigacao/caso-justin-nobaind/card.webp`;
 const InvestigacaoPage = lazy(() => import("@/investigacao/InvestigacaoPage"));
 
 // Case/product metadata used for analytics events (view_case / click_buy).
@@ -46,6 +52,7 @@ const CASES: Record<CaseName, { name: CaseName; productName: string; value: numb
   dona_odete: { name: "dona_odete", productName: "Caso Dona Odete — Investigação Digital", value: 7.9 },
   rasputin: { name: "rasputin", productName: "Caso Rasputin — Investigação Digital", value: RASPUTIN_PRICE },
   peao_envenenado: { name: "peao_envenenado", productName: "Caso Peão Envenenado — Investigação Digital", value: PEAO_PRICE },
+  justin_nobaind: { name: "justin_nobaind", productName: "Caso Justin Nobaind — Investigação Digital", value: JUSTIN_PRICE },
 };
 
 function getApiPath(path: string) {
@@ -66,6 +73,7 @@ function LandingPage() {
   const case3CardRef = useRef<HTMLDivElement>(null);
   const case4CardRef = useRef<HTMLDivElement>(null);
   const case5CardRef = useRef<HTMLDivElement>(null);
+  const case6CardRef = useRef<HTMLDivElement>(null);
   const viewedCasesRef = useRef<Set<CaseName>>(new Set());
 
   useEffect(() => {
@@ -97,6 +105,7 @@ function LandingPage() {
       { el: case3CardRef.current, caseName: "dona_odete" },
       ...(RASPUTIN_AVAILABLE ? [{ el: case4CardRef.current, caseName: "rasputin" as CaseName }] : []),
       ...(PEAO_AVAILABLE ? [{ el: case5CardRef.current, caseName: "peao_envenenado" as CaseName }] : []),
+      ...(JUSTIN_AVAILABLE ? [{ el: case6CardRef.current, caseName: "justin_nobaind" as CaseName }] : []),
     ];
 
     const observer = new IntersectionObserver(
@@ -576,6 +585,56 @@ function LandingPage() {
                     rel="noopener noreferrer"
                     onClick={() => handlePurchaseClick("peao_envenenado", PEAO_CHECKOUT_URL)}
                     className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none"
+                  >{t("site.startCase")}</a>
+                ) : (
+                  <div className="block w-full border border-primary/20 text-primary/50 rounded p-4 font-serif text-lg font-bold text-center cursor-not-allowed select-none" aria-disabled="true">{t("site.comingSoonShort")}</div>
+                )}
+              </div>
+            </div>
+
+            {/* Card 6 — Caso Justin Nobaind (Investigação Digital) */}
+            <div ref={case6CardRef} className="group relative bg-white/5 border border-primary/15 rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.07] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]">
+              <div className="absolute top-0 left-0 right-0 h-[2px] card-gradient-top opacity-70" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none mix-blend-screen" />
+              <div className="p-6 pb-4">
+                <div className="font-mono text-[10px] tracking-widest text-muted mb-3 flex justify-between items-center">
+                  <span>{t("site.case006Label")}</span>
+                  <span className="inline-block border border-primary/25 rounded px-2 py-0.5 text-[9px] text-primary/55 -rotate-2">{t("site.open")}</span>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-[9px] tracking-widest uppercase text-muted/70">{t("site.difficulty")}</span>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((n) => <span key={n} className={`block w-3 h-1.5 rounded-sm ${n <= 4 ? "bg-secondary/80" : "bg-primary/15 border border-primary/20"}`} />)}
+                  </div>
+                  <span className="font-mono text-[9px] text-muted/70">4/5</span>
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-2">{t("site.caseJustinName")}</h3>
+                <p className="text-sm text-muted mb-3">{t("site.caseJustinDescription")}</p>
+                <p className="text-sm text-muted mb-4">{t("site.caseJustinStory")}</p>
+                <img src={JUSTIN_CARD_IMAGE} alt={t("site.case006ImageAlt")} className="w-full h-40 object-cover object-[50%_30%] rounded border border-primary/10 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+              </div>
+              <div className="p-6 pt-4 border-t border-primary/10 flex flex-col flex-1 justify-end">
+                <div className="flex flex-col mb-1">
+                  {JUSTIN_AVAILABLE ? (
+                    <>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span className="font-serif text-4xl font-bold text-red-400 whitespace-nowrap">{JUSTIN_PRICE_LABEL}</span>
+                      </div>
+                      <span className="text-sm text-muted mt-1">{t("site.perCase")}</span>
+                    </>
+                  ) : <span className="font-mono text-[10px] tracking-widest uppercase text-primary/60">{t("site.comingSoon")}</span>}
+                </div>
+                <p className="font-mono text-xs text-muted tracking-wide mt-3 mb-5">
+                  {t("site.idealFor", { count: "1–3", audience: t("site.audienceDateFriendsFamily") })}<br />
+                  {t("site.averageTime", { duration: t("duration.justin") })}
+                </p>
+                {JUSTIN_AVAILABLE ? (
+                  <a
+                    href={JUSTIN_CHECKOUT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => handlePurchaseClick("justin_nobaind", JUSTIN_CHECKOUT_URL)}
+                    className="block w-full bg-primary/90 hover:bg-primary text-background rounded p-4 font-serif text-lg font-bold text-center transition-all duration-300 ease-out shadow-[0_0_20px_rgba(255,250,205,0.1)] hover:shadow-[0_0_30px_rgba(255,250,205,0.2)] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >{t("site.startCase")}</a>
                 ) : (
                   <div className="block w-full border border-primary/20 text-primary/50 rounded p-4 font-serif text-lg font-bold text-center cursor-not-allowed select-none" aria-disabled="true">{t("site.comingSoonShort")}</div>

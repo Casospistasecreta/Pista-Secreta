@@ -8,7 +8,7 @@ function AppIcon({ app, badge }: { app: AppMeta; badge?: number }) { const { ope
 export function HomeScreen() {
   const { caseData, evidence } = useDevice();
   const t = useT();
-  const grid = APPS.filter((app) => !app.dock && (caseData.apps ? caseData.apps.includes(app.id) : app.id !== "tabulive"));
+  const grid = APPS.filter((app) => !app.dock && (caseData.apps ? caseData.apps.includes(app.id) : app.id !== "tabulive" && app.id !== "calls"));
   const dock = APPS.filter((app) => app.dock);
   const unread = caseData.messages.reduce((count, conversation) => count + (conversation.unread ?? 0), 0);
 

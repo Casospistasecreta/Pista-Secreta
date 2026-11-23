@@ -4,7 +4,8 @@ import { caso02 } from "./caso-02";
 import { casoOdete } from "./caso-odete";
 import { casoRasputin } from "./caso-rasputin";
 import { casoPeaoEnvenenado } from "./caso-peao-envenenado";
-export const CASES: Record<string, CaseData> = { [casoDemo.slug]: casoDemo, [caso02.slug]: caso02, [casoOdete.slug]: casoOdete, [casoRasputin.slug]: casoRasputin, [casoPeaoEnvenenado.slug]: casoPeaoEnvenenado };
+import { casoJustinNobaind } from "./caso-justin-nobaind";
+export const CASES: Record<string, CaseData> = { [casoDemo.slug]: casoDemo, [caso02.slug]: caso02, [casoOdete.slug]: casoOdete, [casoRasputin.slug]: casoRasputin, [casoPeaoEnvenenado.slug]: casoPeaoEnvenenado, [casoJustinNobaind.slug]: casoJustinNobaind };
 export const DEFAULT_CASE_SLUG = casoDemo.slug;
 export function getCase(slug?: string) { return CASES[slug && slug.length > 0 ? slug : DEFAULT_CASE_SLUG] ?? null; }
 export function listCases() { return Object.values(CASES); }

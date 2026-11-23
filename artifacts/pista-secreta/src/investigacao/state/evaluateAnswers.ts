@@ -37,7 +37,16 @@ export function evaluate(config: ResolvedLocalized<FinalAnswerConfig>, answers: 
     const correct = answered && isCorrect(question, value);
     const fb = question.feedback;
     const feedback = correct ? fb?.correct : answered ? (question.type === "multiple" ? fb?.wrong : (fb?.wrongByOption?.[value] ?? fb?.wrong)) : undefined;
-    return { question, answered, correct, points: correct ? (question.points ?? 0) : 0, feedback };
+    let points = correct ? (question.points ?? 0) : 0;
+    if (!correct && answered && question.type === "multiple" && question.partialCredit) {
+      const selected = parseAnswer(value);
+      const correctOptions = question.correctOptionIds ?? [];
+      const hits = selected.filter((id) => correctOptions.includes(id)).length;
+      const misses = selected.length - hits;
+      const rawScore = hits * question.partialCredit.perCorrect - misses * question.partialCredit.penaltyPerWrong;
+      points = Math.max(0, Math.min(question.points ?? rawScore, rawScore));
+    }
+    return { question, answered, correct, points, feedback };
   });
   const total = results.reduce((sum, r) => sum + r.points, 0);
   const max = config.questions.reduce((sum, q) => sum + (q.points ?? 0), 0);

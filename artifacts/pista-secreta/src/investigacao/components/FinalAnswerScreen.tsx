@@ -40,7 +40,7 @@ export function FinalAnswerScreen() {
                   <Icon size={16} className="mt-[2px] shrink-0" style={{ color: result.correct ? ACCENT : skipped ? "var(--inv-dim-2)" : "var(--inv-danger)" }} />
                   <span>
                     <span className="inv-mono text-[10px] uppercase tracking-[.14em] text-[var(--inv-dim-2)]">
-                       {result.question.bonus ? t("answer.bonus") : t("answer.question", { number: index + 1 })}{result.answered ? "" : t("answer.noAnswer")}
+                      {result.question.bonus ? t("answer.bonus") : t("answer.question", { number: index + 1 })}{result.answered ? "" : t("answer.noAnswer")}{result.question.partialCredit && result.answered ? ` · ${result.points}/${result.question.points} pts` : ""}
                     </span>
                     {result.feedback && <span className="block pt-1 text-[var(--inv-dim)]">{result.feedback}</span>}
                   </span>
@@ -48,6 +48,7 @@ export function FinalAnswerScreen() {
               );
             })}
           </ul>
+          {report.image && <img src={report.image.src} alt={report.image.alt} loading="lazy" className="mt-6 w-full rounded-xl border border-[var(--inv-line)]" />}
           {report.subtitle && <p className="inv-mono pt-6 text-[10px] uppercase tracking-[.16em] text-[var(--inv-dim-2)]">{report.subtitle}</p>}
           {report.paragraphs.map((paragraph, index) => (
             <p key={index} className="pt-4 text-[14px] leading-relaxed">{paragraph}</p>
@@ -70,6 +71,7 @@ export function FinalAnswerScreen() {
             <CheckCircle2 size={18} />
             <p className="inv-mono text-[10px] uppercase tracking-[.2em]">{t("answer.solved")}</p>
           </div>
+          {report.image && <img src={report.image.src} alt={report.image.alt} loading="lazy" className="mt-6 w-full rounded-xl border border-[var(--inv-line)]" />}
           {report.subtitle && <p className="inv-mono pt-3 text-[10px] uppercase tracking-[.16em] text-[var(--inv-dim-2)]">{report.subtitle}</p>}
           {report.paragraphs.map((paragraph, index) => (
             <p key={index} className="pt-4 text-[14px] leading-relaxed">{paragraph}</p>

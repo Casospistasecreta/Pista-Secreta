@@ -15,6 +15,7 @@ export type AppId =
   | "bank"
   | "notes"
   | "tabulive"
+  | "calls"
   | "casefile";
 
 /** Uma tela dentro do dispositivo. `view`/`id` são interpretados por cada app. */
@@ -240,7 +241,7 @@ export interface BankData {
   brand: string;
   holder: LocalizedText;
   /** Moeda exibida. Padrão: "BRL" (R$). */
-  currency?: "BRL" | "RUB";
+  currency?: "BRL" | "RUB" | "USD";
   balance: number;
   days: BankDay[];
 }
@@ -326,6 +327,36 @@ export interface CaseData {
   locationStyle?: "map" | "chess";
   /** Dados do app TabuLive (xadrez). Só é usado se "tabulive" estiver em `apps`. */
   tabulive?: TabuLiveData;
+  /** Dados do histórico de chamadas e correio de voz. Só é usado quando "calls" estiver em `apps`. */
+  calls?: CallsData;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chamadas                                                            */
+/* ------------------------------------------------------------------ */
+
+export interface CallEntry {
+  id: string;
+  at: string;
+  kind: "received" | "missed" | "outgoing";
+  name: string;
+  personId?: string;
+  duration?: string;
+  count?: number;
+}
+
+export interface Voicemail {
+  id: string;
+  at: string;
+  name: string;
+  personId?: string;
+  duration: string;
+  transcript: string;
+}
+
+export interface CallsData {
+  recents: CallEntry[];
+  voicemails: Voicemail[];
 }
 
 /* ------------------------------------------------------------------ */
@@ -399,6 +430,8 @@ export interface FinalQuestion {
   points?: number;
   /** Somente com `scoring`: pergunta opcional (não bloqueia o envio). */
   bonus?: boolean;
+  /** Crédito parcial para perguntas de múltipla escolha pontuadas. */
+  partialCredit?: { perCorrect: number; penaltyPerWrong: number };
   /** Somente com `scoring`: textos exibidos no resultado. */
   feedback?: {
     correct?: LocalizedText;
@@ -409,6 +442,8 @@ export interface FinalQuestion {
 }
 
 export interface FinalReport {
+  /** Imagem opcional exibida no relatório final. */
+  image?: { src: string; alt: string };
   title: LocalizedText;
   subtitle?: LocalizedText;
   paragraphs: LocalizedText[];
