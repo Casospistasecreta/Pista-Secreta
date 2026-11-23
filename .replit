@@ -37,4 +37,3 @@ channel = "stable-25_05"
 [userenv]
 
 [userenv.shared]
-PERSONALIZADOS_TEST_CUSTOMER_EMAIL = "PERSONALIZADOS_TEST_CUSTOMER_EMAIL=casospistasecreta@gmail.com"
