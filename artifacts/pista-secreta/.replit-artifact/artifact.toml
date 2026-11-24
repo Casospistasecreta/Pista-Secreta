@@ -18,7 +18,7 @@ localPort = 23677
 run = "pnpm --filter @workspace/pista-secreta run dev"
 
 [services.production]
-build = [ "pnpm", "--filter", "@workspace/pista-secreta", "run", "build" ]
+build = [ "sh", "-c", "pnpm run security:audit && pnpm --filter @workspace/pista-secreta run build" ]
 publicDir = "artifacts/pista-secreta/dist/public"
 serve = "static"
 
