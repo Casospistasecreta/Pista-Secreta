@@ -400,7 +400,7 @@ router.post("/personalizados/briefings", async (req, res) => {
     return;
   }
   if ((body.purpose && !ALLOWED_PURPOSES.has(body.purpose)) ||
-      (body.styles ?? []).some((style) => !ALLOWED_STYLES.has(style))) {
+      (body.styles ?? []).some((style: string) => !ALLOWED_STYLES.has(style))) {
     res.status(400).json({ error: "invalid_options" });
     return;
   }
