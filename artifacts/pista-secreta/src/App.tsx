@@ -800,22 +800,35 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="mb-12 rounded-xl border border-primary/25 bg-white/[0.04] p-6 text-center animate-in fade-in duration-1000 delay-900 fill-mode-both md:p-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">
-            {t("personalized.landingEyebrow")}
-          </p>
-          <h2 className="mt-3 font-serif text-2xl font-bold md:text-3xl">
-            {t("personalized.landingTitle")}
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-muted">
-            {t("personalized.landingDescription")}
-          </p>
-          <Link
-            href="/personalizados"
-            className="mt-6 inline-flex min-h-12 items-center justify-center rounded bg-primary px-6 py-3 font-serif text-sm font-bold text-background transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          >
-            {t("personalized.landingCta")}
-          </Link>
+        <section
+          data-testid="section-personalized-cta"
+          className="relative mb-12 overflow-hidden rounded-lg border border-primary/15 bg-white/[0.025] px-5 py-6 animate-in fade-in duration-1000 delay-900 fill-mode-both md:px-8 md:py-7"
+        >
+          <div className="absolute inset-x-0 top-0 h-px ultraviolet-gradient opacity-60" />
+          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between md:gap-8">
+            <div className="max-w-2xl">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/70">
+                {t("personalized.landingEyebrow")}
+              </p>
+              <h2 className="mt-2 font-serif text-xl font-bold leading-tight md:text-2xl">
+                {t("personalized.landingTitle")}
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                {t("personalized.landingDescription")}
+              </p>
+              <p className="mt-2 text-xs leading-5 text-primary/65">
+                {t("personalized.landingSupport")}
+              </p>
+            </div>
+            <Link
+              data-testid="link-personalized-cta"
+              href="/personalizados"
+              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded border border-primary/35 bg-primary/[0.06] px-5 py-3 font-mono text-xs font-bold tracking-wide text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:self-center"
+            >
+              {t("personalized.landingCta")}
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         </section>
 
         <footer className="mt-12 animate-in fade-in duration-1000 delay-1000">
