@@ -1,5 +1,4 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "SG7WaM2lNJ49mez7TBkbZ"
@@ -24,3 +23,17 @@ id = "KPQOIrsWnIM6yBmlbYEtX"
 uri = "file://artifacts/pista-secreta/public/evidence.png"
 type = "image"
 title = "Evidence items preview"
+
+[[outputs]]
+id = "AlUXiQv1OXpRm-dKq2ijy"
+uri = "file://docs/ux-polish-report.md"
+type = "text"
+title = "Relatório de acabamento e QA"
+description = "Resultados reais de tradução, typecheck, build, revisão responsiva e pendências do Pista Secreta."
+logical_id = "1955af68-01a5-42ca-991e-8a50c3c38168"
+content_hash = "sha256:4e4088e6cc583dc441afa624f49d3ebd22d0aee008a1998ba0e6c8d820e38d19"
+size = 7315
+mtime_ms = 1795509936303
+storage_uri = "gcs://replit-rams-assets-riker/rams/assets/repl:b7428c7d-a3bc-4d27-812a-17d1c882ddfd/1955af68-01a5-42ca-991e-8a50c3c38168/6282db76-d823-48fe-bcaa-df513f3336ae"
+storage_version_token = "1795509982981717"
+content_type = "text/markdown"

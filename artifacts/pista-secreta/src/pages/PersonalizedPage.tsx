@@ -135,11 +135,11 @@ function getApiPath(path: string): string {
 }
 
 function formatCurrency(cents: number, lang: "pt-BR" | "en" | "es"): string {
-  return new Intl.NumberFormat(lang, {
-    style: "currency",
-    currency: "BRL",
+  const amount = new Intl.NumberFormat(lang, {
     minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(cents / 100);
+  return `R$\u00a0${amount}`;
 }
 
 function formatAmount(cents: number, lang: "pt-BR" | "en" | "es"): string {
