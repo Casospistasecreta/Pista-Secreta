@@ -4,12 +4,81 @@
    ================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initUpsellAnalytics();
   initEvidenceThread();
   initScrollReveal();
   initTypewriter();
   initFaqAccordion();
   initSkipLink();
 });
+
+/* ------------------------------------------------------------------
+   Analytics: CTA clicks and provider-confirmed upsell purchases.
+   Only route/variant/action/status are sent; no customer or order data.
+   ------------------------------------------------------------------ */
+function initUpsellAnalytics() {
+  const route = window.location.pathname.replace(/\/$/, '') || '/';
+  const variant = route.endsWith('/upsell2') ? 'upsell2' : 'upsell';
+  let conversionTracked = false;
+
+  function track(name, data) {
+    try {
+      window.umami?.track(name, data);
+    } catch {
+      // Analytics failures must never interrupt the offer or checkout.
+    }
+  }
+
+  function trackConfirmedStatus(status) {
+    if (conversionTracked || (status !== 'paid' && status !== 'authorized')) return;
+    conversionTracked = true;
+    track('upsell_conversion', {
+      route,
+      variant,
+      payment_status: status,
+    });
+  }
+
+  document.addEventListener('click', (event) => {
+    const target = event.target instanceof Element
+      ? event.target
+      : event.target?.parentElement;
+    if (!target) return;
+
+    let action;
+    if (target.closest('[id^="kiwify-upsell-trigger-"]')) action = 'accept';
+    else if (target.closest('[id^="kiwify-upsell-cancel-trigger-"]')) action = 'decline';
+    else if (target.closest('#skipOffer')) action = 'continue_digital';
+
+    if (action) track('upsell_cta_click', { route, variant, action });
+  });
+
+  const originalFetch = window.fetch;
+  if (typeof originalFetch !== 'function') return;
+
+  window.fetch = function (...args) {
+    const requestUrl = typeof args[0] === 'string'
+      ? args[0]
+      : args[0]?.url ?? args[0]?.href ?? '';
+    const isUpsellConfirmation = /\/(?:v2\/charge\/upsell|generate-pix\/upsell|v2\/orders\/[^/]+\/status)(?:[/?#]|$)/.test(requestUrl);
+    const responsePromise = originalFetch.apply(this, args);
+
+    if (!isUpsellConfirmation) return responsePromise;
+
+    return responsePromise.then((response) => {
+      if (response.ok) {
+        response.clone().json().then((payload) => {
+          if (payload && typeof payload.status === 'string') {
+            trackConfirmedStatus(payload.status);
+          }
+        }).catch(() => {
+          // Ignore non-JSON responses from the payment provider.
+        });
+      }
+      return response;
+    });
+  };
+}
 
 /* ------------------------------------------------------------------
    1) FIO DE EVIDÊNCIAS
