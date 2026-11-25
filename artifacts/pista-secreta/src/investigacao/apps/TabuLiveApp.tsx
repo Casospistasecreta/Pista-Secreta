@@ -150,7 +150,7 @@ function FriendScreen({ id }: { id: string }) {
           </div>
         ))}
       </div>
-      <div className="pt-4"><EvidenceToggle accent={ACCENT} item={{ id: `tabulive:friend:${friend.id}`, appId: "tabulive", title: `TabuLive — conversa com ${friend.name}`, subtitle: "TabuLive", target: { app: "tabulive", view: "friend", id: friend.id } }} /></div>
+      <div className="pt-4"><EvidenceToggle accent={ACCENT} item={{ id: `tabulive:friend:${friend.id}`, appId: "tabulive", title: t("tabulive.friendConversation", { name: friend.name }), subtitle: t("app.tabulive"), target: { app: "tabulive", view: "friend", id: friend.id } }} /></div>
     </AppShell>
   );
 }

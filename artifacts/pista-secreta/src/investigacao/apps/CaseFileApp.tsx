@@ -20,6 +20,40 @@ export function CaseFileApp() {
   const t = useT();
   if (current?.view === "answer" && caseData.finalAnswer) return <FinalAnswerScreen />;
   const displayedEvidence = evidence.map((item) => {
+    if (item.appId === "calls" && caseData.calls) {
+      const id = item.id.slice("calls:".length);
+      const call = caseData.calls.recents.find((entry) => entry.id === id);
+      if (call) {
+        const label = call.kind === "missed"
+          ? t("calls.missed")
+          : call.kind === "outgoing" ? t("calls.outgoing") : t("calls.received");
+        return {
+          ...item,
+          title: `${label}${call.count && call.count > 1 ? ` (${call.count})` : ""} · ${call.name}`,
+          subtitle: `${t("app.calls")} · ${call.at}`,
+        };
+      }
+      const voicemail = caseData.calls.voicemails.find((entry) => entry.id === id);
+      if (voicemail) {
+        return {
+          ...item,
+          title: `${t("calls.voicemail")} · ${voicemail.name}`,
+          subtitle: `${t("app.calls")} · ${voicemail.at}`,
+        };
+      }
+      return item;
+    }
+    if (item.appId === "tabulive") {
+      const friendId = item.id.split(":")[2];
+      const friend = caseData.tabulive?.friends.find((entry) => entry.id === friendId);
+      return friend
+        ? {
+            ...item,
+            title: t("tabulive.friendConversation", { name: friend.name }),
+            subtitle: t("app.tabulive"),
+          }
+        : item;
+    }
     if (caseData.slug === "caso-rasputin") {
       const [, firstId, secondId] = item.id.split(":");
       if (item.appId === "messages") {
@@ -139,14 +173,6 @@ export function CaseFileApp() {
       if (item.appId === "notes") {
         const note = caseData.notes.find((entry) => entry.id === firstId);
         return note ? { ...item, title: note.title, subtitle: `${t("app.notes")} · ${note.at}` } : item;
-      }
-      if (item.appId === "tabulive") {
-        const friend = caseData.tabulive?.friends.find((entry) => entry.id === secondId);
-        return friend ? {
-          ...item,
-          title: `${t("tabulive.friends")} — ${friend.name}`,
-          subtitle: labelFor("tabulive", t("app.tabulive")),
-        } : item;
       }
       return item;
     }

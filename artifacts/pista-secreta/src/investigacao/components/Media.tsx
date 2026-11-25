@@ -10,7 +10,7 @@ export function initials(name: string) { const clean = name.replace(/[^\p{L}\s]/
 export function Photo({ media, className = "", rounded = "rounded-xl", showKindBadge = true }: { media: ResolvedLocalized<MediaRef>; className?: string; rounded?: string; showKindBadge?: boolean }) {
   const t = useT();
   const p = palette(media.seed);
-  if (media.src) return <img src={media.src} alt={media.caption ?? (media.takenAt ? `Foto de ${media.takenAt}` : t("gallery.photoFromDevice"))} loading="lazy" decoding="async" className={`h-full w-full object-cover ${rounded} ${className}`} />;
+  if (media.src) return <img src={media.src} alt={media.caption ?? (media.takenAt ? t("media.photoTakenAt", { date: media.takenAt }) : t("gallery.photoFromDevice"))} loading="lazy" decoding="async" className={`h-full w-full object-cover ${rounded} ${className}`} />;
   return <div className={`relative h-full w-full overflow-hidden ${rounded} ${className}`} style={{ background: `linear-gradient(${p.angle}deg, ${p.a}, ${p.b})` }} aria-hidden="true"><div className="absolute inset-0" style={{ background: `radial-gradient(60% 60% at ${p.x}% ${p.y}%, ${p.c}, transparent 70%)` }} /><div className="absolute inset-0 flex items-center justify-center">{media.kind === "video" ? <Video size={18} className="opacity-25" /> : <ImageIcon size={18} className="opacity-25" />}</div>{showKindBadge && media.kind === "video" && <span className="inv-mono absolute bottom-1.5 right-2 text-[10px] tracking-wide opacity-70">{media.durationSec ? `0:${String(media.durationSec).padStart(2, "0")}` : t("shared.video")}</span>}</div>;
 }
 export function Avatar({ name, seed, src, size = 44, ring = false }: { name: string; seed: string; src?: string; size?: number; ring?: boolean }) {

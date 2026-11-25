@@ -34,7 +34,7 @@ function CallRow({ call }: { call: CallEntry }) {
         <span className="inv-mono shrink-0 text-right text-[10px] text-[var(--inv-dim-2)]">{call.at}</span>
       </div>
       <div className="pl-[54px] pt-2">
-        <EvidenceToggle compact accent={ACCENT} item={{ id: `calls:${call.id}`, appId: "calls", title: `${label} · ${call.name}${call.duration ? ` · ${call.duration}` : ""}`, subtitle: `Chamadas · ${call.at}`, target: { app: "calls", view: "recents" } }} />
+        <EvidenceToggle compact accent={ACCENT} item={{ id: `calls:${call.id}`, appId: "calls", title: `${label} · ${call.name}${call.duration ? ` · ${call.duration}` : ""}`, subtitle: `${t("app.calls")} · ${call.at}`, target: { app: "calls", view: "recents" } }} />
       </div>
     </li>
   );
@@ -58,7 +58,7 @@ function VoicemailRow({ voicemail }: { voicemail: Voicemail }) {
         <p className="whitespace-pre-line text-[14px] leading-snug">{voicemail.transcript}</p>
       </div>
       <div className="pt-2.5">
-        <EvidenceToggle compact accent={ACCENT} item={{ id: `calls:${voicemail.id}`, appId: "calls", title: `Correio de voz · ${voicemail.name}`, subtitle: `Chamadas · ${voicemail.at}`, target: { app: "calls", view: "voicemail" } }} />
+        <EvidenceToggle compact accent={ACCENT} item={{ id: `calls:${voicemail.id}`, appId: "calls", title: `${t("calls.voicemail")} · ${voicemail.name}`, subtitle: `${t("app.calls")} · ${voicemail.at}`, target: { app: "calls", view: "voicemail" } }} />
       </div>
     </li>
   );
