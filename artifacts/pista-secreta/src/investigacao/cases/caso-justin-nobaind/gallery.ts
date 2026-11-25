@@ -43,4 +43,8 @@ export const gallery: GalleryGroup[] = STAMPS.reduce<GalleryGroup[]>((groups, st
   if (last && last.id === `g-${date}`) last.items.push(photoFor(stamp));
   else groups.push({ id: `g-${date}`, label: dateLabel(date), items: [photoFor(stamp)] });
   return groups;
-}, []);
+}, []).map((group) =>
+  // As fotos de 08 MAI (a fuga) são o maior spoiler do aparelho: ficam trancadas. A senha (9 de novembro, dia em que Justin
+  // ganhou a primeira guitarra) está numa conversa do Papai, em Mensagens (05 MAR).
+  group.id === "g-19940508" ? { ...group, lock: { passcode: "0911", hint: "O dia em que Justin ganhou a primeira guitarra (dia e mês)." } } : group,
+);

@@ -1,11 +1,14 @@
 import type { Conversation, Message } from "../../types";
 import { asset } from "./helpers";
+import { withExtras } from "./messages-extra";
 
 /*
  * Mensagens (roteiro 5.1 a 5.3). Formato de data: "07 MAI · 22:48" (padrão do motor). Todos os registros são de 1994.
  * Mensagens marcadas [Entregue] no roteiro (recebidas depois da "morte" e nunca lidas) = contador de não lidas.
  *
  * AJUSTES SOBRE O ROTEIRO (todos pequenos, para o caso fechar):
+ *  - Os dois "números desconhecidos" viraram duas conversas (A e B), cada uma com seu número. O prefixo "(Número A)"/"(Número B)" saiu do texto
+ *    porque agora o nome da conversa já diz quem é.
  *  - Mamãe, 29 ABR: Justin passou de "Vou só." para "Levo, sim." porque a foto do jantar de 06 MAI (IMG_19940506_2030)
  *    mostra Katherine à mesa.
  *  - Katherine, 07 MAI 21:44: "Vai dormir, Kat." virou "Dirige com calma, Kat." (ela já tinha saído às 21h10 e estava na estrada).
@@ -15,7 +18,7 @@ import { asset } from "./helpers";
 const them = (id: string, at: string, text: string): Message => ({ id, from: "them", at, text });
 const me = (id: string, at: string, text: string): Message => ({ id, from: "victim", at, text });
 
-export const messages: Conversation[] = [
+const baseMessages: Conversation[] = [
   {
     id: "c-mamae",
     person: { id: "p-mamae", name: "Mamãe", avatarSeed: "mamae", avatarSrc: asset("mensagens/mamae.webp") },
@@ -225,12 +228,20 @@ export const messages: Conversation[] = [
   },
   {
     id: "c-desconhecidos",
-    person: { id: "p-desc", name: "Números desconhecidos", avatarSeed: "desconhecido", avatarSrc: asset("mensagens/desconhecido.webp") },
+    person: { id: "p-desc", name: "Número desconhecido A", avatarSeed: "desconhecido", avatarSrc: asset("mensagens/desconhecido.webp") },
+    preview: "Sai do jogo ou o jogo sai de você. Um amigo.",
+    time: "06 MAI",
+    messages: [
+      them("m01", "06 MAI · 03:12", "Sai do jogo ou o jogo sai de você. Um amigo."),
+    ],
+  },
+  {
+    id: "c-desconhecido-b",
+    person: { id: "p-desc-b", name: "Número desconhecido B", avatarSeed: "desconhecido-b", avatarSrc: asset("mensagens/desconhecido.webp") },
     preview: "Sei que você tem namorada. Mas eu sei cantar todas as suas músicas. — L.",
     time: "07 MAI",
     messages: [
-      them("m01", "06 MAI · 03:12", "(Número A) Sai do jogo ou o jogo sai de você. Um amigo."),
-      them("m02", "07 MAI · 17:45", "(Número B) Sei que você tem namorada. Mas eu sei cantar todas as suas músicas. — L."),
+      them("m01", "07 MAI · 17:45", "Sei que você tem namorada. Mas eu sei cantar todas as suas músicas. — L."),
     ],
   },
   {
@@ -257,3 +268,6 @@ export const messages: Conversation[] = [
     ],
   },
 ];
+
+/** Conversas finais: as do roteiro + as mensagens extras do pacote de atualização (messages-extra.ts), intercaladas por data. */
+export const messages: Conversation[] = baseMessages.map(withExtras);
