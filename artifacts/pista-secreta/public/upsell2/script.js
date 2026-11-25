@@ -36,7 +36,9 @@ function initEvidenceThread() {
 
     if (statusEl) {
       const currentIndex = Math.max(1, Math.ceil(progress * totalSections));
-      statusEl.textContent = `ARQUIVO ${String(currentIndex).padStart(2, '0')} / ${totalSections}`;
+      statusEl.textContent = window.upsellI18n
+        ? window.upsellI18n.formatProgress(currentIndex, totalSections)
+        : `ARQUIVO ${String(currentIndex).padStart(2, '0')} / ${totalSections}`;
     }
 
     ticking = false;
@@ -48,6 +50,7 @@ function initEvidenceThread() {
       ticking = true;
     }
   }, { passive: true });
+  window.addEventListener('upsell-language-change', update);
 
   update();
 }
@@ -88,16 +91,22 @@ function initTypewriter() {
   const section = document.getElementById('s2');
   if (!target || !section) return;
 
-  const fullText = 'Existe uma parte deste caso que o arquivo digital não consegue entregar.';
+  let fullText = window.upsellI18n
+    ? window.upsellI18n.text("interruptText")
+    : 'Existe uma parte deste caso que o arquivo digital não consegue entregar.';
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let hasTyped = false;
+
+  window.addEventListener('upsell-language-change', () => {
+    fullText = window.upsellI18n ? window.upsellI18n.text("interruptText") : fullText;
+    if (hasTyped || prefersReducedMotion) target.textContent = fullText;
+  });
 
   if (prefersReducedMotion) {
     target.textContent = fullText;
     if (cursor) cursor.style.display = 'none';
     return;
   }
-
-  let hasTyped = false;
 
   const observer = new IntersectionObserver(
     (entries) => {

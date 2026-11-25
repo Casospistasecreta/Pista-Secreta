@@ -125,6 +125,19 @@ a { color: var(--gold); }
   backdrop-filter: blur(2px);
 }
 .case-bar__status { color: var(--gold); }
+.language-select {
+  max-width: 8.5rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid rgba(237, 231, 214, 0.22);
+  border-radius: 3px;
+  background: rgba(18, 19, 15, 0.92);
+  color: var(--bone);
+  font: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+}
+.language-select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
 /* ==================================================================
    ESTRUTURA GERAL DE SEÇÃO
@@ -560,6 +573,8 @@ main { position: relative; z-index: 2; }
 @media (max-width: 480px) {
   .stamp { position: static; display: inline-block; margin-bottom: 1.6rem; transform: rotate(-4deg); }
   .offer__price { gap: 0.6rem; }
+  .case-bar { gap: 0.45rem; padding-inline: 0.8rem; font-size: 0.58rem; }
+  .language-select { max-width: 7.2rem; padding: 0.3rem 0.25rem; font-size: 0.66rem; }
 }
 
 /* respeita usuários que pedem menos movimento */
