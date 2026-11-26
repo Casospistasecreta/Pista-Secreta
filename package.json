@@ -7,7 +7,8 @@
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
-    "security:audit": "pnpm audit --audit-level=high"
+    "security:audit": "pnpm audit --audit-level=high",
+    "test:security-build-gate": "python3 scripts/test-security-build-gate.py"
   },
   "private": true,
   "devDependencies": {
