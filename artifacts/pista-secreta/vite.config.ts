@@ -27,14 +27,41 @@ if (!basePath) {
   );
 }
 
-// Plugin that serves static HTML pages under /upsell/ and /upsell2/
-// before Vite's SPA fallback can intercept them.
+const upsellTemplatePath = path.resolve(
+  import.meta.dirname,
+  "public/upsell/index.html",
+);
+
+const upsellVariants = {
+  upsell: { basePath: "/upsell/", kiwifyId: "GsjGxdn" },
+  // Kiwify issues a separate identifier for each checkout offer.
+  upsell2: { basePath: "/upsell2/", kiwifyId: "rHmD3pb" },
+} as const;
+
+function renderUpsellPage(variant: keyof typeof upsellVariants): string {
+  const template = fs.readFileSync(upsellTemplatePath, "utf8");
+  const config = upsellVariants[variant];
+
+  if (
+    !template.includes('<base href="/upsell/">') ||
+    !template.includes("GsjGxdn")
+  ) {
+    throw new Error("The shared upsell page is missing its route or checkout marker.");
+  }
+
+  return template
+    .replace('<base href="/upsell/">', `<base href="${config.basePath}">`)
+    .replaceAll("GsjGxdn", config.kiwifyId);
+}
+
+// Serve the shared offer template in development and emit the second
+// Kiwify-specific route in the production build.
 function staticHtmlPlugin(): import("vite").Plugin {
-  const staticRoutes: Record<string, string> = {
-    "/upsell/": path.resolve(import.meta.dirname, "public/upsell/index.html"),
-    "/upsell": path.resolve(import.meta.dirname, "public/upsell/index.html"),
-    "/upsell2/": path.resolve(import.meta.dirname, "public/upsell2/index.html"),
-    "/upsell2": path.resolve(import.meta.dirname, "public/upsell2/index.html"),
+  const staticRoutes: Record<string, keyof typeof upsellVariants> = {
+    "/upsell/": "upsell",
+    "/upsell": "upsell",
+    "/upsell2/": "upsell2",
+    "/upsell2": "upsell2",
   };
 
   return {
@@ -42,13 +69,20 @@ function staticHtmlPlugin(): import("vite").Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url?.split("?")[0] ?? "";
-        const filePath = staticRoutes[url];
-        if (filePath && fs.existsSync(filePath)) {
+        const variant = staticRoutes[url];
+        if (variant) {
           res.setHeader("Content-Type", "text/html; charset=utf-8");
-          res.end(fs.readFileSync(filePath));
+          res.end(renderUpsellPage(variant));
           return;
         }
         next();
+      });
+    },
+    generateBundle() {
+      this.emitFile({
+        type: "asset",
+        fileName: "upsell2/index.html",
+        source: renderUpsellPage("upsell2"),
       });
     },
   };
