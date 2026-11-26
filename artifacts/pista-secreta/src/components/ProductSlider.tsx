@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MessageSquare, Users, Play, Laptop, Smartphone, Fingerprint, Search, HelpCircle } from "lucide-react";
 import { useT, type TranslationKey } from "@/i18n/LanguageProvider";
+import { trackEvent } from "@/lib/analytics";
 
 type Slide =
   | { type: "photo"; src: string; captionKey: TranslationKey }
@@ -129,9 +130,27 @@ function GraphicSlide({ kind, t }: { kind: Extract<Slide, { type: "graphic" }>["
 export function ProductSlider() {
   const t = useT();
   const [current, setCurrent] = useState(0);
+  const viewedSlides = useRef(new Set<number>());
 
-  const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length);
-  const next = () => setCurrent((c) => (c + 1) % slides.length);
+  useEffect(() => {
+    if (viewedSlides.current.has(current)) return;
+    viewedSlides.current.add(current);
+    trackEvent("product_content_view", {
+      slide_index: current + 1,
+      content_type: slides[current].type,
+    });
+  }, [current]);
+
+  const goTo = (nextIndex: number) => {
+    if (nextIndex === current) return;
+    trackEvent("product_content_navigation", {
+      from_slide: current + 1,
+      to_slide: nextIndex + 1,
+    });
+    setCurrent(nextIndex);
+  };
+  const prev = () => goTo((current - 1 + slides.length) % slides.length);
+  const next = () => goTo((current + 1) % slides.length);
 
   return (
     <section className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500 fill-mode-both">
@@ -188,7 +207,7 @@ export function ProductSlider() {
           {slides.map((_, i) => (
             <button
               key={i}
-              onClick={() => setCurrent(i)}
+              onClick={() => goTo(i)}
               aria-label={`${t("slider.viewSlide")} ${i + 1}`}
               className="p-2 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
             >

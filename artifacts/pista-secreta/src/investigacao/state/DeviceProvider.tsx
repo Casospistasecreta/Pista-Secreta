@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import { trackEvent } from "@/lib/analytics";
 import { resolveLocalized, type ResolvedLocalized } from "@/i18n/types";
 import type { AppId, CaseData, EvidenceItem, Screen } from "../types";
 
@@ -92,22 +93,70 @@ export function DeviceProvider({
     }
   }, [localizedCaseData.slug, evidence, unlocked]);
 
-  const open = useCallback((screen: Screen) => setStack((prev) => [...prev, screen]), []);
-  const back = useCallback(() => setStack((prev) => prev.slice(0, -1)), []);
-  const goHome = useCallback(() => setStack([]), []);
+  const open = useCallback((screen: Screen) => {
+    trackEvent("investigation_navigation", {
+      case_id: localizedCaseData.slug,
+      app_id: screen.app,
+      action: screen.view ? "open_view" : "open_app",
+      view_type: screen.view ?? "home",
+    });
+    setStack((prev) => [...prev, screen]);
+  }, [localizedCaseData.slug]);
+  const back = useCallback(() => {
+    const screen = stack[stack.length - 1];
+    if (screen) {
+      trackEvent("investigation_navigation", {
+        case_id: localizedCaseData.slug,
+        app_id: screen.app,
+        action: "back",
+        view_type: screen.view ?? "home",
+      });
+    }
+    setStack((prev) => prev.slice(0, -1));
+  }, [localizedCaseData.slug, stack]);
+  const goHome = useCallback(() => {
+    const screen = stack[stack.length - 1];
+    if (screen) {
+      trackEvent("investigation_navigation", {
+        case_id: localizedCaseData.slug,
+        app_id: screen.app,
+        action: "go_home",
+        view_type: screen.view ?? "home",
+      });
+    }
+    setStack([]);
+  }, [localizedCaseData.slug, stack]);
   const replace = useCallback(
-    (screen: Screen) => setStack((prev) => (prev.length === 0 ? [screen] : [...prev.slice(0, -1), screen])),
-    [],
+    (screen: Screen) => {
+      trackEvent("investigation_navigation", {
+        case_id: localizedCaseData.slug,
+        app_id: screen.app,
+        action: "replace_view",
+        view_type: screen.view ?? "home",
+      });
+      setStack((prev) => (prev.length === 0 ? [screen] : [...prev.slice(0, -1), screen]));
+    },
+    [localizedCaseData.slug],
   );
   const unlockDevice = useCallback(
     (code: string) => {
       if (code === localizedCaseData.device.passcode) {
         setDeviceUnlocked(true);
+        let alreadyStarted = false;
+        try {
+          alreadyStarted = window.sessionStorage.getItem(`pista-secreta:analytics:started:${localizedCaseData.slug}`) === "1";
+          if (!alreadyStarted) {
+            window.sessionStorage.setItem(`pista-secreta:analytics:started:${localizedCaseData.slug}`, "1");
+          }
+        } catch {
+          // The event remains useful when browser storage is unavailable.
+        }
+        if (!alreadyStarted) trackEvent("investigation_start", { case_id: localizedCaseData.slug });
         return true;
       }
       return false;
     },
-    [localizedCaseData.device.passcode],
+    [localizedCaseData.device.passcode, localizedCaseData.slug],
   );
   const lockDevice = useCallback(() => {
     setDeviceUnlocked(false);
@@ -116,21 +165,39 @@ export function DeviceProvider({
   const isUnlocked = useCallback((key: string) => unlocked.includes(key), [unlocked]);
   const tryUnlock = useCallback((key: string, code: string, expected: string) => {
     if (code.trim() !== expected) return false;
+    if (!unlocked.includes(key)) {
+      trackEvent("investigation_clue_unlocked", {
+        case_id: localizedCaseData.slug,
+        app_id: key.split(":")[0] ?? "unknown",
+      });
+    }
     setUnlocked((prev) => (prev.includes(key) ? prev : [...prev, key]));
     return true;
-  }, []);
+  }, [localizedCaseData.slug, unlocked]);
   const grantUnlock = useCallback((key: string) => {
+    if (!unlocked.includes(key)) {
+      trackEvent("investigation_clue_unlocked", {
+        case_id: localizedCaseData.slug,
+        app_id: key.split(":")[0] ?? "unknown",
+      });
+    }
     setUnlocked((prev) => (prev.includes(key) ? prev : [...prev, key]));
-  }, []);
+  }, [localizedCaseData.slug, unlocked]);
   const labelFor = useCallback((id: AppId, fallback: string) => localizedCaseData.appLabels?.[id] ?? fallback, [localizedCaseData.appLabels]);
   const isEvidence = useCallback((id: string) => evidence.some((item) => item.id === id), [evidence]);
   const toggleEvidence = useCallback((item: EvidenceItem) => {
+    const removing = evidence.some((existing) => existing.id === item.id);
+    trackEvent("investigation_evidence_toggle", {
+      case_id: localizedCaseData.slug,
+      app_id: item.appId,
+      action: removing ? "remove" : "save",
+    });
     setEvidence((prev) =>
       prev.some((existing) => existing.id === item.id)
         ? prev.filter((existing) => existing.id !== item.id)
         : [...prev, item],
     );
-  }, []);
+  }, [evidence, localizedCaseData.slug]);
   const removeEvidence = useCallback((id: string) => setEvidence((prev) => prev.filter((item) => item.id !== id)), []);
   const clearEvidence = useCallback(() => setEvidence([]), []);
 

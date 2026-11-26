@@ -195,6 +195,20 @@ const ptBR = {
   "photos.thumbnails": "Miniaturas das fotos",
   "photos.view": "Ver foto {number}",
   "chessboard.label": "Tabuleiro de xadrez",
+  "analytics.consent.title": "Suas preferências de privacidade",
+  "analytics.consent.description": "Usamos ferramentas opcionais para entender o uso do site e melhorar as campanhas. Elas só são ativadas com sua autorização; você pode mudar sua escolha depois.",
+  "analytics.consent.necessary": "Armazenamento necessário",
+  "analytics.consent.necessaryDescription": "Lembra sua escolha e dados locais necessários ao app, como idioma, progresso e rascunhos. Eles não são enviados aos provedores de analytics.",
+  "analytics.consent.analytics": "Medição de uso",
+  "analytics.consent.analyticsDescription": "Permite medir páginas, navegação e interações sem enviar respostas ou dados de contato.",
+  "analytics.consent.marketing": "Marketing",
+  "analytics.consent.marketingDescription": "Permite que o Pixel da Meta meça interações para avaliar campanhas.",
+  "analytics.consent.settingsDescription": "Escolha quais ferramentas opcionais podem ser ativadas.",
+  "analytics.consent.acceptAll": "Aceitar opcionais",
+  "analytics.consent.rejectOptional": "Recusar opcionais",
+  "analytics.consent.customize": "Personalizar",
+  "analytics.consent.save": "Salvar preferências",
+  "analytics.consent.manage": "Configurações de privacidade",
 } as const;
 
 export default ptBR;

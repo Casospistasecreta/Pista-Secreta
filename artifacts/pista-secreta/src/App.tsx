@@ -16,7 +16,8 @@ import case2Image from "@assets/2.png";
 import case3Image from "@assets/caso-dona-odete.jpg";
 import { ProductSlider } from "@/components/ProductSlider";
 import { TestimonialsSlider } from "@/components/TestimonialsSlider";
-import { trackClickBuy, trackViewCase, type CaseName } from "@/lib/analytics";
+import { hasAnalyticsConsent, trackClickBuy, trackEvent, trackViewCase, type CaseName } from "@/lib/analytics";
+import { AnalyticsManager } from "@/components/AnalyticsManager";
 import { LanguageProvider, useLanguage, useT } from "@/i18n/LanguageProvider";
 import { LanguageSwitcher } from "@/i18n/LanguageSwitcher";
 import { updatePageMetadata } from "@/i18n/metadata";
@@ -210,9 +211,11 @@ function LandingPage() {
 
   const handleSignup = () => {
     if (!email || !email.includes("@")) {
+      trackEvent("newsletter_validation_error", { error_type: "invalid_email" });
       setError(true);
       return;
     }
+    trackEvent("newsletter_submit_attempt", { form_id: "landing_newsletter" });
     setError(false);
     setSuccess(true);
     setEmail("");
@@ -226,12 +229,14 @@ function LandingPage() {
       value: caseInfo.value,
     });
 
-    fetch(getApiPath("api/analytics/purchase-click"), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ destination }),
-      keepalive: true,
-    }).catch(() => {});
+    if (hasAnalyticsConsent()) {
+      fetch(getApiPath("api/analytics/purchase-click"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ destination }),
+        keepalive: true,
+      }).catch(() => {});
+    }
   };
 
   return (
@@ -925,6 +930,7 @@ function ClerkProviderWithRoutes() {
     >
       <ClerkQueryClientCacheInvalidator />
       <Router />
+      <AnalyticsManager />
       <Toaster />
     </ClerkProvider>
   );

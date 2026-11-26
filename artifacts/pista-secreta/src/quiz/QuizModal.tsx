@@ -100,6 +100,22 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
   }, [open]);
 
   useEffect(() => {
+    if (open) quizTrack.view();
+  }, [open]);
+
+  useEffect(() => {
+    if (open && typeof step === "number") quizTrack.questionView(step + 1);
+  }, [open, step]);
+
+  const wasOpenRef = useRef(open);
+  useEffect(() => {
+    if (wasOpenRef.current && !open && step !== "result") {
+      quizTrack.abandon(typeof step === "number" ? step + 1 : 0);
+    }
+    wasOpenRef.current = open;
+  }, [open, step]);
+
+  useEffect(() => {
     if (!open) return;
     scrollRef.current?.scrollTo({ top: 0, behavior: "auto" });
     headingRef.current?.focus({ preventScroll: true });
@@ -125,7 +141,7 @@ export function QuizModal({ open, source, onOpenChange }: Props) {
     const nextAnswers = [...answers];
     nextAnswers[questionIndex] = optionId;
     setAnswers(nextAnswers);
-    quizTrack.questionAnswered(questionIndex + 1, `${questionIndex + 1}${optionId}`);
+    quizTrack.questionAnswered(questionIndex + 1, optionId);
 
     advanceTimer.current = window.setTimeout(() => {
       if (questionIndex < total - 1) {

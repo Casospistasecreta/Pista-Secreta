@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { FinalAnswerConfig } from "../types";
 import type { ResolvedLocalized } from "@/i18n/types";
 import { encodeAnswer, isCorrect, parseAnswer } from "./evaluateAnswers";
+import { trackInvestigationCompleted } from "@/lib/analytics";
 
 interface Persisted {
   answers: Record<string, string>;
@@ -25,6 +26,10 @@ function read(slug: string): Persisted {
   } catch {
     return empty;
   }
+}
+
+export function isFinalAnswerSolved(slug: string): boolean {
+  return read(slug).solved;
 }
 
 /**
@@ -65,14 +70,18 @@ export function useFinalAnswer(slug: string) {
   const submit = useCallback(
     (config: ResolvedLocalized<FinalAnswerConfig>) => {
       if (config.scoring) {
+        if (!state.solved) trackInvestigationCompleted(slug);
         setState((prev) => ({ ...prev, solved: true }));
         return true;
       }
       const allCorrect = config.questions.every((q) => isCorrect(q, state.answers[q.id]));
-      if (allCorrect) setState((prev) => ({ ...prev, solved: true }));
+      if (allCorrect) {
+        if (!state.solved) trackInvestigationCompleted(slug);
+        setState((prev) => ({ ...prev, solved: true }));
+      }
       return allCorrect;
     },
-    [state.answers],
+    [slug, state.answers, state.solved],
   );
 
   /** Volta ao formulário mantendo as respostas já marcadas (modo com pontuação). */

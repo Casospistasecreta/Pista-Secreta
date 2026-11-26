@@ -11,11 +11,12 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import { useEffect, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { Link } from "wouter";
 import { LanguageSwitcher } from "@/i18n/LanguageSwitcher";
 import { updatePageMetadata } from "@/i18n/metadata";
 import { useLanguage, useT, type TranslationKey } from "@/i18n/LanguageProvider";
+import { trackEvent, trackStandardMetaEvent } from "@/lib/analytics";
 
 type Product = keyof typeof PERSONALIZED_PRODUCTS;
 type UploadedReference = { uploadId: string; name: string; size: number };
@@ -242,6 +243,29 @@ function PersonalizedForm({
   const [formError, setFormError] = useState<string | null>(null);
   const [honeypot, setHoneypot] = useState("");
   const [result, setResult] = useState<{ customerEmailSent: boolean } | null>(null);
+  const currentStepRef = useRef(step);
+  const touchedCategories = useRef(new Set<string>());
+  const submittedRef = useRef(false);
+  currentStepRef.current = step;
+
+  useEffect(() => {
+    trackEvent("personalized_form_start", { product_type: product });
+    return () => {
+      if (!submittedRef.current) {
+        trackEvent("personalized_form_abandon", {
+          product_type: product,
+          step_number: currentStepRef.current + 1,
+        });
+      }
+    };
+  }, [product]);
+
+  useEffect(() => {
+    trackEvent("personalized_form_step_view", {
+      product_type: product,
+      step_number: step + 1,
+    });
+  }, [product, step]);
 
   const productNameKey: TranslationKey =
     product === "digital"
@@ -270,6 +294,21 @@ function PersonalizedForm({
   }, [lang, productNameKey, t]);
 
   function updateField<Key extends keyof BriefingFields>(key: Key, value: BriefingFields[Key]) {
+    const fieldKey = String(key);
+    const category = ["name", "email", "whatsapp"].includes(fieldKey)
+      ? "contact"
+      : fieldKey.startsWith("story") || fieldKey.startsWith("characters") || fieldKey === "additionalInfo"
+        ? "creative_brief"
+        : fieldKey.startsWith("consent")
+          ? "consent"
+          : "preferences";
+    if (!touchedCategories.current.has(category)) {
+      touchedCategories.current.add(category);
+      trackEvent("personalized_form_field_interaction", {
+        product_type: product,
+        field_category: category,
+      });
+    }
     setFormError(null);
     setFields((current) => ({ ...current, [key]: value }));
   }
@@ -370,15 +409,18 @@ function PersonalizedForm({
     if (!fields.name.trim() || !fields.email.trim() || fields.whatsapp.trim().length < 6) {
       setFormError("personalized.contactRequired");
       setStep(5);
+      trackEvent("personalized_form_validation_error", { product_type: product, error_type: "contact_required" });
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email.trim())) {
       setFormError("personalized.emailInvalid");
       setStep(5);
+      trackEvent("personalized_form_validation_error", { product_type: product, error_type: "invalid_email" });
       return;
     }
     if (!fields.consentProject || !fields.consentPrivacy) {
       setFormError("personalized.invalidRequest");
+      trackEvent("personalized_form_validation_error", { product_type: product, error_type: "required_consent_missing" });
       return;
     }
 
@@ -400,14 +442,25 @@ function PersonalizedForm({
       if (!response.ok) {
         if (response.status === 429) {
           setFormError("personalized.rateLimited");
+          trackEvent("personalized_form_submit_error", { product_type: product, error_type: "rate_limited" });
         } else if (response.status === 401) {
           setFormError("personalized.referencesLogin");
+          trackEvent("personalized_form_submit_error", { product_type: product, error_type: "authentication_required" });
         } else {
           setFormError("personalized.submitError");
+          trackEvent("personalized_form_submit_error", { product_type: product, error_type: "server_rejected" });
         }
         return;
       }
       const saved = (await response.json()) as { customerEmailSent?: boolean };
+      submittedRef.current = true;
+      trackEvent("personalized_form_submit", {
+        product_type: product,
+        language: lang,
+        attachments_count: uploads.length,
+      });
+      trackEvent("generate_lead", { product_type: product, currency: "BRL" });
+      trackStandardMetaEvent("Lead", { content_name: product, content_type: "product" });
       setResult({ customerEmailSent: saved.customerEmailSent === true });
       try {
         window.sessionStorage.removeItem(DRAFT_STORAGE_KEY);
@@ -416,6 +469,7 @@ function PersonalizedForm({
       }
     } catch {
       setFormError("personalized.submitError");
+      trackEvent("personalized_form_submit_error", { product_type: product, error_type: "network_error" });
     } finally {
       setSubmitting(false);
     }
@@ -784,7 +838,10 @@ function PersonalizedForm({
         <button
           data-testid="button-briefing-previous"
           type="button"
-          onClick={() => setStep((current) => Math.max(0, current - 1))}
+          onClick={() => {
+            trackEvent("personalized_form_step_back", { product_type: product, step_number: step + 1 });
+            setStep((current) => Math.max(0, current - 1));
+          }}
           disabled={step === 0 || uploading || submitting}
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-primary/30 px-5 py-3 text-sm font-semibold transition hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 disabled:invisible"
         >
@@ -795,7 +852,13 @@ function PersonalizedForm({
           <button
             data-testid="button-briefing-next"
             type="button"
-            onClick={() => setStep((current) => Math.min(STEPS.length - 1, current + 1))}
+            onClick={() => {
+              trackEvent("personalized_form_step_complete", {
+                product_type: product,
+                step_number: step + 1,
+              });
+              setStep((current) => Math.min(STEPS.length - 1, current + 1));
+            }}
             disabled={uploading || submitting}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded bg-primary px-5 py-3 text-sm font-bold text-background transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-60"
           >
@@ -1066,7 +1129,10 @@ export default function PersonalizedPage() {
                 <button
                   data-testid={`button-select-product-${product.id}`}
                   type="button"
-                  onClick={() => setSelectedProduct(product.id)}
+                  onClick={() => {
+                    trackEvent("personalized_product_select", { product_type: product.id });
+                    setSelectedProduct(product.id);
+                  }}
                   className="mt-auto inline-flex min-h-12 items-center justify-center gap-2 rounded bg-primary px-4 py-3 text-sm font-bold text-background transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   {t(product.button)}

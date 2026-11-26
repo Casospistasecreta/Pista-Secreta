@@ -9,6 +9,17 @@ import { db, purchaseClickEventsTable } from "@workspace/db";
 
 const router: IRouter = Router();
 
+function safeReferrerOrigin(value: string | undefined): string | null {
+  if (!value) return null;
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return null;
+    return parsed.origin;
+  } catch {
+    return null;
+  }
+}
+
 async function getTotalClicks() {
   const [result] = await db.select({ value: count() }).from(purchaseClickEventsTable);
   return result?.value ?? 0;
@@ -20,8 +31,8 @@ router.post("/analytics/purchase-click", async (req, res, next) => {
 
     await db.insert(purchaseClickEventsTable).values({
       destination: body.destination ?? "https://kiwify.app/CzueX7E",
-      referrer: req.get("referer") ?? null,
-      userAgent: req.get("user-agent") ?? null,
+      referrer: safeReferrerOrigin(req.get("referer")),
+      userAgent: null,
     });
 
     const totalClicks = await getTotalClicks();

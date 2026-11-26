@@ -195,6 +195,20 @@ const es = {
   "photos.thumbnails": "Miniaturas de fotos",
   "photos.view": "Ver foto {number}",
   "chessboard.label": "Tablero de ajedrez",
+  "analytics.consent.title": "Tus opciones de privacidad",
+  "analytics.consent.description": "Usamos herramientas opcionales para entender cómo se utiliza el sitio y mejorar las campañas. Solo se activan con tu autorización y puedes cambiar tu elección después.",
+  "analytics.consent.necessary": "Almacenamiento necesario",
+  "analytics.consent.necessaryDescription": "Recuerda tu elección y los datos locales necesarios para la app, como el idioma, el progreso y los borradores. No se envían a proveedores de analítica.",
+  "analytics.consent.analytics": "Medición de uso",
+  "analytics.consent.analyticsDescription": "Permite medir páginas, navegación e interacciones sin enviar respuestas ni datos de contacto.",
+  "analytics.consent.marketing": "Marketing",
+  "analytics.consent.marketingDescription": "Permite que Meta Pixel mida interacciones para evaluar campañas.",
+  "analytics.consent.settingsDescription": "Elige qué herramientas opcionales pueden activarse.",
+  "analytics.consent.acceptAll": "Aceptar opcionales",
+  "analytics.consent.rejectOptional": "Rechazar opcionales",
+  "analytics.consent.customize": "Personalizar",
+  "analytics.consent.save": "Guardar preferencias",
+  "analytics.consent.manage": "Configuración de privacidad",
 } as const;
 
 export default es;

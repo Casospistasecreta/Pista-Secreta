@@ -195,6 +195,20 @@ const en = {
   "photos.thumbnails": "Photo thumbnails",
   "photos.view": "View photo {number}",
   "chessboard.label": "Chessboard",
+  "analytics.consent.title": "Your privacy choices",
+  "analytics.consent.description": "We use optional tools to understand how the site is used and improve campaigns. They are enabled only with your permission, and you can change your choice later.",
+  "analytics.consent.necessary": "Necessary storage",
+  "analytics.consent.necessaryDescription": "Remembers your choice and local data needed by the app, such as language, progress, and drafts. These are not sent to analytics providers.",
+  "analytics.consent.analytics": "Usage measurement",
+  "analytics.consent.analyticsDescription": "Lets us measure pages, navigation, and interactions without sending answers or contact details.",
+  "analytics.consent.marketing": "Marketing",
+  "analytics.consent.marketingDescription": "Lets Meta Pixel measure interactions to evaluate campaigns.",
+  "analytics.consent.settingsDescription": "Choose which optional tools may be enabled.",
+  "analytics.consent.acceptAll": "Accept optional tools",
+  "analytics.consent.rejectOptional": "Reject optional tools",
+  "analytics.consent.customize": "Customize",
+  "analytics.consent.save": "Save preferences",
+  "analytics.consent.manage": "Privacy settings",
 } as const;
 
 export default en;
