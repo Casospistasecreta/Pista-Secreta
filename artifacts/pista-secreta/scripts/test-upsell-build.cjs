@@ -113,3 +113,5 @@ for (const reference of Object.values(builtPages[0].resources)) {
 console.log(
   "Upsell production build checks passed: route-specific Kiwify IDs and shared assets.",
 );
+
+require("./test-upsell-i18n.cjs");
