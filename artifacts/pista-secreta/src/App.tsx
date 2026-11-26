@@ -16,6 +16,7 @@ import case2Image from "@assets/2.png";
 import case3Image from "@assets/caso-dona-odete.jpg";
 import { ProductSlider } from "@/components/ProductSlider";
 import { TestimonialsSlider } from "@/components/TestimonialsSlider";
+import { GuaranteeFaq } from "@/components/GuaranteeFaq";
 import { hasAnalyticsConsent, trackClickBuy, trackEvent, trackViewCase, type CaseName } from "@/lib/analytics";
 import { AnalyticsManager } from "@/components/AnalyticsManager";
 import { LanguageProvider, useLanguage, useT } from "@/i18n/LanguageProvider";
@@ -835,6 +836,8 @@ function LandingPage() {
             </Link>
           </div>
         </section>
+
+        <GuaranteeFaq />
 
         <footer className="mt-12 animate-in fade-in duration-1000 delay-1000">
           <p className="text-[10px] md:text-xs text-primary/45 text-center font-mono tracking-widest uppercase">
